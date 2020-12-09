@@ -342,9 +342,7 @@ layers of perceptrons, as follows:
 
 -Convolutional Neural Networks
 Convolutional neural networks follow the same principle as multi-layer neural networks, the only difference being that they include “convolutional
-layers,” which make use of filters. A filter is a grid of size AxB that is moved across the image and gets multiplied several times by it to produce a new value. Each value represents a line or an edge in the image. Once the filters have been used on the image, its important characteristics can be extracted. This is done with the help of a pooling layer. These layers pool or collect the main features of each image. One popular technique of doing this is known as max pooling, which takes the largest number of each image and stores it in a separate grid. It thus compresses the main features into a single image and then passes it on to a
-regular multi-layer neural network for further processing. These neural networks are mainly used for image classification. They
-can also be used in search engines and recommender systems.
+layers,” which make use of filters. A filter is a grid of size AxB that is moved across the image and gets multiplied several times by it to produce a new value. Each value represents a line or an edge in the image. Once the filters have been used on the image, its important characteristics can be extracted. This is done with the help of a pooling layer. These layers pool or collect the main features of each image. One popular technique of doing this is known as max pooling, which takes the largest number of each image and stores it in a separate grid. It thus compresses the main features into a single image and then passes it on to a regular multi-layer neural network for further processing. These neural networks are mainly used for image classification. They can also be used in search engines and recommender systems.
 
 -Recurrent Neural Networks
 Recurrent neural networks (RNNs) are used for temporal data; i.e., data that requires past experiences to predict future outcomes. State matrices remember previous states of data by storing the last output, and then use this data to calculate the new output.two states: long term and short term. RNNs begin in the layers after the first layer. Here, each node acts as a memory cell during the computation, which allows it to compare previous values with new values during
@@ -374,6 +372,10 @@ Based on the kind of data being used, there are two main types of machine learni
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/TensorFlow-Supervised_Unsupervised_Learning_diff.png" width="500">
 
+A typical supervised machine learning architecture: 
+
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/TensorFlow-supervised-ML-architecture.png" width="500">
 
 Each type of learning method has various types of algorithms that can be used to solve a machine learning problem. Let’s take a look at some important ones.
 
