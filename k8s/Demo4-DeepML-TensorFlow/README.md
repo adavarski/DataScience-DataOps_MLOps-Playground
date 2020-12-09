@@ -24,7 +24,7 @@ Machine learning involves data science techniques (like cleaning, manipulating, 
 These libraries have been tried and tested and were found to be easy to work with. They have thus gained popularity over the years, with numerous applications in various machine learning programs. With the growing enthusiasm toward [deep machine learning], there arose a need to create libraries that could assist with building multi-layered [neural networks]. Thus, libraries like [Theano], [PyTorch], [OpenCV], [Caffe], [Apache Spark], [Keras], and [TensorFlow] were released. These libraries enable programmers to develop large, multi-layered neural networks with less time and effort, and more efficiency. All these libraries, although varying in functionality and capability, have similar uses in deep machine learning. 
 
 
-### TensorFlow 2.0 DeepML library
+### TensorFlow 1.0/2.0 DeepML library
 
 TensorFlow consists of two main components, as follows:
 1. Tensors, in which the data is held
