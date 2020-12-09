@@ -387,6 +387,7 @@ churn or not (categorical yes or no), this is a classification problem. Classifi
 Each type of learning method has various types of algorithms that can be used to solve a machine learning problem. Let’s take a look at some important ones.
 
 Supervised Learning Algorithms
+
 The goal of every supervised learning algorithm is to map the input to the output, as shown in the following equation:
 `y = f(x)`
 
@@ -410,18 +411,21 @@ Applications of Supervised Learning Algorithms
 security system on our cell phones, which can scan our fingerprint and grant us access accordingly.
 
 Unsupervised Learning Algorithms
+
 The goal of unsupervised learning algorithms is to discover possible patterns from the set of data that is provided. The algorithm has no prior information about the patterns and labels present in the data. There are several algorithms that can be used to solve a machine learning problem with the help of unsupervised learning. These algorithms can be segregated into the following categories:
 
-• Cluster analysis: This approach finds similarities among the data and then groups the common data together in clusters.
+1. Cluster analysis: This approach finds similarities among the data and then groups the common data together in clusters.
 
-• Dimensionality reduction: This approach attempts to reduce the complexity of data while still keeping the data relevant.
+2. Dimensionality reduction: This approach attempts to reduce the complexity of data while still keeping the data relevant.
 
 Two common algorithms that are used for unsupervised learning: K-means clustering and principal component analysis.
 
 -KMeans Clustering
+
 -Principal Component Analysis
 
 Applications of Unsupervised Machine Learning Algorithms
+
 Anomaly detection is the identification of certain anomalies or observations that are different from the rest of the observations. These anomalies are also
 called outliers. For example, credit card fraud can be discovered by detecting unusual transactions made with the credit card. Association is the process of identifying associations between different observations with the help of provided data. For example, in e-commerce it is easy to figure out the type of products a customer might be interested in by analyzing previous purchases.
 
