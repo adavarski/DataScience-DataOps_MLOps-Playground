@@ -1349,7 +1349,7 @@ Access  http://localhost:5000/
 
 Building a Keras TensorFlow-Based Model
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/TensorFlow-sample-from-the-Fashion-MNIST-data-set.png" width="500" 
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/TensorFlow-sample-from-the-Fashion-MNIST-data-set.png" width="500">
 
 Execute Program3 in a new Jupyter notebook
 ```
