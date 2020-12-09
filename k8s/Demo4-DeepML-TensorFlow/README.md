@@ -1079,7 +1079,7 @@ Saving any model is also known as serialization. This can also be done in differ
 Once the model is saved on disk or at any other location, we can reload or restore it back, for making predictions on new data. In the example below, we consider the standard data set for building a linear regression model. The input data has five input columns and one output column. All the variables are numeric in nature, so little feature engineering is required. Nevertheless, the idea here is not to focus on building a perfect model but to build a baseline model, save it, and then restore it. In the first step, we load the data and create input and output feature variables (X,y).
 
 
-JupyterLab/Jupyter Notebook environment (running not inside k8s in this example only to create/pickle/test the model)
+Jupyter Notebook (Note: running not inside k8s in this example only to create/pickle/test the model)
 
 Jupyter Notebooks are a browser-based (or web-based) IDE (integrated development environments)
 
@@ -1236,7 +1236,9 @@ b9571113d5a1        davarski/jupyterlab-eth:latest   "tini -g -- start-no…"   
 $ docker exec -it jl bash -c "ls"
 Linear_regression_dataset.csv  linear_regression_model.pkl  Untitled.ipynb  work
 $ docker cp jl:/home/jovyan/linear_regression_model.pkl .
-docker build -t davarski/tf-linear-regression-rest:1.0.0 .
+$ docker build -t davarski/tf-linear-regression-rest:1.0.0 .
+$ docker login 
+$ docker push davarski/tf-linear-regression-rest:1.0.0
 $ docker run -d -p 5000:5000 davarski/tf-linear-regression-rest:1.0.0 
 936ef10f86797c1a7f1987ca168deb428f700fee8434e176805d1f5123cc95d2
 $ docker logs 936ef10f8679
@@ -1248,7 +1250,7 @@ $ docker logs 936ef10f8679
  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
 ```
 
-Access browser http://localhost:5000/
+Access  http://localhost:5000/
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/TensorFlow-model-UI-1.png" width="500">
 
@@ -1256,7 +1258,7 @@ Access browser http://localhost:5000/
 
 
 
-TODO2: DeepML with IoT
+TODO1: DeepML with IoT
 
 Smart Homes
 Smart homes refer to the phenomenon of home automation, where the home does tasks on its own, without the need for anyone to control it. So far, smart homes have been able to do the following:
