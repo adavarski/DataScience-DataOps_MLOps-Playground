@@ -377,6 +377,13 @@ A typical supervised machine learning architecture:
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/TensorFlow-supervised-ML-architecture.png" width="500">
 
+```
+Note: Within supervised learning, if we are to predict numeric values, this is called regression, whereas if we are to predict classes or categorical
+variables, we call that classification. For example, if the aim is to predict the sales (in dollars) a company is going to earn (numeric value), this
+comes under regression. If the aim is to determine whether a customer will buy a product from an online store or to check if an employee is going to
+churn or not (categorical yes or no), this is a classification problem. Classification can be further divided as binary and multi-class. Binary classification deals with classifying two outcomes, i.e., either yes or no. Multi-class classification yields multiple outcomes. For example, a customer is categorized as a hot prospect, warm prospect, or cold prospect, etc.
+```
+
 Each type of learning method has various types of algorithms that can be used to solve a machine learning problem. Let’s take a look at some important ones.
 
 Supervised Learning Algorithms
