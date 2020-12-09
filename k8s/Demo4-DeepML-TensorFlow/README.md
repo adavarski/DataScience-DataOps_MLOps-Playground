@@ -1256,6 +1256,82 @@ Access  http://localhost:5000/
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/TensorFlow-model-UI-2.png" width="500">
 
+Building a Keras TensorFlow-Based Model
+
+Execute Program3 in a new Jupyter notebook
+```
+import tensorflow as tf
+from tensorflow.keras import datasets, layers, models
+data = datasets.fashion_mnist
+(ip_train, op_train), (ip_test, op_test) = data.load_data()
+print(ip_train.shape, ip_test.shape)
+ip_train = ip_train.reshape((60000, 28, 28, 1))
+ip_test = ip_test.reshape((10000, 28, 28, 1))
+print(ip_train.shape, ip_train.shape)
+ip_train, ip_test = ip_train / 255.0, ip_test / 255.0
+model = models.Sequential([
+    layers.Flatten(input_shape=(28, 28, 1)),
+    layers.Dense(128, activation='relu'),
+    layers.Dense(1000, activation='relu'),
+    layers.Dropout(0.5),
+    layers.Dense(10, activation='softmax')
+])
+model.summary()
+model.fit(ip_train, op_train, epochs = 5)
+model.evaluate(ip_test, op_test, verbose = 2)
+class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress',
+'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
+import matplotlib.pyplot as plt
+%matplotlib inline
+test_image=ip_test[5000]
+plt.imshow(test_image.reshape(28,28))
+import numpy as np
+from tensorflow.keras.preprocessing import image
+test_image = image.img_to_array(test_image)
+test_image = test_image.reshape(1, 28, 28, 1)
+result = model.predict(test_image)
+result
+np.around(result)
+n=(np.around(result)).argmax()
+print(n)
+print(class_names[n])
+```
+
+Now, we save the model as a Keras model and load it back, using load_model for prediction.
+
+```
+model.save("keras_model.h5")
+loaded_model = models.load_model("keras_model.h5")
+```
+In the following example, we load a test image (300), which is a dress, and then we will use our saved model to make a prediction about this image : result = loaded_model.predict(test_image)
+
+
+```
+class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress',
+'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
+import matplotlib.pyplot as plt
+%matplotlib inline
+test_image=ip_test[300]
+plt.imshow(test_image.reshape(28,28))
+import numpy as np
+from tensorflow.keras.preprocessing import image
+test_image = image.img_to_array(test_image)
+test_image = test_image.reshape(1, 28, 28, 1)
+result = loaded_model.predict(test_image)
+result
+np.around(result)
+n=(np.around(result)).argmax()
+print(n)
+print(class_names[n])
+```
+Example Output:
+Dress
+
+TODO: TF ind deployment: Productionizing the machine learning model (deploy model) via Kubeflow/Seldon core (Note: package model into docker container if needed) 
+
+
+Kubeflow is a native tool for managing and deploying machine learning models on Kubernetes. Kubernetes can be defined as a container orchestration platform that allows for the running, deployment, and management of containerized applications (machine learning models, in our case). We will replicate the same model that we built previously and run it in the cloud (via Google Cloud Platform), using Kubeflow. We will also use the Kubeflow UI, to navigate and run Jupyter Notebook in the cloud. Because we are going to use Google Cloud Platform (GCP), we must have a Google account, so that we can avail ourselves of the free credits provided by Google for the use of GCP components. Go to https://console.cloud.google.com/ and create a Google user account, if you do not have one already. You will be required to provide a few additional details, along with credit card information. Once we log in to the Google console, there are many options to explore, but first, we must enable the free credits provided by Google, in order to access the cloud services for free (up to $300). Next, we must create a new project or select one of the existing projects, for users already in possession of a Google account. To use Kubeflow, the final step is to enable Kubernetes Engine APIs. In
+order to enable Kubernetes Engine APIs, we must go to the APIs & Services dashboard and search for Kubernetes Engine API. Once this shows up in the library, we must enable it.The next step is to deploy the Kubernetes cluster on GCP, using Kubeflow. Ref:  https://www.kubeflow.org/docs/gke/deploy/ Once we log in to the Kubeflow UI, we can see the Kubeflow dashboard, with its multiple options, such as Pipelines, Notebook Servers, etc. We must select Notebook Servers, to start a new notebook server. For a new notebook server, we must provide a few details regarding the desired configuration. Now we must provide a few configuration details to spin up the server, such as base image (with pre-installed libraries and dependencies), the size of CPU/GPUs, and total memory (5 CPUs and 5GB memory suffices for our model). We can select the image with TensorFlow version (2.0, if we are building the model with that version). We must also add GCP credentials, in case we want to save the model to GCP’s storage bucket and use it for serving purposes. After a while, the notebook server will be up and running, and we can click Connect, to open the Jupyter Notebook running on the Kubeflow server. Once Jupyter Notebook is up, we can select the option to create a new Python 3 notebook or simply go to its terminal and clone the required repo from Git, to download all the model files to this notebook. In our case, because we are building the model from scratch, we will create a new Python 3 notebook and replicate the same model built earlier. It should work exactly as before, the only difference being that we are now using Kubeflow to build and serve the model. In case any library is not available, we can simply pip3 install the library and use it in this notebook. Once the model is built and we have used the services of Kubeflow, we must terminate and delete all the resources, in order to avoid any extra cost. We must go back to the Google console and, under the Kubernetes clusters list, delete the Kubeflow server.
 
 
 TODO1: DeepML with IoT
