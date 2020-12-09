@@ -74,7 +74,20 @@ Matrix = 4 5 6 : The second rank tensor would have a shape of [3, 3]
 
 [Flow] The input of the program is taken in the form of tensors, which are then executed in distributed mode with the help of computational graphs. These graphs are used to set the flow of the entire program. A computational graph is a flowchart of operations and functions that are needed to be carried out on the input tensor. The tensor enters on one side, goes through a list of operations, then comes out the other side as the output of the code. The Tensorflow Machine Learning Library This is how TensorFlow got its name—the input tensor follows a systematic flow, thus producing the necessary output. Now that we know what TensorFlow is, let’s examine how it is useful to machine learning developers. 
 
+So flow is basically an underlying graph computation framework that uses tensors for its execution. A typical graph consists of two entities: nodes and edges, as
+shown: (Nodes are also called vertices):
 
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s//Demo4-DeepML-TensorFlow/pictures/TensorFlow-typical-graph.png" width="500">
+
+The edges are essentially the connections between the nodes/vertices through which the data flows, and nodes are where actual computation
+takes place. Now, in general, the graph can be cyclic or acyclic, but in TensorFlow, it is always acyclic. It cannot start and end at the same node.
+Let’s consider a simple computational graph, as shown, and explore some of its attributes.
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s//Demo4-DeepML-TensorFlow/pictures/TensorFlow-computational-graph.png" width="500">
+
+The nodes in the graph indicate some sort of computation, such as addition, multiplication, division, etc., except for the leaf nodes, which
+contain the actual tensors with either constant or variable values to be operated upon. These tensors flow through the edges or connections between nodes, and the computation at the next node results in formation of a new tensor. So, in the sample graph, a new tensor m is created through a computation at the node using other tensors x and y. The thing to focus on in this graph is that computations take place only at the next stage after leaf nodes, as leaf nodes can only be simple tensors, which become input for next-node computation flowing through edges. We can also represent the computations at each node through a hierarchical structure. The nodes at the same level can be executed in parallel, as there is no interdependency between them. In this case, m and n can be calculated
+in parallel at the same time. This attribute of graph helps to execute computational graphs in a distributed manner, which allows TensorFlow to be used for large-scale applications.
 
 Note: TF 1.0 specific example: TensorFlow works with the help of a computational graph. This graph consists of all the variables that we declare, all the operations that we carry out, and so on. It basically works behind the scenes of a program. In TensorFlow, every node of the graph is known as an operation, even if it is just a command that initializes a variable. We will begin by acquiring the “default graph,” like this:`graph = tf.get_default_graph()` Now, let’s try to retrieve the operations from within this graph:`graph.get_operations()`We will get an output like this:`[ ]` This is because we’ve not carried out any operations yet, so the graph has nothing to display. We will now begin adding some nodes to this graph. Let us use some of the simple commands we have learned so far, like the following:
 
