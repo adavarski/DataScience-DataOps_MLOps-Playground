@@ -47,7 +47,34 @@ However, it is a universally accepted practice that when we have more than one n
 
 As you can see, the four data structures are quite similar to each other notation-wise as well, differing with respect to their capacity. Although tensors usually hold numbers, they can also hold text and strings. Tensors are capable of containing large amounts of data in a compact form. This makes it easier to handle the computation of our program, even when we have enormous amounts of data that we need to use to train our machine.
 
+So a tensor is also a mathematical entity with which to represent different properties, similar to a scalar, vector, or matrix. It is true that a tensor is a generalization of a scalar or vector. In short, tensors are multidimensional arrays that have some dynamic properties. A vector is a one-dimensional tensor, whereas two-dimensional tensors are matrices:
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s//Demo4-DeepML-TensorFlow/pictures/TensorFlow-Tensors.png" width="500">
+
+Tensors can be of two types: constant or variable.
+
+Rank
+
+Ranking tensors can sometimes be confusing for some people, but in terms of tensors, rank simply indicates the number of directions required to
+describe the properties of an object, meaning the dimensions of the array contained in the tensor itself. Breaking this down for different objects, a
+scalar doesn’t have any direction and, hence, automatically becomes a rank 0 tensor, whereas a vector, which can be described using only one direction, becomes a first rank tensor. The next object, which is a matrix, requires two directions to describe it and becomes a second rank tensor.
+
+Shape
+
+The shape of a tensor represents the number of values in each dimension.
+```
+Scalar—32: The shape of the tensor would be [ ].
+Vector—[3, 4, 5]: The shape of the first rank tensor
+would be [3].
+         1 2 3
+Matrix = 4 5 6 : The second rank tensor would have a shape of [3, 3]
+         7 8 9
+
+```
+
 [Flow] The input of the program is taken in the form of tensors, which are then executed in distributed mode with the help of computational graphs. These graphs are used to set the flow of the entire program. A computational graph is a flowchart of operations and functions that are needed to be carried out on the input tensor. The tensor enters on one side, goes through a list of operations, then comes out the other side as the output of the code. The Tensorflow Machine Learning Library This is how TensorFlow got its name—the input tensor follows a systematic flow, thus producing the necessary output. Now that we know what TensorFlow is, let’s examine how it is useful to machine learning developers. 
+
+
 
 Note: TF 1.0 specific example: TensorFlow works with the help of a computational graph. This graph consists of all the variables that we declare, all the operations that we carry out, and so on. It basically works behind the scenes of a program. In TensorFlow, every node of the graph is known as an operation, even if it is just a command that initializes a variable. We will begin by acquiring the “default graph,” like this:`graph = tf.get_default_graph()` Now, let’s try to retrieve the operations from within this graph:`graph.get_operations()`We will get an output like this:`[ ]` This is because we’ve not carried out any operations yet, so the graph has nothing to display. We will now begin adding some nodes to this graph. Let us use some of the simple commands we have learned so far, like the following:
 
