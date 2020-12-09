@@ -1325,7 +1325,11 @@ print(n)
 print(class_names[n])
 ```
 Example Output:
+
 Dress
+
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/TensorFlow-Keras-save-load-models.png" width="500">
 
 TODO: TF ind deployment: Productionizing the machine learning model (deploy model) via Kubeflow/Seldon core (Note: package model into docker container if needed) 
 
