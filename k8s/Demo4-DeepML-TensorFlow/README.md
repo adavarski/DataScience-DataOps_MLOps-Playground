@@ -1069,7 +1069,191 @@ else:
 print(prediction2)
 ```
 
-TODO1: Python-Based Model Deployment: Deploying a Machine Learning Model As a REST Service (Flask + joblib + Pickle)
+
+### TensorFlow Models in Production
+#### Python-Based Model Deployment: Deploying a Machine Learning Model As a REST Service (Flask + joblib + Pickle)
+
+- Saving and Restoring a Machine Learning Model
+
+Saving any model is also known as serialization. This can also be done in different ways, as Python has its own way of persisting a model, known as pickle. Pickle can be used to serialize machine language models, as well as any other transformer. The other approach has the built-in functionality of sklearn, which allows saving and restoring of Python-based machine learning models. In this section, we will focus on using the joblib function to save and persist sklearn models.
+Once the model is saved on disk or at any other location, we can reload or restore it back, for making predictions on new data. In the example below, we consider the standard data set for building a linear regression model. The input data has five input columns and one output column. All the variables are numeric in nature, so little feature engineering is required. Nevertheless, the idea here is not to focus on building a perfect model but to build a baseline model, save it, and then restore it. In the first step, we load the data and create input and output feature variables (X,y).
+
+
+JupyterLab/Jupyter Notebook environment (running not inside k8s in this example only to create/pickle/test the model)
+
+Jupyter Notebooks are a browser-based (or web-based) IDE (integrated development environments)
+
+Build custom JupyterLab docker image and pushing it into DockerHub container registry.
+```
+$ cd ./jupyterlab
+$ docker build -t jupyterlab-eth .
+$ docker tag jupyterlab-eth:latest davarski/jupyterlab-eth:latest
+$ docker login 
+$ docker push davarski/jupyterlab-eth:latest
+```
+Run Jupyter Notebook
+
+```
+$ sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/k3s-config-jupyter
+$ sed -i "s/127.0.0.1/192.168.0.101/" ~/.kube/k3s-config-jupyter
+$ docker run --rm --name jl -p 8888:8888 \
+   -v "$(pwd)":"/home/jovyan/work" \
+   -v "$HOME/.kube/k3s-config-jupyter":"/home/jovyan/.kube/config" \
+   --user root \
+   -e GRANT_SUDO=yes \
+   -e JUPYTER_ENABLE_LAB=yes -e RESTARTABLE=yes \
+   davarski/jupyterlab-eth:latest
+```
+Example:
+```
+$ docker run --rm --name jl -p 8888:8888 \
+>    -v "$(pwd)":"/home/jovyan/work" \
+>    -v "$HOME/.kube/k3s-config-jupyter":"/home/jovyan/.kube/config" \
+>    --user root \
+>    -e GRANT_SUDO=yes \
+>    -e JUPYTER_ENABLE_LAB=yes -e RESTARTABLE=yes \
+>    davarski/jupyterlab-eth:latest
+
+Set username to: jovyan
+usermod: no changes
+Granting jovyan sudo access and appending /opt/conda/bin to sudo PATH
+Executing the command: jupyter lab
+[I 21:37:15.811 LabApp] Writing notebook server cookie secret to /home/jovyan/.local/share/jupyter/runtime/notebook_cookie_secret
+[I 21:37:16.594 LabApp] Loading IPython parallel extension
+[I 21:37:16.614 LabApp] JupyterLab extension loaded from /opt/conda/lib/python3.7/site-packages/jupyterlab
+[I 21:37:16.614 LabApp] JupyterLab application directory is /opt/conda/share/jupyter/lab
+[W 21:37:16.623 LabApp] JupyterLab server extension not enabled, manually loading...
+[I 21:37:16.638 LabApp] JupyterLab extension loaded from /opt/conda/lib/python3.7/site-packages/jupyterlab
+[I 21:37:16.638 LabApp] JupyterLab application directory is /opt/conda/share/jupyter/lab
+[I 21:37:16.639 LabApp] Serving notebooks from local directory: /home/jovyan
+[I 21:37:16.639 LabApp] The Jupyter Notebook is running at:
+[I 21:37:16.639 LabApp] http://(e1696ffe20ab or 127.0.0.1):8888/?token=f0c6d63a7ffb4e67d132716e3ed49745e97b3e7fa78db28d
+[I 21:37:16.639 LabApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 21:37:16.648 LabApp] 
+    
+    To access the notebook, open this file in a browser:
+        file:///home/jovyan/.local/share/jupyter/runtime/nbserver-17-open.html
+    Or copy and paste one of these URLs:
+        http://(e1696ffe20ab or 127.0.0.1):8888/?token=f0c6d63a7ffb4e67d132716e3ed49745e97b3e7fa78db28d
+```
+Open IDE in browser: http://127.0.0.1:8888/?token=f0c6d63a7ffb4e67d132716e3ed49745e97b3e7fa78db28d
+
+Create new Python 3 notebook and create/picle/test model
+
+```
+import pandas as pd
+import numpy as np
+from sklearn.linear_model import LinearRegression
+```
+Note: Upload "Linear_regression_dataset.csv" into Jupyter Notebook it in the same folder as the Jupyter notebook that you are working in.
+
+```
+df=pd.read_csv('Linear_regression_dataset.csv',header='infer')
+X=df.loc[:,df.columns !='output']
+y=df['output']
+```
+The next step is to split the data into train and test sets. Then we build
+the linear regression model on the training data and access the coefficient
+values for all the input variables.
+```
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
+lr = LinearRegression().fit(X_train, y_train)
+lr.coef_
+```
+Example output:
+
+array([ 3.33773356e-04,  6.12485115e-05,  2.57628117e-04, -6.69740154e-01,
+        5.04645773e-01])
+
+
+```
+lr.score(X_train,y_train)
+```
+Exampe Output: 
+
+0.8700856735266858
+```
+lr.score(X_test,y_test)
+```
+Exampe Output: 
+
+0.8666629982427125
+
+The performance of this baseline model seems reasonable, with an R-squared value of 87% on the training set and 86% on the test set.
+
+Now that we have the trained model available, we can save it at any location or disk, using joblib or pickle. We name the exported model linear_regression_model.pkl.
+
+```
+import joblib
+joblib.dump(lr,'linear_regression_model.pkl')
+````
+
+['linear_regression_model.pkl']
+
+Now, we create a random input feature set and predict the output, using the trained model that we just saved.
+
+```
+test_data=[600,588,90,0.358,0.333]
+pred_arr=np.array(test_data)
+print(pred_arr)
+```
+Example Output:
+
+[[6.00e+02 5.88e+02 9.00e+01 3.58e-01 3.33e-01]]
+
+In order to predict the output with the same model, we first must
+import or load the saved model, using joblib.load. Once the model is
+loaded, we can simply use the predict function, to make the prediction on
+a new data point.
+
+```
+model=open("linear_regression_model.pkl","rb")
+lr_model=joblib.load(model)
+model_prediction=lr_model.predict(preds)
+print(model_prediction)
+```
+Example Output:
+
+[0.36941795]
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/TensorFlow-pickle-the-model.png" width="500">
+
+
+Deploying a Machine Learning Model As a REST Service (in docker container)
+
+we can deploy the model as a REST (representational state transfer) service, in order to expose it to external users. This allows them to use the model output or prediction without having to access the underlying model. In this section, we will make use of Flask to deploy the model as a REST service. Flask is a lightweight web framework, built in Python, to deploy applications on a server.
+
+Flask app.py : First, we import all the required libraries from Python. Next, we create our first function, which is the home page that renders the HTML template to allow users to fill input values. The next function is to publish the predictions by the model on those input values provided by the user. We save the input values into five different variables coming from the user and create a list (pred_args). We then convert that into a numpy array. We reshape it into the desired form, to be able to make predictions in the same way. The next step is to load the trained model (linear_regression_ model.pkl) and make the predictions. We save the final output into a variable (model_prediction). We then publish these results via another HTML template (predict.html). Tempaltes: There are two web pages that we have to design, in order to post requests to the server and receive in return the response message, which is the prediction by the machine learning model for that particular request. we are creating a form to request five values in five different variables. We are using a standard CSS template with very basic fields. The next template is to publish the model prediction back to the user. It is less complicated, compared to the first template, as there is just one value that we have to post back to the user.
+
+We are going to use the same model that we built in the preceding section and deploy it, using the Flask server.. We can either move the model.pkl file manually to the web_app folder:
+
+```
+cd ./docker/web_app
+$ docker ps -a 
+CONTAINER ID        IMAGE                            COMMAND                  CREATED             STATUS              PORTS                    NAMES
+b9571113d5a1        davarski/jupyterlab-eth:latest   "tini -g -- start-no…"   21 minutes ago      Up 21 minutes       0.0.0.0:8888->8888/tcp   jl
+$ docker exec -it jl bash -c "ls"
+Linear_regression_dataset.csv  linear_regression_model.pkl  Untitled.ipynb  work
+$ docker cp jl:/home/jovyan/linear_regression_model.pkl .
+docker build -t davarski/tf-linear-regression-rest:1.0.0 .
+$ docker run -d -p 5000:5000 davarski/tf-linear-regression-rest:1.0.0 
+936ef10f86797c1a7f1987ca168deb428f700fee8434e176805d1f5123cc95d2
+$ docker logs 936ef10f8679
+ * Serving Flask app "app" (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: off
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+```
+
+Access browser http://localhost:5000/
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/TensorFlow-model-UI-1.png" width="500">
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/TensorFlow-model-UI-2.png" width="500">
+
 
 
 TODO2: DeepML with IoT
