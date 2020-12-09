@@ -273,6 +273,44 @@ The basic function of these three sections is as follows:
 
 3. The output layer, as the name suggests, contains the output signals. These are nothing but the final results of all the calculations performed by the hidden layer/s.
 
+So Artificial Neural Networks (ANNs) tries to mimic the brain at its most basic level, i.e., that of the neuron. An artificial neuron has a similar structure to that of a human neuron and comprises the following sections:
+
+Input layer: This layer is similar to dendrites and takes input from other networks/neurons.
+
+Summation layer: This layer functions like the soma of neurons. It aggregates the input signal received.
+
+Activation layer: This layer is also similar to a soma, and it takes the aggregated information and fires a signal only if the aggregated input crosses a certain
+threshold value. Otherwise, it does not fire.
+
+Output layer: This layer is similar to axon terminals in that it might be connected to other neurons/networks or act as a final output layer (for predictions).
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/TensorFlow-Artificial-neural-network.png" width="400">
+
+```
+In the preceding figure, X 1 , X 2 , X 3 ,.........X n are the inputs fed to the neural network. W 1 , W 2 , W 3 ,............W n are the weights associated with the inputs, and Y is the final prediction. Many activation functions can be used in the activation layer, to convert all the linear details produced at the input and make the summation layer nonlinear. This helps users acquire more details about the input data that would not be possible if this were a linear function.
+Therefore, the activation layer plays an important role in predictions. Some of the most familiar types of activation functions are sigmoid, ReLU, and softmax as explained above.
+
+```
+
+Simple Neural Network Architecture : a typical neural network architecture is made up of an Input layer, Hidden layer, Output layer
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/TensorFlow-Simple-neural-network-architecture_regression.png" width="600">
+
+```
+Every input is connected to every neuron of the hidden layer and, in turn, connected to the output layer. If we are solving a regression problem, the architecture looks like the one shown in above picture, in which we have the output Y p, which is continuous if predicted at the output layer. If we are
+solving a classification (binary, in this case), we will have the outputs Y class1 and Y class2 , which are the probability values for each of the binary classes 1 and 2 at the output layer, as shown bellow.
+```
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/TensorFlow-Simple-neural-network-architecture_classifiacation.png" width="600">
+
+Deep Neural Networks (DNNs): When a simple neural network has more than one hidden layer, it is known as a deep neural network (DNN). Architecture of a
+typical DNN:
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/TensorFlow-Deep-neural-network-with-three-hidden-layers.png" width="600">
+
+It consists of an input layer with two input variables, three hidden layers with three neurons each, and an output layer (consisting either of a single output for regression or multiple outputs for classification). The more hidden layers, the more neurons. Hence, the neural network is able to learn the nonlinear (non-convex) relation between the inputs and output.
+
+
 The Process
 
 There are four main steps to the neural network process that allow it to come up with the most optimal solution for any problem that is given to it.
