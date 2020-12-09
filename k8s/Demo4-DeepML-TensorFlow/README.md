@@ -1220,7 +1220,7 @@ Example Output:
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/TensorFlow-pickle-the-model.png" width="500">
 
 
-Deploying a Machine Learning Model As a REST Service (in docker container)
+- Deploying a Machine Learning Model As a REST Service (in docker container)
 
 we can deploy the model as a REST (representational state transfer) service, in order to expose it to external users. This allows them to use the model output or prediction without having to access the underlying model. In this section, we will make use of Flask to deploy the model as a REST service. Flask is a lightweight web framework, built in Python, to deploy applications on a server.
 
