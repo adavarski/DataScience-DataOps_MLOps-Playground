@@ -2,7 +2,7 @@
 
 Hidden Technical Debt in Machine Learning Systems, NIPS 2015
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo3-AutoML-MLFlof-SeldonCore/pictures/MLOps-ML-system.png" width="800">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo3-AutoML-MLFlow-SeldonCore/pictures/MLOps-ML-system.png" width="800">
 
 ML lifecycle high-Level overview
 
