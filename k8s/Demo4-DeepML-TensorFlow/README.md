@@ -287,8 +287,11 @@ Output layer: This layer is similar to axon terminals in that it might be connec
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/TensorFlow-Artificial-neural-network.png" width="400">
 
 ```
-In the preceding figure, X 1 , X 2 , X 3 ,.........X n are the inputs fed to the neural network. W 1 , W 2 , W 3 ,............W n are the weights associated with the inputs, and Y is the final prediction. Many activation functions can be used in the activation layer, to convert all the linear details produced at the input and make the summation layer nonlinear. This helps users acquire more details about the input data that would not be possible if this were a linear function.
-Therefore, the activation layer plays an important role in predictions. Some of the most familiar types of activation functions are sigmoid, ReLU, and softmax as explained above.
+In the preceding figure, X 1 , X 2 , X 3 ,.........X n are the inputs fed to the neural network. W 1 , W 2 , W 3 ,............W n are the weights 
+associated with the inputs, and Y is the final prediction. Many activation functions can be used in the activation layer, to convert all the linear 
+details produced at the input and make the summation layer nonlinear. This helps users acquire more details about the input data that would not 
+be possible if this were a linear function. Therefore, the activation layer plays an important role in predictions. Some of the most familiar 
+types of activation functions are sigmoid, ReLU, and softmax as explained above.
 
 ```
 
@@ -297,8 +300,11 @@ Simple Neural Network Architecture : a typical neural network architecture is ma
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/TensorFlow-Simple-neural-network-architecture_regression.png" width="600">
 
 ```
-Every input is connected to every neuron of the hidden layer and, in turn, connected to the output layer. If we are solving a regression problem, the architecture looks like the one shown in above picture, in which we have the output Y p, which is continuous if predicted at the output layer. If we are
-solving a classification (binary, in this case), we will have the outputs Y class1 and Y class2 , which are the probability values for each of the binary classes 1 and 2 at the output layer, as shown bellow.
+Every input is connected to every neuron of the hidden layer and, in turn, connected to the output layer. If we are solving a 
+regression problem, the architecture looks like the one shown in above picture, in which we have the output Y p, 
+which is continuous if predicted at the output layer. If we are solving a classification (binary, in this case),
+we will have the outputs Y class1 and Y class2 , which are the probability values for each of the binary 
+classes 1 and 2 at the output layer, as shown bellow.
 ```
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/TensorFlow-Simple-neural-network-architecture_classifiacation.png" width="600">
@@ -378,10 +384,13 @@ A typical supervised machine learning architecture:
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/TensorFlow-supervised-ML-architecture.png" width="500">
 
 ```
-Note: Within supervised learning, if we are to predict numeric values, this is called regression, whereas if we are to predict classes or categorical
-variables, we call that classification. For example, if the aim is to predict the sales (in dollars) a company is going to earn (numeric value), this
-comes under regression. If the aim is to determine whether a customer will buy a product from an online store or to check if an employee is going to
-churn or not (categorical yes or no), this is a classification problem. Classification can be further divided as binary and multi-class. Binary classification deals with classifying two outcomes, i.e., either yes or no. Multi-class classification yields multiple outcomes. For example, a customer is categorized as a hot prospect, warm prospect, or cold prospect, etc.
+Note: Within supervised learning, if we are to predict numeric values, this is called regression, whereas if we are to predict 
+classes or categorical variables, we call that classification. For example, if the aim is to predict the sales (in dollars) a 
+company is going to earn (numeric value), this comes under regression. If the aim is to determine whether a customer will 
+buy a product from an online store or to check if an employee is going to churn or not (categorical yes or no), this is a 
+classification problem. Classification can be further divided as binary and multi-class. Binary classification deals 
+with classifying two outcomes, i.e., either yes or no. Multi-class classification yields multiple outcomes. For example, 
+a customer is categorized as a hot prospect, warm prospect, or cold prospect, etc.
 ```
 
 Each type of learning method has various types of algorithms that can be used to solve a machine learning problem. Let’s take a look at some important ones.
@@ -420,9 +429,9 @@ The goal of unsupervised learning algorithms is to discover possible patterns fr
 
 Two common algorithms that are used for unsupervised learning: K-means clustering and principal component analysis.
 
--KMeans Clustering
+- KMeans Clustering
 
--Principal Component Analysis
+- Principal Component Analysis
 
 Applications of Unsupervised Machine Learning Algorithms
 
@@ -748,6 +757,7 @@ array([[0., 0., 0., 0., 0., 0., 1., 0., 0., 0.]], dtype=float32)
 
 ```
 This gives the output like this:
+
 6
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s//Demo4-DeepML-TensorFlow/pictures/TensorFlow-e2.png" width="500">
@@ -829,6 +839,7 @@ print(n)
 This gives us the following output:
 
 2
+
 This output is very vague. All it tells us is the position of the predicted
 class, but not what the actual item of clothing is. Thus, we add an extra line
 of code:
