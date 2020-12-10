@@ -1448,6 +1448,22 @@ $ mc mb minio-cluster/tensorflow
 $ mc cp model.pkl minio-cluster/tensorflow/artifacts/model/model.pkl
 ```
 
+Databrick
+
+Use TensorFlow is through the Databricks platform.
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/Databrick-Unified-Analytics-Platform.png" width="500">
+
+Log in to the Databricks account and spin up a cluster of desired size:
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/Databrick-environment.png" width="500">
+
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/Databrick-create-cluster.png" width="500">
+
+Once the cluster is up and running, we go to the Libraries options of the cluster, via Actions. Within the Libraries tab, if the cluster already has a set of pre-installed libraries, they will be listed, or, in the case of a new cluster, no packages will be installed. We then click the Install New button. This will open a new window with multiple options to import or install a new library in Databricks. We select PyPI, and in the Package option, we mention the version of TensorFlow required to be installed. It will take some time, and we can then see TensorFlow successfully installed in Databricks, under Libraries. We can now open a new or existing notebook using the same cluster. 
+
+
 TODO1: DeepML with IoT
 
 Smart Homes
