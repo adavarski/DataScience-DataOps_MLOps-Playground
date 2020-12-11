@@ -453,7 +453,9 @@ beeline -u jdbc:hive2:// -f /tmp/create-table.hql
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/pictures/beeline-hive-metastore.png" width="500">
 
-Example:
+Example: 
+
+Note: To create tables for test data, I use Option 1 in this example
 
 ```
 $ kubectl exec -it hive-dccc9f446-6wsg2 bash -n data
@@ -509,6 +511,14 @@ OK
 ```
 
 Create two csv files and two MinIO buckets:
+
+```
+# Minio example
+mc config host add minio-cluster http://minio.data.davar.com:9000 minio minio123
+mc mb minio-cluster/hive
+mc cp ./dummy-data/iris.csv minio-cluster/hive/warehouse/iris/iris.csv
+mc cp ./dummy-data/users.csv minio-cluster/hive/warehouse/users/users.csv
+```
 
 ```
 
