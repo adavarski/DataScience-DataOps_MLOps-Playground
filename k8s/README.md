@@ -458,7 +458,7 @@ modelUri: s3://mlflow/artifacts/1/e22b3108e7b04c269d65b3f081f44166/artifacts/mod
 kubectl apply -f ./003-data/1000-seldoncore/000-sd-s3-secret.yml
 kubectl apply -f ./003-data/1000-seldoncore/100-sd-quality.yml
 ```
-### Hive (with MinIO:S3)
+### DWH: Hive SQL-Engine with MinIO DataLake (s3 Object Storage)
 ```
 kubectl apply -f ./003-data/3000-hive/10-mysql-metadata_backend.yml
 kubectl apply -f ./003-data/3000-hive/20-service.yml
