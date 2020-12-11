@@ -457,6 +457,11 @@ beeline -u jdbc:hive2:// -f /tmp/create-table.hql
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo5-BigData-MinIO-Hive/pictures/beeline-hive-metastore.png" width="500">
 
+Note: Including Presto (see bellow) into picture
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo5-BigData-MinIO-Hive/pictures/diagram-presto-hive.png" width="500">
+
+
 Example: 
 
 Create two csv files and cp to MinIO buckets: hive:
