@@ -69,6 +69,9 @@ Add container to registry:
 docker login
 docker push davarski/hive-s3m:3.1.2-1.0.0
 ```
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/Hive-local-workstation-testing.png" width="800">
+
+
 
 # K8s:
 ```
