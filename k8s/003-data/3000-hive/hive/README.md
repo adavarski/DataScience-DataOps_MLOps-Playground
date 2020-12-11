@@ -21,7 +21,7 @@ tar -xzvf ./src/hadoop-3.1.2.tar.gz -C ./src
 # create container
 docker build -t davarski-hive-s3m:3.1.2 .
 docker tag davarski-hive-s3m:3.1.2 davarski/hive-s3m:3.1.2-1.0.0
-
+```
 # create MinIO bucket
 ```
 $ mc mb minio-cluster/test1
