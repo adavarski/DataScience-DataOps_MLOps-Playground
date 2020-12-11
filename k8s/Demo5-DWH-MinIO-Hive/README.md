@@ -34,7 +34,7 @@ Custom Hive container build instructions (download and uncompress both Apache Hi
 
 ```shell script
 
-cd ./hive 
+cd ./hive ; mkdir ./src
 
 # Download Apache Hive
 curl -L http://mirror.cc.columbia.edu/pub/software/apache/hive/hive-3.1.2/apache-hive-3.1.2-bin.tar.gz -o ./src/apache-hive-3.1.2-bin.tar.gz
