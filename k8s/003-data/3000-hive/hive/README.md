@@ -434,7 +434,7 @@ hive> select * from exports.donors;
 ```
 Note: This demo uses a custom Apache Hive container to project schema onto the distributed object-store. While the single Hive container is capable of executing queries through ODBC/thrift exposed over the hive:1000 Kubernetes Service, a more extensive Hive cluster is necessary for executing production workloads directly against Hive. 
 
-### Beeline cli
+### Beeline CLI
 
 Different ways how to connect
 ```
@@ -502,7 +502,7 @@ OK
 
 ```
 
-Create two csv files and two buckets:
+Create two csv files and two MinIO buckets:
 
 ```
 
@@ -675,6 +675,7 @@ $ mc cp iris.csv minio-cluster/iris
 iris.csv:                            3.63 KiB / 3.63 KiB ┃▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓┃ 88.09 KiB/s 0s
 
 ```
+Table creation on S3 for users & iris data set (check users.csv & iris.csv)
 
 ```
 0: jdbc:hive2://> CREATE DATABASE users;
