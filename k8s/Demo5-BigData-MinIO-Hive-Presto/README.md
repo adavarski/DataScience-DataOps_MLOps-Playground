@@ -667,7 +667,16 @@ Once Helm completes the install process, the Kubernetes cluster contains one Pre
 kubectl apply -f 50-ingress.yml
 ```
 
-Presto simple test:
+Presto simple tests:
+
+```
+SHOW CATALOGS [ LIKE pattern ]
+SHOW SCHEMAS [ FROM catalog ] [ LIKE pattern ]
+SHOW TABLES [ FROM schema ] [ LIKE pattern ]
+...
+...
+```
+
 ```
 $ kubectl exec -it pod/presto-data-coordinator-64f7ffbb99-65ggt bash -n data
 kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
