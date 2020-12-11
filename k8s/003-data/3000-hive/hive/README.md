@@ -1,4 +1,4 @@
-# Hive DWH Overview
+# Hive Overview
 
 Apache Hive is Data Warehouse software initially developed by Facebook and later given to the Apache Software Foundation. Organizations such as
 Netflix and FINRA use Hive to query massive volumes of structured data across distributed storage systems, including Hadoop’s HDFS and Amazon
