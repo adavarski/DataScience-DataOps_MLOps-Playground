@@ -9,7 +9,7 @@ structured data not managed by formal database management systems, steady stream
 ingestion. Apache Hive reduces the complexity and effort to perform Data Science activities, including business analytics, business intelligence, and
 Machine Learning, by providing an SQL interface, metadata, and schema onto a vast Data Lake.
 
-# Hive docker image build/test)
+## Hive docker image build/test)
 
 This section creates a custom Apache Hive container configured to use MySQL for the storage of schema and metadata related to objects residing
 in an S3-compatible distributed storage system, such as the MinIO cluster (configured before). Apache Hive, like many Big Data applications evolved outside the Cloud-Native and Kubernetes ecosystems, therefore requiring a bit more effort in onboarding it into the cluster. The following starts with building a custom container suitable for use with Kubernetes and local experimentation.
@@ -46,34 +46,34 @@ populated by the container with environment variables at runtime (file named hiv
 process. The entry point script uses sed to replace values in the hive-site.xml configuration file with values from the environment variables passed in through the container runtime, defined in the previous section. After applying the configuration, the script runs the utility schematool to add any MySQL database and tables Hive requires to store schema and metadata. Finally, the entry point script starts both a Hive server and a Hive Metastore server.
 
 
-# create MinIO bucket
+### create MinIO bucket
 ```
 $ mc mb minio-cluster/test1
 ```
 
-# local test (remote S3:MinIO)
+### local test (remote S3:MinIO)
 docker-compose up
 
-# connect to hive CLI
+### connect to hive CLI
 docker exec -it hive /opt/hive/bin/hive
 
-# create table
+### create table
 ```
 CREATE DATABASE IF NOT EXISTS test;
 CREATE EXTERNAL TABLE IF NOT EXISTS test.message (id int,message string) row format delimited fields terminated by ',' lines terminated by "\n" location 's3a://test/messages';
 INSERT INTO test.message VALUES (1, "Test1");
 SELECT * FROM test.message;
 ```
-Add container to registry:
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/Hive-local-workstation-testing.png" width="800">
+
+### Add container to registry:
 ```shell script
 docker login
 docker push davarski/hive-s3m:3.1.2-1.0.0
 ```
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/Hive-local-workstation-testing.png" width="800">
 
-
-
-# K8s:
+# K8s deploy/test:
 ```
 kubectl apply -f ../10-mysql-metadata_backend.yml  
 kubectl apply -f ../20-service.yml  
