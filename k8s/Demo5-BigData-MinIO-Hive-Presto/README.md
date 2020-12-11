@@ -725,6 +725,63 @@ presto@presto-data-coordinator-64f7ffbb99-5hlrb:~$ presto -f ./query-example.sql
 ...
 
 ```
+Jupyter Notebook:
+
+```
+!pip install presto-python-client==0.7.0
+```
+```
+import prestodb
+import os
+import pandas as pd
+```
+```
+conn=prestodb.dbapi.connect(
+     host='presto-data.data',
+     port=80,
+     user=os.environment['HOSTNAME'],
+)
+cur = conn.cursor()
+
+```
+```
+cur.execute('SHOW CATALOGS')
+rows = cur.fetchall()
+rows
+```
+```
+curr.execute('SELECT * from system.runtime.nodes;)
+rows = cur.fetchall()
+
+df = pd.DataFrame(
+    rows, 
+    columns=[d[0] for d in cur.description]
+)
+
+df.loc[:, 'http_url':'state']
+```
+```
+curr.execute('DESCRIBE hive.warehouse.users;)
+rows = cur.fetchall()
+
+df = pd.DataFrame(
+    rows, 
+    columns=[d[0] for d in cur.description]
+)
+
+df
+```
+```
+curr.execute('SELECT * from hive.warehouse.users;)
+rows = cur.fetchall()
+
+df = pd.DataFrame(
+    rows, 
+    columns=[d[0] for d in cur.description]
+)
+df
+```
+
 An Ingress configuration, exposes the Presto UI at https://presto.data.davar.com as depicted in: 
 
 
