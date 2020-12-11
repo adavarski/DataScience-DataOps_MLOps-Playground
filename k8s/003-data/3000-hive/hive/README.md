@@ -521,7 +521,7 @@ mc cp ./dummy-data/users.csv minio-cluster/hive/warehouse/users/users.csv
 ```
 
 ```
-
+$ cd ./dummy-data
 $ cat users.csv 
 1,Zik,Zhvu
 2,John,Doe
