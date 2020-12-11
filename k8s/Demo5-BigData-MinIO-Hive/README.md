@@ -614,8 +614,14 @@ OK
 
 ```
 ## Presto
-Presto is the final component of the modern Data Warehouse. According to the official website prestodb.io, “Presto is an open source distributed SQL query engine for running interactive analytic queries against data sources of all sizes ranging from gigabytes to petabytes.” Although Hive is also a distributed SQL query engine cable of querying vast quantities of data, Presto connects to a broader range of data sources, including Apache Hive (as shown in Figure 8-5). Aside from
-Presto’s high-performance querying capabilities, it provides a central catalog of data sources.
+
+Constructing a modern Data Warehouse in Kubernetes provides an abstraction from low-level infrastructure, a unified control plane, standardized configuration management, holistic monitoring, role-based access control, network policies, and compatibility with the rapidly growing landscape of cloud-native technologies.
+This Presto demo configures two new data sources: MySQL representing a common RDBMS database, Apache Hive capable of projecting a schema atop the S3-compatible object storage set up in the previous sections (and TODO: Apache Cassandra as a wide-column distributed NoSQL database). Presto, a distributed SQL query engine for Big Data, ties these existing data sources together into a single catalog, providing schema and connectivity. Presto natively supports over 20 typical data applications, including Elasticsearch and Apache Kafka. It is not uncommon to write an application that natively connects and consumes data from more than one source. However, technologies such as Presto consolidate and abstract this capability, distribute queries across a cluster to workers, aggregate results, and monitor performance. Centralized access to a vast warehouse of data from Presto reduces technical debt across specialized systems by managing diverse connectivity requirements and schema management.
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo5-BigData-MinIO-Hive/pictures/7-DWH_Presto_distributed_SQL_joining_multiple_datasources.png" width="800">
+
+
+Presto is the final component of the modern Data Warehouse in this demo. According to the official website prestodb.io, “Presto is an open source distributed SQL query engine for running interactive analytic queries against data sources of all sizes ranging from gigabytes to petabytes.” Although Hive is also a distributed SQL query engine cable of querying vast quantities of data, Presto connects to a broader range of data sources, including Apache Hive. Aside from Presto’s high-performance querying capabilities, it provides a central catalog of data sources.
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo5-BigData-MinIO-Hive/pictures/7-DWH_Presto_distributed_SQL_query_multiple_datasources.png" width="800">
 
