@@ -87,7 +87,7 @@ INSERT INTO test.message VALUES (1, "Test1");
 SELECT * FROM test.message;
 ```
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo5-BigData-MinIO-Hive/pictures/Hive-local-workstation-testing.png" width="800">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo5-BigData-MinIO-Hive/pictures/Hive-local-workstation-testing.png" width="800">
 
 Note: The previous test created a type of distributed database capable of cataloging and querying petabytes of data from a distributed, highly scalable MinIO object storage system. The preceding exercise is capable of modeling existing data, provided that all data in the specified bucket and prefix (/test/messages/) has the same structure. This powerful concept allows organizations to begin collecting structured data and apply a schema in the future, once the need to access it arises.
 
