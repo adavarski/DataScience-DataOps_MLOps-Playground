@@ -9,6 +9,9 @@ structured data not managed by formal database management systems, steady stream
 ingestion. Apache Hive reduces the complexity and effort to perform Data Science activities, including business analytics, business intelligence, and
 Machine Learning, by providing an SQL interface, metadata, and schema onto a vast Data Lake.
 
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/pictures/Hive-warehousing-structures-and-semi-structures.png" width="800">
+
+
 ## Hive docker image build/test)
 
 This section creates a custom Apache Hive container configured to use MySQL for the storage of schema and metadata related to objects residing
@@ -65,7 +68,7 @@ INSERT INTO test.message VALUES (1, "Test1");
 SELECT * FROM test.message;
 ```
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/Hive-local-workstation-testing.png" width="800">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/pictures/Hive-local-workstation-testing.png" width="800">
 
 ### Add container to registry:
 ```shell script
@@ -226,5 +229,5 @@ Forwarding from [::1]:10002 -> 10002
 Handling connection for 10002
 
 ```
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/Hive-UI.png" width="800">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/pictures/Hive-UI.png" width="800">
 
