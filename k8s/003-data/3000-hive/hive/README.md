@@ -237,3 +237,175 @@ Handling connection for 10002
 ```
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/pictures/Hive-UI.png" width="800">
 
+### JupyterLab/Jupyter Notebook (Jupyter environment)
+
+Pre: Create MinIO bucket exports
+```
+$ mc mb minio-cluster/exports 
+Bucket created successfully `minio-cluster/exports`.
+
+```
+
+Jupyter Notebooks are a browser-based (or web-based) IDE (integrated development environments)
+
+Build custom JupyterLab docker image and pushing it into DockerHub container registry.
+```
+$ cd ./jupyterlab
+$ docker build -t jupyterlab-eth .
+$ docker tag jupyterlab-eth:latest davarski/jupyterlab-eth:latest
+$ docker login 
+$ docker push davarski/jupyterlab-eth:latest
+```
+Run Jupyter Notebook inside k8s as pod:
+
+```
+kubectl run -i -t jupyter-notebook --namespace=data --restart=Never --rm=true --env="JUPYTER_ENABLE_LAB=yes" --image=davarski/jupyterlab-eth:latest 
+
+```
+Example output:
+```
+davar@carbon:~$ export KUBECONFIG=~/.kube/k3s-config-jupyter 
+davar@carbon:~$ kubectl run -i -t jupyter-notebook --namespace=data --restart=Never --rm=true --env="JUPYTER_ENABLE_LAB=yes" --image=davarski/jupyterlab-eth:latest
+If you don't see a command prompt, try pressing enter.
+[I 08:24:34.011 LabApp] Writing notebook server cookie secret to /home/jovyan/.local/share/jupyter/runtime/notebook_cookie_secret
+[I 08:24:34.378 LabApp] Loading IPython parallel extension
+[I 08:24:34.402 LabApp] JupyterLab extension loaded from /opt/conda/lib/python3.7/site-packages/jupyterlab
+[I 08:24:34.402 LabApp] JupyterLab application directory is /opt/conda/share/jupyter/lab
+[W 08:24:34.413 LabApp] JupyterLab server extension not enabled, manually loading...
+[I 08:24:34.439 LabApp] JupyterLab extension loaded from /opt/conda/lib/python3.7/site-packages/jupyterlab
+[I 08:24:34.440 LabApp] JupyterLab application directory is /opt/conda/share/jupyter/lab
+[I 08:24:34.441 LabApp] Serving notebooks from local directory: /home/jovyan
+[I 08:24:34.441 LabApp] The Jupyter Notebook is running at:
+[I 08:24:34.441 LabApp] http://(jupyter-notebook or 127.0.0.1):8888/?token=5bebb78cc162e7050332ce46371ca3adc82306fac0bc082a
+[I 08:24:34.441 LabApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 08:24:34.451 LabApp] 
+    
+    To access the notebook, open this file in a browser:
+        file:///home/jovyan/.local/share/jupyter/runtime/nbserver-7-open.html
+    Or copy and paste one of these URLs:
+        http://(jupyter-notebook or 127.0.0.1):8888/?token=5bebb78cc162e7050332ce46371ca3adc82306fac0bc082a
+```
+
+Once the Pod is running, copy the generated token from the output logs. Jupyter Notebooks listen on port 8888 by default. In testing and demonstrations such as this, it is common to port-forward Pod containers directly to a local workstation rather than configure Services and Ingress. Caution Jupyter Notebooks intend and purposefully allow remote code execution. Exposing Jupyter Notebooks to public interfaces requires proper security considerations.
+
+Port-forward the test-notebook Pod with the following command: 
+``
+kubectl port-forward jupyter-notebook 8888:8888 -n data
+``
+Browse to http://localhost:8888//?token=5bebb78cc162e7050332ce46371ca3adc82306fac0bc082a
+
+```
+!pip install Faker==2.0.3
+!pip install minio==5.0.1
+
+import os
+import datetime
+from faker import Faker
+from minio import Minio
+from minio.error import (ResponseError,
+                         BucketAlreadyOwnedByYou,
+                         BucketAlreadyExists)
+
+fake = Faker()
+def makeDonor():
+    fp = fake.profile(fields=[
+        "name",
+        "birthdate",
+        "blood_group"
+    ])
+    return (
+        fake.ascii_safe_email(),
+        fp["name"],
+        fp["blood_group"],
+        fp["birthdate"].strftime("%Y-%m-%d"),
+        fake.state(),
+    )
+
+bucket = "exports"
+mc = Minio('minio-service.data:9000',
+            access_key='minio',
+            secret_key='minio123',
+            secure=False)
+try:
+    mc.make_bucket(bucket)
+except BucketAlreadyOwnedByYou as err:
+    pass
+except BucketAlreadyExists as err:
+    pass
+except ResponseError as err:
+    raise
+
+
+for i in range(1,1000):
+    now = datetime.datetime.now()
+    dtstr = now.strftime("%Y%m%d%H%M%S")
+    filename = f'donors/{dtstr}.csv'
+    tmp_file = f'./{dtstr}.csv'
+    with open(tmp_file,"w+") as tf:
+        tf.write("email,name,type,birthday,state\n")
+        for ii in range(1,1000):
+            line = ",".join(makeDonor()) + "\n"
+            tf.write(line)
+        mc.fput_object(bucket, filename, tmp_file, content_type='application/csv')
+    os.remove(tmp_file)
+    print(f'{i:02}: {filename}')
+```
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/pictures/Hive-MinIO-Jupyter-1" width="800">
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/pictures/Hive-MinIO-Jupyter-2" width="800">
+
+
+Check MinIO bucket
+
+
+```
+
+$ mc ls minio-cluster/exports/donors/
+[2020-12-11 13:58:20 EET]     5B 20201211115820.csv
+[2020-12-11 13:58:21 EET]     5B 20201211115821.csv
+[2020-12-11 14:06:42 EET]     5B 20201211120641.csv
+[2020-12-11 14:06:42 EET]     5B 20201211120642.csv
+[2020-12-11 14:10:41 EET]     5B 20201211121041.csv
+$ mc cat minio-cluster/exports/donors/20201211115820.csv
+
+```
+
+Create Schema
+
+```
+CREATE DATABASE exports;
+CREATE TABLE exports.donors (email string, name string, blood_type string, birthday date, state string) row format delimited fields terminated by ',' lines terminated by "\n" location 's3a://exports/donors';
+```
+Example: 
+
+```
+$ kubectl exec -it hive-dccc9f446-6wsg2 /opt/hive/bin/hive -n data
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.10.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/opt/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+Hive Session ID = 60fa7946-59aa-480a-83ac-acbd1c875544
+
+Logging initialized using configuration in jar:file:/opt/hive/lib/hive-common-3.1.2.jar!/hive-log4j2.properties Async: true
+Hive Session ID = 8f0e6b76-af4a-41ac-a556-6fdcb4fb8bb4
+Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+hive> CREATE DATABASE exports;
+OK
+Time taken: 0.744 seconds
+hive> CREATE TABLE exports.donors (email string, name string, blood_type string, birthday date, state string) row format delimited fields terminated by ',' lines terminated by "\n" location 's3a://exports/donors';
+OK
+Time taken: 2.187 seconds
+hive> 
+
+hive> select * from exports.donors;
+OK
+Time taken: 1.901 seconds
+
+
+```
+Note: This chapter uses a custom Apache Hive container to project schema onto the distributed object-store. While the single Hive container is capable of executing queries through ODBC/thrift exposed over the hive:1000 Kubernetes Service, a more extensive Hive cluster is necessary for executing production workloads directly against Hive. 
+
+
