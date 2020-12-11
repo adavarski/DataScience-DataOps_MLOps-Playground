@@ -7,10 +7,14 @@ a database, it delivers the ability to project schema onto any structured data s
 product Elastic MapReduce, including a version of Hive as a service. Apache Hive enables organizations to harness enormous quantities of
 structured data not managed by formal database management systems, steady streams of IoT data, exports from legacy systems, and ad hoc data
 ingestion. Apache Hive reduces the complexity and effort to perform Data Science activities, including business analytics, business intelligence, and
-Machine Learning, by providing an SQL interface, metadata, and schema onto a vast Data Lake.
+Machine Learning, by providing an SQL interface, metadata, and schema onto a vast Data Lake. 
+
+# Modern Data Warehouse
+This demo considers modern Data Warehouses and Data Lakes as an open (employing containerization), cloud-native platform, the cloud represented by Kubernetes (container orchestration), and the platform as an ever-growing collection of data management applications exposed through APIs and graphical user interfaces with the ability to deploy business logic within. Many organizations and applications require access to a variety of data sources, from common RDBMS databases to distributed document, object, and key stores—resulting from trends in Digital Transformation, IoT, and Data Science activities such as Machine Learning. Correlating data from various sources is a common practice; however, depending on the relationships between these sources, the process can be challenging. Migrating all data sources to a commercial Data Warehouse may be cost-prohibitive, impose unacceptable limitations, or result in vendor lock-in. Constructing a modern, cloud-native, vendor-neutral Data Warehouse on Kubernetes may open up new possibilities even alongside commercial applications and PaaS offerings. A tremendous amount of functionality and flexibility is achieved with little effort and capital, starting small with a near-limitless ability to scale.
+This section adds Apache Hive to Kubernetes, applying new layers atop the data platform developed throughout this book. Hive demonstrate the ability to represent  data sources such as MinIO (S3), creating a centralized data access point with distributed query execution.
 
 
-## Hive docker image create and test
+## Create Hive docker image
 
 This section creates a custom Apache Hive container configured to use MySQL for the storage of schema and metadata related to objects residing
 in an S3-compatible distributed storage system, such as the MinIO cluster (configured before). Apache Hive, like many Big Data applications evolved outside the Cloud-Native and Kubernetes ecosystems, therefore requiring a bit more effort in onboarding it into the cluster. The following starts with building a custom container suitable for use with Kubernetes and local experimentation.
@@ -46,6 +50,8 @@ from existing Secrets and ConfigMap values available in Kubernetes. The techniqu
 populated by the container with environment variables at runtime (file named hive-site-template.xml). Shell script named entrypoint.sh as the container’s initial
 process. The entry point script uses sed to replace values in the hive-site.xml configuration file with values from the environment variables passed in through the container runtime, defined in the previous section. After applying the configuration, the script runs the utility schematool to add any MySQL database and tables Hive requires to store schema and metadata. Finally, the entry point script starts both a Hive server and a Hive Metastore server.
 
+## Local Hive Testing and publishing
+This section tests the Hive container built in the previous section by creating a database and table schema mapped to the MinIO (S3) bucket test. Create the bucket test in the MinIO cluster. Later, Hive will be used to catalog object locations as data sources and project schema onto them. The following demonstrates the creation of a data source by creating a schema in Hive mapped to the empty bucket test:
 
 ### create MinIO bucket
 ```
@@ -54,6 +60,9 @@ $ mc mb minio-cluster/test1
 
 ### local test (remote S3:MinIO)
 docker-compose up
+
+Note: After starting Docker Compose, the new Apache Hive container connects to MySQL, creating a database and tables used to store schema
+and metadata defined later. The Apache Hive container exposes three ports: HiveServer2 listens on port 10000, providing SQL access over thrift/JDBC; Hive Metastore listens on port 9083, allowing access to metadata and tables over the thrift protocol; and Hive provides a web interface on port 10002 for performance monitoring, debugging, and observation.
 
 ### connect to hive CLI
 docker exec -it hive /opt/hive/bin/hive
@@ -68,6 +77,8 @@ SELECT * FROM test.message;
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/pictures/Hive-local-workstation-testing.png" width="800">
 
+Note: The previous test created a type of distributed database capable of cataloging and querying petabytes of data from a distributed, highly scalable MinIO object storage system. The preceding exercise is capable of modeling existing data, provided that all data in the specified bucket and prefix (/test/messages/) has the same structure. This powerful concept allows organizations to begin collecting structured data and apply a schema in the future, once the need to access it arises.
+
 ### Add container to registry:
 ```shell script
 docker login
@@ -75,6 +86,9 @@ docker push davarski/hive-s3m:3.1.2-1.0.0
 ```
 
 # Hive K8s deploy/test:
+
+Brings the power of Apache Hive to the Kubernetes platform. Running Hive in Kubernetes brings all the advantages provided by container management, networking,
+monitoring, and logical proximity to all the services within the data platform.
 
 Deploys the custom Apache Hive container developed earlier. Hive supplies SQL-like capabilities atop Apache Hadoop, extending its use to a broader range of data analytics, analysis, and management applications. Hadoop’s Big Data capabilities are traditionally associated with the Hadoop Distributed File System (HDFS). However, the custom container developed earlier extends Hive with the ability to use S3-compatible object storage as a modern alternative to Hadoop’s HDFS. Apache Hive creates a Data Warehouse within a broader Data Lake, as shown:
 
@@ -296,6 +310,9 @@ Browse to http://localhost:8888//?token=5bebb78cc162e7050332ce46371ca3adc82306fa
 
 Preparing Test Data:
 
+Note: Apache Hive provides the ability to project schema onto empty buckets, allowing for the creation of ad hoc yet well-structured data sets. While Hive is not itself a database, it can create massively scalable object-based databases atop distributed object storage, in this case the S3-compatible MinIO. Hive provides the ability to store schema supporting existing structured and semi-structured objects of a given type. The following exercise creates a new blood donor example data set, consisting of one million records distributed across one thousand CSV files. Each record contains the comma-separated values for email, name, blood type, birthday, and state of fictional donors.
+
+
 ```
 !pip install Faker==2.0.3
 !pip install minio==5.0.1
@@ -338,14 +355,14 @@ except ResponseError as err:
     raise
 
 
-for i in range(1,1000):
+for i in range(1,1001):
     now = datetime.datetime.now()
     dtstr = now.strftime("%Y%m%d%H%M%S")
     filename = f'donors/{dtstr}.csv'
     tmp_file = f'./{dtstr}.csv'
     with open(tmp_file,"w+") as tf:
         tf.write("email,name,type,birthday,state\n")
-        for ii in range(1,1000):
+        for ii in range(1,1001):
             line = ",".join(makeDonor()) + "\n"
             tf.write(line)
         mc.fput_object(bucket, filename, tmp_file, content_type='application/csv')
