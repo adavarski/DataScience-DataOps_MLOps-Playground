@@ -724,7 +724,12 @@ davar@carbon:~/Documents/0-GITHUB-SOURCE/SOURCE_REPOS.20201103/PaaS-and-SaaS-POC
 
 
 ```
-
+### Hive (with MinIO:S3)
+```
+kubectl apply -f ./003-data/3000-hive/10-mysql-metadata_backend.yml
+kubectl apply -f ./003-data/3000-hive/20-service.yml
+kubectl apply -f ./003-data/3000-hive/30-deployment.yml
+```
 ### GitLab (in-cluster CI/CD)  
 ```
 kubectl apply -f ./003-data/2000-gitlab/00-namespace.yml
