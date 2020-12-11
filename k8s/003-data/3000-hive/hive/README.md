@@ -1,4 +1,19 @@
-# Hive (docker image build/test)
+# Hive overview
+
+Apache Hive is Data Warehouse software initially developed by Facebook and later given to the Apache Software Foundation. Organizations such as
+Netflix and FINRA use Hive to query massive volumes of structured data across distributed storage systems, including Hadoop’s HDFS and Amazon
+S3. Hive simplifies the complex MapReduce jobs typically required for querying Big Data by providing a standard SQL interface. While Hive is not
+a database, it delivers the ability to project schema onto any structured data stored in HDFS or S3-compatible storage. Amazon’s AWS offers the
+product Elastic MapReduce, including a version of Hive as a service. Apache Hive enables organizations to harness enormous quantities of
+structured data not managed by formal database management systems, steady streams of IoT data, exports from legacy systems, and ad hoc data
+ingestion. Apache Hive reduces the complexity and effort to perform Data Science activities, including business analytics, business intelligence, and
+Machine Learning, by providing an SQL interface, metadata, and schema onto a vast Data Lake.
+
+# Hive docker image build/test)
+
+This section creates a custom Apache Hive container configured to use MySQL for the storage of schema and metadata related to objects residing
+in an S3-compatible distributed storage system, such as the MinIO cluster (configured before). Apache Hive, like many Big Data applications evolved outside the Cloud-Native and Kubernetes ecosystems, therefore requiring a bit more effort in onboarding it into the cluster. The following starts with building a custom container suitable for use with Kubernetes and local experimentation.
+
 
 This repository is for the demonstration of Apache Hive utilizing a MySQL database for metadata storage, specifically for the projection of schema atop S3 object storage.
 
