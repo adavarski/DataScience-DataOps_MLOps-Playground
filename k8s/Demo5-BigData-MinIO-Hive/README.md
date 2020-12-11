@@ -104,7 +104,7 @@ monitoring, and logical proximity to all the services within the data platform.
 
 Deploys the custom Apache Hive container developed earlier. Hive supplies SQL-like capabilities atop Apache Hadoop, extending its use to a broader range of data analytics, analysis, and management applications. Hadoop’s Big Data capabilities are traditionally associated with the Hadoop Distributed File System (HDFS). However, the custom container developed earlier extends Hive with the ability to use S3-compatible object storage as a modern alternative to Hadoop’s HDFS. Apache Hive creates a Data Warehouse within a broader Data Lake, as shown:
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo5-BigData-MinIO-Hive/pictures/Hive-warehousing-structures-and-semi-structures.png" width="800">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo5-BigData-MinIO-Hive/pictures/Hive-warehousing-structures-and-semi-structures.png" width="800">
 
 The following configuration defines a hive Kubernetes Service backed by a hive Deployment implementing the custom image davarski/hive-s3m:3.1.2-1.0.0. The new Hive container uses MySQL to store schema, defining structured and semi-structured objects stored in MinIO (S3).
 
@@ -261,7 +261,7 @@ Forwarding from [::1]:10002 -> 10002
 Handling connection for 10002
 
 ```
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo5-BigData-MinIO-Hive/pictures/Hive-UI.png" width="800">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo5-BigData-MinIO-Hive/pictures/Hive-UI.png" width="800">
 
 ### JupyterLab/Jupyter Notebook (Jupyter environment)
 
@@ -383,9 +383,9 @@ for i in range(1,1001):
 ```
 Example Output:
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo5-BigData-MinIO-Hive/pictures/Hive-MinIO-Juputer-1.png" width="800">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo5-BigData-MinIO-Hive/pictures/Hive-MinIO-Juputer-1.png" width="800">
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo5-BigData-MinIO-Hive/pictures/Hive-MinIO-Jupyter-2.png" width="800">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo5-BigData-MinIO-Hive/pictures/Hive-MinIO-Jupyter-2.png" width="800">
 
 Check MinIO bucket
 
@@ -453,9 +453,9 @@ beeline -u jdbc:hive2:// -f /tmp/create-table.hql
 ```
 
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo5-BigData-MinIO-Hive/pictures/diagram-beeline.png" width="800">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo5-BigData-MinIO-Hive/pictures/diagram-beeline.png" width="800">
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo5-BigData-MinIO-Hive/pictures/beeline-hive-metastore.png" width="500">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo5-BigData-MinIO-Hive/pictures/beeline-hive-metastore.png" width="500">
 
 Example: 
 
