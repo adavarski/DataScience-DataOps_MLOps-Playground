@@ -73,6 +73,38 @@ hive   ClusterIP   10.43.178.75   <none>        10000/TCP,9083/TCP,10002/TCP   3
 $ kubectl get pod -n data |grep hive
 hive-dccc9f446-6wsg2                1/1     Running   0          36m
 
+$ kubectl logs hive-dccc9f446-6wsg2 -n data
+cp: cannot stat '/hive-site-template.xml': No such file or directory
+Setting MySQL endpoint: mysql-service:3306
+Setting S3 endpoint: http://minio-service:9000
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.10.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/opt/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+Metastore connection URL:	 jdbc:mysql://mysql-service:3306/objectmetastore?createDatabaseIfNotExist=true&useSSL=false
+Metastore Connection Driver :	 com.mysql.jdbc.Driver
+Metastore connection User:	 root
+Starting metastore schema initialization to 3.1.0
+Initialization script hive-schema-3.1.0.mysql.sql
+....
+Initialization script completed
+schemaTool completed
+2020-12-11 08:55:12: Starting Hive Metastore Server
+2020-12-11 08:55:12: Starting HiveServer2
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.10.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/opt/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.10.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/opt/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+Hive Session ID = 0f7fda0a-3345-4041-89f7-c2716b4615d5
+
+
 $ kubectl exec -it hive-dccc9f446-6wsg2  /opt/hive/bin/hive -n data
 kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
 SLF4J: Class path contains multiple SLF4J bindings.
