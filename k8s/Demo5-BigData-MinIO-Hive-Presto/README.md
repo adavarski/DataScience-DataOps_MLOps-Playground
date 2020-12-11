@@ -768,7 +768,6 @@ df = pd.DataFrame(
     rows, 
     columns=[d[0] for d in cur.description]
 )
-
 df
 ```
 ```
