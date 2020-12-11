@@ -9,8 +9,6 @@ structured data not managed by formal database management systems, steady stream
 ingestion. Apache Hive reduces the complexity and effort to perform Data Science activities, including business analytics, business intelligence, and
 Machine Learning, by providing an SQL interface, metadata, and schema onto a vast Data Lake.
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/pictures/Hive-warehousing-structures-and-semi-structures.png" width="800">
-
 
 ## Hive docker image build/test)
 
@@ -76,12 +74,20 @@ docker login
 docker push davarski/hive-s3m:3.1.2-1.0.0
 ```
 
-# K8s deploy/test:
+# Hive K8s deploy/test:
+
+Deploys the custom Apache Hive container developed earlier. Hive supplies SQL-like capabilities atop Apache Hadoop, extending its use to a broader range of data analytics, analysis, and management applications. Hadoop’s Big Data capabilities are traditionally associated with the Hadoop Distributed File System (HDFS). However, the custom container developed earlier extends Hive with the ability to use S3-compatible object storage as a modern alternative to Hadoop’s HDFS. Apache Hive creates a Data Warehouse within a broader Data Lake, as shown:
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/pictures/Hive-warehousing-structures-and-semi-structures.png" width="800">
+
+The following configuration defines a hive Kubernetes Service backed by a hive Deployment implementing the custom image davarski/hive-s3m:3.1.2-1.0.0. The new Hive container uses MySQL to store schema, defining structured and semi-structured objects stored in MinIO (S3).
+
 ```
 kubectl apply -f ../10-mysql-metadata_backend.yml  
 kubectl apply -f ../20-service.yml  
 kubectl apply -f ../30-deployment.yml 
 ```
+
 ```
 mc mb minio0cluster/test2
 CREATE DATABASE IF NOT EXISTS test2;
