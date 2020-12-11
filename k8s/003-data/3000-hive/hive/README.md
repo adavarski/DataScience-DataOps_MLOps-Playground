@@ -403,6 +403,8 @@ Create Schema
 ```
 CREATE DATABASE exports;
 CREATE TABLE exports.donors (email string, name string, blood_type string, birthday date, state string) row format delimited fields terminated by ',' lines terminated by "\n" location 's3a://exports/donors';
+SHOW DATABASES;
+SHOW TABLES IN exports;
 ```
 Example: 
 
@@ -432,4 +434,16 @@ hive> select * from exports.donors;
 ```
 Note: This demo uses a custom Apache Hive container to project schema onto the distributed object-store. While the single Hive container is capable of executing queries through ODBC/thrift exposed over the hive:1000 Kubernetes Service, a more extensive Hive cluster is necessary for executing production workloads directly against Hive. 
 
+### Beeline cli
+
+Different ways how to connect
+
+# from metastore (loopback) 
+beeline -u jdbc:hive2://
+    
+# from hive-server (to metastore)
+beeline -u "jdbc:hive2://localhost:10000/default;auth=noSasl" -n hive -p hive  
+
+# exec script from file (example)
+beeline -u jdbc:hive2:// -f /tmp/create-table.hql
 
