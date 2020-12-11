@@ -33,6 +33,9 @@ This repository is for the demonstration of Apache Hive utilizing a MySQL databa
 Custom Hive container build instructions (download and uncompress both Apache Hive and its main dependency Apache Hadoop and extend Apache Hive’s capabilities by adding JAR files containing the functionality needed for connecting to S3-compatible object storage and MySQL for schema and metadata management)
 
 ```shell script
+
+cd ./hive 
+
 # Download Apache Hive
 curl -L http://mirror.cc.columbia.edu/pub/software/apache/hive/hive-3.1.2/apache-hive-3.1.2-bin.tar.gz -o ./src/apache-hive-3.1.2-bin.tar.gz
 
@@ -105,9 +108,9 @@ Deploys the custom Apache Hive container developed earlier. Hive supplies SQL-li
 The following configuration defines a hive Kubernetes Service backed by a hive Deployment implementing the custom image davarski/hive-s3m:3.1.2-1.0.0. The new Hive container uses MySQL to store schema, defining structured and semi-structured objects stored in MinIO (S3).
 
 ```
-kubectl apply -f ../10-mysql-metadata_backend.yml  
-kubectl apply -f ../20-service.yml  
-kubectl apply -f ../30-deployment.yml 
+kubectl apply -f ../003-data/3000-hive/10-mysql-metadata_backend.yml  
+kubectl apply -f ../003-data/3000-hive/20-service.yml  
+kubectl apply -f ../003-data/3000-hive/30-deployment.yml 
 ```
 
 ```
