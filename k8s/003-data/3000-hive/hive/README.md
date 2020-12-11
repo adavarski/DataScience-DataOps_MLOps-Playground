@@ -437,7 +437,7 @@ Note: This demo uses a custom Apache Hive container to project schema onto the d
 ### Beeline cli
 
 Different ways how to connect
-
+```
 # from metastore (loopback) 
 beeline -u jdbc:hive2://
     
@@ -446,4 +446,58 @@ beeline -u "jdbc:hive2://localhost:10000/default;auth=noSasl" -n hive -p hive
 
 # exec script from file (example)
 beeline -u jdbc:hive2:// -f /tmp/create-table.hql
+```
+Example:
 
+```
+$ kubectl exec -it hive-dccc9f446-6wsg2 bash -n data
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
+root@hive-dccc9f446-6wsg2:/# ls -al /opt/hive/bin/beeline
+-rwxr-xr-x 1 root root 881 Aug 22  2019 /opt/hive/bin/beeline
+root@hive-dccc9f446-6wsg2:/# /opt/hive/bin/beeline -u jdbc:hive2://
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.10.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/opt/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+Connecting to jdbc:hive2://
+Hive Session ID = b5f5eb2e-3478-4c75-a337-f5afcf61ca55
+20/12/11 14:03:23 [main]: WARN session.SessionState: METASTORE_FILTER_HOOK will be ignored, since hive.security.authorization.manager is set to instance of HiveAuthorizerFactory.
+20/12/11 14:03:23 [main]: WARN metastore.ObjectStore: datanucleus.autoStartMechanismMode is set to unsupported value null . Setting it to value: ignored
+20/12/11 14:03:25 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 14:03:25 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 14:03:25 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 14:03:25 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 14:03:25 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 14:03:25 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 14:03:26 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 14:03:26 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 14:03:26 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 14:03:26 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 14:03:26 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 14:03:26 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+Connected to: Apache Hive (version 3.1.2)
+Driver: Hive JDBC (version 3.1.2)
+Transaction isolation: TRANSACTION_REPEATABLE_READ
+Beeline version 3.1.2 by Apache Hive
+0: jdbc:hive2://> 
+0: jdbc:hive2://> SHOW DATABASES;
+OK
++----------------+
+| database_name  |
++----------------+
+| default        |
+| exports        |
++----------------+
+2 rows selected (1.411 seconds)
+0: jdbc:hive2://> SHOW TABLES IN exports;
+OK
++-----------+
+| tab_name  |
++-----------+
+| donors    |
++-----------+
+1 row selected (0.165 seconds)
+0: jdbc:hive2://> 
+
+```
