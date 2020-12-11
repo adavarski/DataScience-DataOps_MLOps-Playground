@@ -351,7 +351,7 @@ for i in range(1,1000):
     print(f'{i:02}: {filename}')
 ```
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/pictures/Hive-MinIO-Jupyter-1.png" width="800">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/pictures/Hive-MinIO-Juputer-1.png" width="800">
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/pictures/Hive-MinIO-Jupyter-2.png" width="800">
 
