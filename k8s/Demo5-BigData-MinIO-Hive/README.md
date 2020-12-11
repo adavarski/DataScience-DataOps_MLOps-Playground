@@ -712,6 +712,8 @@ presto@presto-data-coordinator-64f7ffbb99-5hlrb:~$ presto -f ./query-example.sql
 ...
 
 ```
+An Ingress configuration, exposes the Presto UI at https://presto.data.davar.com as depicted in: 
+
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo5-BigData-MinIO-Hive/pictures/Presto-UI-queries.png" width="800">
 
