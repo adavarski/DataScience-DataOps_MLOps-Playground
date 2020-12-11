@@ -10,7 +10,7 @@ ingestion. Apache Hive reduces the complexity and effort to perform Data Science
 Machine Learning, by providing an SQL interface, metadata, and schema onto a vast Data Lake.
 
 
-## Hive docker image build/test)
+## Hive docker image build/test
 
 This section creates a custom Apache Hive container configured to use MySQL for the storage of schema and metadata related to objects residing
 in an S3-compatible distributed storage system, such as the MinIO cluster (configured before). Apache Hive, like many Big Data applications evolved outside the Cloud-Native and Kubernetes ecosystems, therefore requiring a bit more effort in onboarding it into the cluster. The following starts with building a custom container suitable for use with Kubernetes and local experimentation.
