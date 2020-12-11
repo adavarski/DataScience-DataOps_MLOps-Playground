@@ -458,278 +458,351 @@ modelUri: s3://mlflow/artifacts/1/e22b3108e7b04c269d65b3f081f44166/artifacts/mod
 kubectl apply -f ./003-data/1000-seldoncore/000-sd-s3-secret.yml
 kubectl apply -f ./003-data/1000-seldoncore/100-sd-quality.yml
 ```
-
-## Check k8s development cluster:
-
-```
-$ kubectl get ingress --all-namespaces
-Warning: extensions/v1beta1 Ingress is deprecated in v1.14+, unavailable in v1.22+; use networking.k8s.io/v1 Ingress
-NAMESPACE   NAME               CLASS    HOSTS                    ADDRESS         PORTS     AGE
-data        kibana             <none>   kib.data.davar.com       192.168.0.101   80, 443   6d23h
-data        nifi               <none>   nifi.data.davar.com      192.168.0.101   80, 443   6d21h
-data        openfaas-ingress   <none>   gateway.openfaas.local                   80        6d21h
-data        faas               <none>   faas.data.davar.com      192.168.0.101   80, 443   6d21h
-data        minio-ingress      <none>   minio.data.davar.com     192.168.0.101   80, 443   44h
-data        mlflow             <none>   mlflow.data.davar.com    192.168.0.101   80, 443   19h
-default     quality            <none>   quality.data.davar.com   192.168.0.101   80, 443   34m
-
-$ kubectl get certificates --all-namespaces
-NAMESPACE   NAME                     READY   SECRET                   AGE
-data        data-production-tls      True    data-production-tls      6d23h
-data        minio-production-tls     True    minio-production-tls     44h
-data        mlflow-production-tls    True    mlflow-production-tls    19h
-default     quality-production-tls   True    quality-production-tls   35m
-
-$ kubectl get all --all-namespaces
-NAMESPACE             NAME                                              READY   STATUS      RESTARTS   AGE
-kube-system           pod/helm-install-traefik-fbmkt                    0/1     Completed   0          14d
-gitlab-managed-apps   pod/install-helm                                  0/1     Error       0          12d
-data                  pod/jupyter-notebook                              0/1     Unknown     0          19h
-data                  pod/nifi-1                                        0/1     Pending     0          6d21h
-data                  pod/mlflow-0                                      1/1     Running     3          19h
-cert-manager          pod/cert-manager-5597cff495-rrl52                 1/1     Running     24         8d
-kube-system           pod/local-path-provisioner-7ff9579c6-88rrd        1/1     Running     75         14d
-kube-system           pod/seldon-spartakus-volunteer-5b57b95596-5xpcx   1/1     Running     1          5h15m
-data                  pod/mqtt-cbdf9fb4-c2grj                           1/1     Running     17         7d1h
-seldon-system         pod/seldon-controller-manager-99f687d8d-5nv74     1/1     Running     1          5h15m
-kube-system           pod/metrics-server-7b4f8b595-964g7                1/1     Running     26         14d
-data                  pod/nifi-0                                        1/1     Running     16         6d21h
-kube-system           pod/coredns-66c464876b-lpfv4                      1/1     Running     31         13d
-data                  pod/elasticsearch-0                               1/1     Running     17         7d
-cert-manager          pod/cert-manager-cainjector-bd5f9c764-z7bh6       1/1     Running     49         8d
-data                  pod/kibana-67c68595b7-hgmlb                       1/1     Running     16         7d
-data                  pod/nats-7d86c64647-lmktk                         1/1     Running     16         6d21h
-kube-system           pod/svclb-traefik-w9lq6                           2/2     Running     52         14d
-data                  pod/kafka-client-util                             1/1     Running     17         7d1h
-kube-system           pod/traefik-5dd496474-xbdg2                       1/1     Running     30         14d
-data                  pod/logstash-7b445484d8-tn4ww                     1/1     Running     16         7d
-data                  pod/queue-worker-5c76c4bd84-dg9db                 1/1     Running     22         6d21h
-data                  pod/sentimentanalysis-9b98675f9-bf6jw             1/1     Running     23         6d20h
-data                  pod/basic-auth-plugin-bc899c574-t55r2             1/1     Running     16         6d21h
-cert-manager          pod/cert-manager-webhook-5f57f59fbc-49jk7         1/1     Running     23         8d
-data                  pod/prometheus-78dc788984-m7q4z                   1/1     Running     16         6d21h
-data                  pod/alertmanager-6fcb5b9b7b-c7hqb                 1/1     Running     16         6d21h
-data                  pod/zookeeper-0                                   1/1     Running     17         7d1h
-data                  pod/zookeeper-1                                   1/1     Running     17         7d1h
-data                  pod/gateway-58fd85c86b-5klq4                      2/2     Running     40         6d21h
-data                  pod/faas-idler-6df76476c9-6dhdp                   1/1     Running     43         6d21h
-data                  pod/kafka-0                                       1/1     Running     21         7d1h
-data                  pod/kafka-1                                       1/1     Running     21         7d1h
-data                  pod/minio-698d6d54c8-xkvpq                        1/1     Running     8          2d4h
-default               pod/quality-default-0-quality-6d4664bd99-pl28n    2/2     Running     0          35m
-default               pod/dnsutils                                      1/1     Running     151        13d
-default               pod/busybox                                       1/1     Running     155        13d
-
-NAMESPACE       NAME                              TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
-default         service/kubernetes                ClusterIP      10.43.0.1       <none>          443/TCP                      14d
-kube-system     service/metrics-server            ClusterIP      10.43.139.93    <none>          443/TCP                      14d
-kube-system     service/traefik-prometheus        ClusterIP      10.43.78.216    <none>          9100/TCP                     14d
-kube-system     service/kube-dns                  ClusterIP      10.43.0.10      <none>          53/UDP,53/TCP,9153/TCP       14d
-cert-manager    service/cert-manager              ClusterIP      10.43.162.66    <none>          9402/TCP                     8d
-cert-manager    service/cert-manager-webhook      ClusterIP      10.43.202.9     <none>          443/TCP                      8d
-data            service/zookeeper                 ClusterIP      10.43.215.75    <none>          2181/TCP                     7d1h
-data            service/zookeeper-headless        ClusterIP      None            <none>          2181/TCP,3888/TCP,2888/TCP   7d1h
-data            service/kafka                     ClusterIP      10.43.166.24    <none>          9092/TCP                     7d1h
-data            service/kafka-headless            ClusterIP      None            <none>          9092/TCP                     7d1h
-data            service/mqtt                      ClusterIP      10.43.133.39    <none>          1883/TCP                     7d1h
-data            service/elasticsearch             ClusterIP      10.43.243.188   <none>          9200/TCP                     7d
-data            service/logstash                  ClusterIP      10.43.69.80     <none>          5044/TCP                     7d
-data            service/kibana                    ClusterIP      10.43.142.124   <none>          80/TCP                       7d
-data            service/nifi                      ClusterIP      None            <none>          8080/TCP,6007/TCP            6d21h
-data            service/gateway                   ClusterIP      10.43.169.202   <none>          8080/TCP                     6d21h
-data            service/nats                      ClusterIP      10.43.142.201   <none>          4222/TCP                     6d21h
-data            service/basic-auth-plugin         ClusterIP      10.43.70.145    <none>          8080/TCP                     6d21h
-data            service/alertmanager              ClusterIP      10.43.17.222    <none>          9093/TCP                     6d21h
-data            service/prometheus                ClusterIP      10.43.21.25     <none>          9090/TCP                     6d21h
-data            service/sentimentanalysis         ClusterIP      10.43.190.146   <none>          8080/TCP                     6d20h
-data            service/minio-service             ClusterIP      10.43.248.161   <none>          9000/TCP                     44h
-data            service/minio-service-headless    ClusterIP      None            <none>          9000/TCP                     41h
-data            service/mlflow                    ClusterIP      10.43.60.15     <none>          5000/TCP                     19h
-seldon-system   service/seldon-webhook-service    ClusterIP      10.43.220.83    <none>          443/TCP                      14h
-kube-system     service/traefik                   LoadBalancer   10.43.100.221   192.168.0.101   80:31768/TCP,443:30058/TCP   14d
-default         service/quality-default-quality   ClusterIP      10.43.244.50    <none>          9000/TCP,9500/TCP            35m
-default         service/quality-default           ClusterIP      10.43.68.44     <none>          8000/TCP,5001/TCP            32m
-
-NAMESPACE     NAME                           DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
-kube-system   daemonset.apps/svclb-traefik   1         1         1       1            1           <none>          14d
-
-NAMESPACE       NAME                                         READY   UP-TO-DATE   AVAILABLE   AGE
-data            deployment.apps/mqtt                         1/1     1            1           7d1h
-kube-system     deployment.apps/metrics-server               1/1     1            1           14d
-kube-system     deployment.apps/local-path-provisioner       1/1     1            1           14d
-cert-manager    deployment.apps/cert-manager                 1/1     1            1           8d
-seldon-system   deployment.apps/seldon-controller-manager    1/1     1            1           14h
-kube-system     deployment.apps/seldon-spartakus-volunteer   1/1     1            1           14h
-kube-system     deployment.apps/coredns                      1/1     1            1           14d
-cert-manager    deployment.apps/cert-manager-cainjector      1/1     1            1           8d
-data            deployment.apps/kibana                       1/1     1            1           7d
-data            deployment.apps/nats                         1/1     1            1           6d21h
-kube-system     deployment.apps/traefik                      1/1     1            1           14d
-data            deployment.apps/logstash                     1/1     1            1           7d
-data            deployment.apps/queue-worker                 1/1     1            1           6d21h
-data            deployment.apps/sentimentanalysis            1/1     1            1           6d20h
-data            deployment.apps/basic-auth-plugin            1/1     1            1           6d21h
-cert-manager    deployment.apps/cert-manager-webhook         1/1     1            1           8d
-data            deployment.apps/prometheus                   1/1     1            1           6d21h
-data            deployment.apps/alertmanager                 1/1     1            1           6d21h
-data            deployment.apps/gateway                      1/1     1            1           6d21h
-data            deployment.apps/faas-idler                   1/1     1            1           6d21h
-data            deployment.apps/minio                        1/1     1            1           2d4h
-default         deployment.apps/quality-default-0-quality    1/1     1            1           35m
-
-NAMESPACE       NAME                                                    DESIRED   CURRENT   READY   AGE
-data            replicaset.apps/mqtt-cbdf9fb4                           1         1         1       7d1h
-kube-system     replicaset.apps/metrics-server-7b4f8b595                1         1         1       14d
-kube-system     replicaset.apps/local-path-provisioner-7ff9579c6        1         1         1       14d
-cert-manager    replicaset.apps/cert-manager-5597cff495                 1         1         1       8d
-seldon-system   replicaset.apps/seldon-controller-manager-99f687d8d     1         1         1       5h15m
-kube-system     replicaset.apps/seldon-spartakus-volunteer-5b57b95596   1         1         1       5h15m
-kube-system     replicaset.apps/coredns-66c464876b                      1         1         1       14d
-cert-manager    replicaset.apps/cert-manager-cainjector-bd5f9c764       1         1         1       8d
-data            replicaset.apps/kibana-67c68595b7                       1         1         1       7d
-data            replicaset.apps/nats-7d86c64647                         1         1         1       6d21h
-kube-system     replicaset.apps/traefik-5dd496474                       1         1         1       14d
-data            replicaset.apps/logstash-7b445484d8                     1         1         1       7d
-data            replicaset.apps/queue-worker-5c76c4bd84                 1         1         1       6d21h
-data            replicaset.apps/sentimentanalysis-9b98675f9             1         1         1       6d20h
-data            replicaset.apps/basic-auth-plugin-bc899c574             1         1         1       6d21h
-cert-manager    replicaset.apps/cert-manager-webhook-5f57f59fbc         1         1         1       8d
-data            replicaset.apps/prometheus-78dc788984                   1         1         1       6d21h
-data            replicaset.apps/alertmanager-6fcb5b9b7b                 1         1         1       6d21h
-data            replicaset.apps/gateway-58fd85c86b                      1         1         1       6d21h
-data            replicaset.apps/faas-idler-6df76476c9                   1         1         1       6d21h
-data            replicaset.apps/minio-698d6d54c8                        1         1         1       2d4h
-default         replicaset.apps/quality-default-0-quality-6d4664bd99    1         1         1       35m
-
-NAMESPACE   NAME                             READY   AGE
-data        statefulset.apps/mlflow          1/1     19h
-data        statefulset.apps/nifi            1/2     6d21h
-data        statefulset.apps/elasticsearch   1/1     7d
-data        statefulset.apps/zookeeper       2/2     7d1h
-data        statefulset.apps/kafka           2/2     7d1h
-
-NAMESPACE     NAME                             COMPLETIONS   DURATION   AGE
-kube-system   job.batch/helm-install-traefik   1/1           44s        14d
-
-$ kubectl get all -n data
-NAME                                    READY   STATUS    RESTARTS   AGE
-pod/jupyter-notebook                    0/1     Unknown   0          19h
-pod/nifi-1                              0/1     Pending   0          6d21h
-pod/mlflow-0                            1/1     Running   3          19h
-pod/mqtt-cbdf9fb4-c2grj                 1/1     Running   17         7d1h
-pod/nifi-0                              1/1     Running   16         6d21h
-pod/elasticsearch-0                     1/1     Running   17         7d
-pod/kibana-67c68595b7-hgmlb             1/1     Running   16         7d
-pod/nats-7d86c64647-lmktk               1/1     Running   16         6d21h
-pod/kafka-client-util                   1/1     Running   17         7d1h
-pod/logstash-7b445484d8-tn4ww           1/1     Running   16         7d
-pod/queue-worker-5c76c4bd84-dg9db       1/1     Running   22         6d21h
-pod/sentimentanalysis-9b98675f9-bf6jw   1/1     Running   23         6d20h
-pod/basic-auth-plugin-bc899c574-t55r2   1/1     Running   16         6d21h
-pod/prometheus-78dc788984-m7q4z         1/1     Running   16         6d21h
-pod/alertmanager-6fcb5b9b7b-c7hqb       1/1     Running   16         6d21h
-pod/zookeeper-0                         1/1     Running   17         7d1h
-pod/zookeeper-1                         1/1     Running   17         7d1h
-pod/gateway-58fd85c86b-5klq4            2/2     Running   40         6d21h
-pod/faas-idler-6df76476c9-6dhdp         1/1     Running   43         6d21h
-pod/kafka-0                             1/1     Running   21         7d1h
-pod/kafka-1                             1/1     Running   21         7d1h
-pod/minio-698d6d54c8-xkvpq              1/1     Running   8          2d4h
-
-NAME                             TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
-service/zookeeper                ClusterIP   10.43.215.75    <none>        2181/TCP                     7d1h
-service/zookeeper-headless       ClusterIP   None            <none>        2181/TCP,3888/TCP,2888/TCP   7d1h
-service/kafka                    ClusterIP   10.43.166.24    <none>        9092/TCP                     7d1h
-service/kafka-headless           ClusterIP   None            <none>        9092/TCP                     7d1h
-service/mqtt                     ClusterIP   10.43.133.39    <none>        1883/TCP                     7d1h
-service/elasticsearch            ClusterIP   10.43.243.188   <none>        9200/TCP                     7d
-service/logstash                 ClusterIP   10.43.69.80     <none>        5044/TCP                     7d
-service/kibana                   ClusterIP   10.43.142.124   <none>        80/TCP                       7d
-service/nifi                     ClusterIP   None            <none>        8080/TCP,6007/TCP            6d21h
-service/gateway                  ClusterIP   10.43.169.202   <none>        8080/TCP                     6d21h
-service/nats                     ClusterIP   10.43.142.201   <none>        4222/TCP                     6d21h
-service/basic-auth-plugin        ClusterIP   10.43.70.145    <none>        8080/TCP                     6d21h
-service/alertmanager             ClusterIP   10.43.17.222    <none>        9093/TCP                     6d21h
-service/prometheus               ClusterIP   10.43.21.25     <none>        9090/TCP                     6d21h
-service/sentimentanalysis        ClusterIP   10.43.190.146   <none>        8080/TCP                     6d20h
-service/minio-service            ClusterIP   10.43.248.161   <none>        9000/TCP                     44h
-service/minio-service-headless   ClusterIP   None            <none>        9000/TCP                     41h
-service/mlflow                   ClusterIP   10.43.60.15     <none>        5000/TCP                     19h
-
-NAME                                READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/mqtt                1/1     1            1           7d1h
-deployment.apps/kibana              1/1     1            1           7d
-deployment.apps/nats                1/1     1            1           6d21h
-deployment.apps/logstash            1/1     1            1           7d
-deployment.apps/queue-worker        1/1     1            1           6d21h
-deployment.apps/sentimentanalysis   1/1     1            1           6d20h
-deployment.apps/basic-auth-plugin   1/1     1            1           6d21h
-deployment.apps/prometheus          1/1     1            1           6d21h
-deployment.apps/alertmanager        1/1     1            1           6d21h
-deployment.apps/gateway             1/1     1            1           6d21h
-deployment.apps/faas-idler          1/1     1            1           6d21h
-deployment.apps/minio               1/1     1            1           2d4h
-
-NAME                                          DESIRED   CURRENT   READY   AGE
-replicaset.apps/mqtt-cbdf9fb4                 1         1         1       7d1h
-replicaset.apps/kibana-67c68595b7             1         1         1       7d
-replicaset.apps/nats-7d86c64647               1         1         1       6d21h
-replicaset.apps/logstash-7b445484d8           1         1         1       7d
-replicaset.apps/queue-worker-5c76c4bd84       1         1         1       6d21h
-replicaset.apps/sentimentanalysis-9b98675f9   1         1         1       6d20h
-replicaset.apps/basic-auth-plugin-bc899c574   1         1         1       6d21h
-replicaset.apps/prometheus-78dc788984         1         1         1       6d21h
-replicaset.apps/alertmanager-6fcb5b9b7b       1         1         1       6d21h
-replicaset.apps/gateway-58fd85c86b            1         1         1       6d21h
-replicaset.apps/faas-idler-6df76476c9         1         1         1       6d21h
-replicaset.apps/minio-698d6d54c8              1         1         1       2d4h
-
-NAME                             READY   AGE
-statefulset.apps/mlflow          1/1     19h
-statefulset.apps/nifi            1/2     6d21h
-statefulset.apps/elasticsearch   1/1     7d
-statefulset.apps/zookeeper       2/2     7d1h
-statefulset.apps/kafka           2/2     7d1h
-
-$ kubectl get all -n default
-NAME                                             READY   STATUS    RESTARTS   AGE
-pod/quality-default-0-quality-6d4664bd99-pl28n   2/2     Running   0          36m
-pod/dnsutils                                     1/1     Running   151        13d
-pod/busybox                                      1/1     Running   155        13d
-
-NAME                              TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)             AGE
-service/kubernetes                ClusterIP   10.43.0.1      <none>        443/TCP             14d
-service/quality-default-quality   ClusterIP   10.43.244.50   <none>        9000/TCP,9500/TCP   36m
-service/quality-default           ClusterIP   10.43.68.44    <none>        8000/TCP,5001/TCP   32m
-
-NAME                                        READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/quality-default-0-quality   1/1     1            1           36m
-
-NAME                                                   DESIRED   CURRENT   READY   AGE
-replicaset.apps/quality-default-0-quality-6d4664bd99   1         1         1       36m
-
-$ kubectl get all -n seldon-system
-NAME                                            READY   STATUS    RESTARTS   AGE
-pod/seldon-controller-manager-99f687d8d-5nv74   1/1     Running   1          5h16m
-
-NAME                             TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
-service/seldon-webhook-service   ClusterIP   10.43.220.83   <none>        443/TCP   14h
-
-NAME                                        READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/seldon-controller-manager   1/1     1            1           14h
-
-NAME                                                  DESIRED   CURRENT   READY   AGE
-replicaset.apps/seldon-controller-manager-99f687d8d   1         1         1       5h16m
-davar@carbon:~/Documents/0-GITHUB-SOURCE/SOURCE_REPOS.20201103/PaaS-and-SaaS-POC$ 
-
-
-```
 ### Hive (with MinIO:S3)
 ```
 kubectl apply -f ./003-data/3000-hive/10-mysql-metadata_backend.yml
 kubectl apply -f ./003-data/3000-hive/20-service.yml
 kubectl apply -f ./003-data/3000-hive/30-deployment.yml
 ```
+
+
+## Check k8s development cluster:
+
+```
+$ kubectl get svc -n data
+NAME                     TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                        AGE
+zookeeper                ClusterIP   10.43.215.75    <none>        2181/TCP                       14d
+zookeeper-headless       ClusterIP   None            <none>        2181/TCP,3888/TCP,2888/TCP     14d
+kafka                    ClusterIP   10.43.166.24    <none>        9092/TCP                       14d
+kafka-headless           ClusterIP   None            <none>        9092/TCP                       14d
+mqtt                     ClusterIP   10.43.133.39    <none>        1883/TCP                       14d
+elasticsearch            ClusterIP   10.43.243.188   <none>        9200/TCP                       14d
+logstash                 ClusterIP   10.43.69.80     <none>        5044/TCP                       14d
+kibana                   ClusterIP   10.43.142.124   <none>        80/TCP                         14d
+nifi                     ClusterIP   None            <none>        8080/TCP,6007/TCP              13d
+gateway                  ClusterIP   10.43.169.202   <none>        8080/TCP                       13d
+nats                     ClusterIP   10.43.142.201   <none>        4222/TCP                       13d
+basic-auth-plugin        ClusterIP   10.43.70.145    <none>        8080/TCP                       13d
+alertmanager             ClusterIP   10.43.17.222    <none>        9093/TCP                       13d
+prometheus               ClusterIP   10.43.21.25     <none>        9090/TCP                       13d
+sentimentanalysis        ClusterIP   10.43.190.146   <none>        8080/TCP                       13d
+minio-service            ClusterIP   10.43.248.161   <none>        9000/TCP                       8d
+minio-service-headless   ClusterIP   None            <none>        9000/TCP                       8d
+mlflow                   ClusterIP   10.43.60.15     <none>        5000/TCP                       7d20h
+mysql-service            ClusterIP   10.43.161.77    <none>        3306/TCP                       4h26m
+hive                     ClusterIP   10.43.178.75    <none>        10000/TCP,9083/TCP,10002/TCP   4h23m
+
+$ kubectl get svc --all-namespaces
+NAMESPACE       NAME                      TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                        AGE
+default         kubernetes                ClusterIP      10.43.0.1       <none>          443/TCP                        21d
+kube-system     metrics-server            ClusterIP      10.43.139.93    <none>          443/TCP                        21d
+kube-system     traefik-prometheus        ClusterIP      10.43.78.216    <none>          9100/TCP                       21d
+kube-system     kube-dns                  ClusterIP      10.43.0.10      <none>          53/UDP,53/TCP,9153/TCP         21d
+cert-manager    cert-manager              ClusterIP      10.43.162.66    <none>          9402/TCP                       15d
+cert-manager    cert-manager-webhook      ClusterIP      10.43.202.9     <none>          443/TCP                        15d
+data            zookeeper                 ClusterIP      10.43.215.75    <none>          2181/TCP                       14d
+data            zookeeper-headless        ClusterIP      None            <none>          2181/TCP,3888/TCP,2888/TCP     14d
+data            kafka                     ClusterIP      10.43.166.24    <none>          9092/TCP                       14d
+data            kafka-headless            ClusterIP      None            <none>          9092/TCP                       14d
+data            mqtt                      ClusterIP      10.43.133.39    <none>          1883/TCP                       14d
+data            elasticsearch             ClusterIP      10.43.243.188   <none>          9200/TCP                       14d
+data            logstash                  ClusterIP      10.43.69.80     <none>          5044/TCP                       14d
+data            kibana                    ClusterIP      10.43.142.124   <none>          80/TCP                         14d
+data            nifi                      ClusterIP      None            <none>          8080/TCP,6007/TCP              13d
+data            gateway                   ClusterIP      10.43.169.202   <none>          8080/TCP                       13d
+data            nats                      ClusterIP      10.43.142.201   <none>          4222/TCP                       13d
+data            basic-auth-plugin         ClusterIP      10.43.70.145    <none>          8080/TCP                       13d
+data            alertmanager              ClusterIP      10.43.17.222    <none>          9093/TCP                       13d
+data            prometheus                ClusterIP      10.43.21.25     <none>          9090/TCP                       13d
+data            sentimentanalysis         ClusterIP      10.43.190.146   <none>          8080/TCP                       13d
+data            minio-service             ClusterIP      10.43.248.161   <none>          9000/TCP                       8d
+data            minio-service-headless    ClusterIP      None            <none>          9000/TCP                       8d
+data            mlflow                    ClusterIP      10.43.60.15     <none>          5000/TCP                       7d20h
+seldon-system   seldon-webhook-service    ClusterIP      10.43.220.83    <none>          443/TCP                        7d16h
+default         quality-default-quality   ClusterIP      10.43.244.50    <none>          9000/TCP,9500/TCP              7d1h
+default         quality-default           ClusterIP      10.43.68.44     <none>          8000/TCP,5001/TCP              7d1h
+kube-system     traefik                   LoadBalancer   10.43.100.221   192.168.0.100   80:31768/TCP,443:30058/TCP     21d
+data            mysql-service             ClusterIP      10.43.161.77    <none>          3306/TCP                       4h32m
+data            hive                      ClusterIP      10.43.178.75    <none>          10000/TCP,9083/TCP,10002/TCP   4h30m
+
+
+$ kubectl get ingress --all-namespaces
+Warning: extensions/v1beta1 Ingress is deprecated in v1.14+, unavailable in v1.22+; use networking.k8s.io/v1 Ingress
+NAMESPACE   NAME               CLASS    HOSTS                    ADDRESS         PORTS     AGE
+data        openfaas-ingress   <none>   gateway.openfaas.local                   80        13d
+data        faas               <none>   faas.data.davar.com      192.168.0.100   80, 443   13d
+data        minio-ingress      <none>   minio.data.davar.com     192.168.0.100   80, 443   8d
+data        mlflow             <none>   mlflow.data.davar.com    192.168.0.100   80, 443   7d20h
+default     quality            <none>   quality.data.davar.com   192.168.0.100   80, 443   7d1h
+data        kibana             <none>   kib.data.davar.com       192.168.0.100   80, 443   14d
+data        nifi               <none>   nifi.data.davar.com      192.168.0.100   80, 443   13d
+
+$ kubectl get certificates --all-namespaces
+NAMESPACE   NAME                     READY   SECRET                   AGE
+data        data-production-tls      True    data-production-tls      14d
+data        minio-production-tls     True    minio-production-tls     8d
+data        mlflow-production-tls    True    mlflow-production-tls    7d20h
+default     quality-production-tls   True    quality-production-tls   7d1h
+
+$ kubectl get all --all-namespaces
+NAMESPACE             NAME                                              READY   STATUS      RESTARTS   AGE
+kube-system           pod/helm-install-traefik-fbmkt                    0/1     Completed   0          21d
+gitlab-managed-apps   pod/install-helm                                  0/1     Error       0          20d
+data                  pod/nifi-1                                        0/1     Pending     0          13d
+kube-system           pod/svclb-traefik-w9lq6                           2/2     Running     84         21d
+data                  pod/kafka-client-util                             1/1     Running     33         14d
+data                  pod/mqtt-cbdf9fb4-c2grj                           1/1     Running     33         14d
+cert-manager          pod/cert-manager-5597cff495-rrl52                 1/1     Running     45         15d
+data                  pod/kibana-67c68595b7-hgmlb                       1/1     Running     32         14d
+data                  pod/mysql-79ffd9d957-xc6xx                        1/1     Running     1          4h29m
+kube-system           pod/traefik-5dd496474-xbdg2                       1/1     Running     47         21d
+kube-system           pod/coredns-66c464876b-lpfv4                      1/1     Running     48         20d
+cert-manager          pod/cert-manager-webhook-5f57f59fbc-49jk7         1/1     Running     42         15d
+data                  pod/mlflow-0                                      1/1     Running     19         7d20h
+data                  pod/elasticsearch-0                               1/1     Running     33         14d
+data                  pod/nats-7d86c64647-lmktk                         1/1     Running     32         13d
+data                  pod/sentimentanalysis-9b98675f9-bf6jw             1/1     Running     49         13d
+data                  pod/basic-auth-plugin-bc899c574-t55r2             1/1     Running     32         13d
+data                  pod/alertmanager-6fcb5b9b7b-c7hqb                 1/1     Running     32         13d
+kube-system           pod/metrics-server-7b4f8b595-964g7                1/1     Running     43         21d
+data                  pod/nifi-0                                        1/1     Running     32         13d
+kube-system           pod/seldon-spartakus-volunteer-5b57b95596-5xpcx   1/1     Running     17         7d6h
+data                  pod/logstash-7b445484d8-tn4ww                     1/1     Running     32         14d
+data                  pod/prometheus-78dc788984-m7q4z                   1/1     Running     32         13d
+data                  pod/zookeeper-0                                   1/1     Running     33         14d
+data                  pod/zookeeper-1                                   1/1     Running     33         14d
+data                  pod/queue-worker-5c76c4bd84-dg9db                 1/1     Running     47         13d
+data                  pod/gateway-58fd85c86b-5klq4                      2/2     Running     79         13d
+data                  pod/faas-idler-6df76476c9-6dhdp                   1/1     Running     88         13d
+data                  pod/hive-dccc9f446-6wsg2                          1/1     Running     2          4h26m
+data                  pod/minio-698d6d54c8-xkvpq                        1/1     Running     29         9d
+data                  pod/kafka-1                                       1/1     Running     41         14d
+data                  pod/kafka-0                                       1/1     Running     42         14d
+default               pod/quality-default-0-quality-6d4664bd99-pl28n    2/2     Running     56         7d1h
+cert-manager          pod/cert-manager-cainjector-bd5f9c764-z7bh6       1/1     Running     129        15d
+seldon-system         pod/seldon-controller-manager-99f687d8d-5nv74     1/1     Running     81         7d6h
+kube-system           pod/local-path-provisioner-7ff9579c6-88rrd        1/1     Running     153        21d
+data                  pod/jupyter-notebook                              1/1     Running     0          85m
+default               pod/dnsutils                                      1/1     Running     218        20d
+default               pod/busybox                                       1/1     Running     222        20d
+
+NAMESPACE       NAME                              TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                        AGE
+default         service/kubernetes                ClusterIP      10.43.0.1       <none>          443/TCP                        21d
+kube-system     service/metrics-server            ClusterIP      10.43.139.93    <none>          443/TCP                        21d
+kube-system     service/traefik-prometheus        ClusterIP      10.43.78.216    <none>          9100/TCP                       21d
+kube-system     service/kube-dns                  ClusterIP      10.43.0.10      <none>          53/UDP,53/TCP,9153/TCP         21d
+cert-manager    service/cert-manager              ClusterIP      10.43.162.66    <none>          9402/TCP                       15d
+cert-manager    service/cert-manager-webhook      ClusterIP      10.43.202.9     <none>          443/TCP                        15d
+data            service/zookeeper                 ClusterIP      10.43.215.75    <none>          2181/TCP                       14d
+data            service/zookeeper-headless        ClusterIP      None            <none>          2181/TCP,3888/TCP,2888/TCP     14d
+data            service/kafka                     ClusterIP      10.43.166.24    <none>          9092/TCP                       14d
+data            service/kafka-headless            ClusterIP      None            <none>          9092/TCP                       14d
+data            service/mqtt                      ClusterIP      10.43.133.39    <none>          1883/TCP                       14d
+data            service/elasticsearch             ClusterIP      10.43.243.188   <none>          9200/TCP                       14d
+data            service/logstash                  ClusterIP      10.43.69.80     <none>          5044/TCP                       14d
+data            service/kibana                    ClusterIP      10.43.142.124   <none>          80/TCP                         14d
+data            service/nifi                      ClusterIP      None            <none>          8080/TCP,6007/TCP              13d
+data            service/gateway                   ClusterIP      10.43.169.202   <none>          8080/TCP                       13d
+data            service/nats                      ClusterIP      10.43.142.201   <none>          4222/TCP                       13d
+data            service/basic-auth-plugin         ClusterIP      10.43.70.145    <none>          8080/TCP                       13d
+data            service/alertmanager              ClusterIP      10.43.17.222    <none>          9093/TCP                       13d
+data            service/prometheus                ClusterIP      10.43.21.25     <none>          9090/TCP                       13d
+data            service/sentimentanalysis         ClusterIP      10.43.190.146   <none>          8080/TCP                       13d
+data            service/minio-service             ClusterIP      10.43.248.161   <none>          9000/TCP                       8d
+data            service/minio-service-headless    ClusterIP      None            <none>          9000/TCP                       8d
+data            service/mlflow                    ClusterIP      10.43.60.15     <none>          5000/TCP                       7d20h
+seldon-system   service/seldon-webhook-service    ClusterIP      10.43.220.83    <none>          443/TCP                        7d16h
+default         service/quality-default-quality   ClusterIP      10.43.244.50    <none>          9000/TCP,9500/TCP              7d1h
+default         service/quality-default           ClusterIP      10.43.68.44     <none>          8000/TCP,5001/TCP              7d1h
+kube-system     service/traefik                   LoadBalancer   10.43.100.221   192.168.0.100   80:31768/TCP,443:30058/TCP     21d
+data            service/mysql-service             ClusterIP      10.43.161.77    <none>          3306/TCP                       4h29m
+data            service/hive                      ClusterIP      10.43.178.75    <none>          10000/TCP,9083/TCP,10002/TCP   4h26m
+
+NAMESPACE     NAME                           DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+kube-system   daemonset.apps/svclb-traefik   1         1         1       1            1           <none>          21d
+
+NAMESPACE       NAME                                         READY   UP-TO-DATE   AVAILABLE   AGE
+data            deployment.apps/mqtt                         1/1     1            1           14d
+cert-manager    deployment.apps/cert-manager                 1/1     1            1           15d
+data            deployment.apps/kibana                       1/1     1            1           14d
+data            deployment.apps/mysql                        1/1     1            1           4h29m
+kube-system     deployment.apps/traefik                      1/1     1            1           21d
+kube-system     deployment.apps/coredns                      1/1     1            1           21d
+cert-manager    deployment.apps/cert-manager-webhook         1/1     1            1           15d
+data            deployment.apps/nats                         1/1     1            1           13d
+data            deployment.apps/sentimentanalysis            1/1     1            1           13d
+data            deployment.apps/basic-auth-plugin            1/1     1            1           13d
+data            deployment.apps/alertmanager                 1/1     1            1           13d
+kube-system     deployment.apps/metrics-server               1/1     1            1           21d
+kube-system     deployment.apps/seldon-spartakus-volunteer   1/1     1            1           7d16h
+data            deployment.apps/logstash                     1/1     1            1           14d
+data            deployment.apps/prometheus                   1/1     1            1           13d
+data            deployment.apps/queue-worker                 1/1     1            1           13d
+data            deployment.apps/gateway                      1/1     1            1           13d
+data            deployment.apps/faas-idler                   1/1     1            1           13d
+data            deployment.apps/hive                         1/1     1            1           4h26m
+data            deployment.apps/minio                        1/1     1            1           9d
+default         deployment.apps/quality-default-0-quality    1/1     1            1           7d1h
+cert-manager    deployment.apps/cert-manager-cainjector      1/1     1            1           15d
+kube-system     deployment.apps/local-path-provisioner       1/1     1            1           21d
+seldon-system   deployment.apps/seldon-controller-manager    1/1     1            1           7d16h
+
+NAMESPACE       NAME                                                    DESIRED   CURRENT   READY   AGE
+data            replicaset.apps/mqtt-cbdf9fb4                           1         1         1       14d
+cert-manager    replicaset.apps/cert-manager-5597cff495                 1         1         1       15d
+data            replicaset.apps/kibana-67c68595b7                       1         1         1       14d
+data            replicaset.apps/mysql-79ffd9d957                        1         1         1       4h29m
+kube-system     replicaset.apps/traefik-5dd496474                       1         1         1       21d
+kube-system     replicaset.apps/coredns-66c464876b                      1         1         1       21d
+cert-manager    replicaset.apps/cert-manager-webhook-5f57f59fbc         1         1         1       15d
+data            replicaset.apps/nats-7d86c64647                         1         1         1       13d
+data            replicaset.apps/sentimentanalysis-9b98675f9             1         1         1       13d
+data            replicaset.apps/basic-auth-plugin-bc899c574             1         1         1       13d
+data            replicaset.apps/alertmanager-6fcb5b9b7b                 1         1         1       13d
+kube-system     replicaset.apps/metrics-server-7b4f8b595                1         1         1       21d
+kube-system     replicaset.apps/seldon-spartakus-volunteer-5b57b95596   1         1         1       7d6h
+data            replicaset.apps/logstash-7b445484d8                     1         1         1       14d
+data            replicaset.apps/prometheus-78dc788984                   1         1         1       13d
+data            replicaset.apps/queue-worker-5c76c4bd84                 1         1         1       13d
+data            replicaset.apps/gateway-58fd85c86b                      1         1         1       13d
+data            replicaset.apps/faas-idler-6df76476c9                   1         1         1       13d
+data            replicaset.apps/hive-dccc9f446                          1         1         1       4h26m
+data            replicaset.apps/minio-698d6d54c8                        1         1         1       9d
+default         replicaset.apps/quality-default-0-quality-6d4664bd99    1         1         1       7d1h
+cert-manager    replicaset.apps/cert-manager-cainjector-bd5f9c764       1         1         1       15d
+seldon-system   replicaset.apps/seldon-controller-manager-99f687d8d     1         1         1       7d6h
+kube-system     replicaset.apps/local-path-provisioner-7ff9579c6        1         1         1       21d
+
+NAMESPACE   NAME                             READY   AGE
+data        statefulset.apps/mlflow          1/1     7d20h
+data        statefulset.apps/elasticsearch   1/1     14d
+data        statefulset.apps/nifi            1/2     13d
+data        statefulset.apps/zookeeper       2/2     14d
+data        statefulset.apps/kafka           2/2     14d
+
+NAMESPACE     NAME                             COMPLETIONS   DURATION   AGE
+kube-system   job.batch/helm-install-traefik   1/1           44s        21d
+
+$ kubectl get all -n default
+NAME                                             READY   STATUS    RESTARTS   AGE
+pod/quality-default-0-quality-6d4664bd99-pl28n   2/2     Running   56         7d1h
+pod/dnsutils                                     1/1     Running   218        20d
+pod/busybox                                      1/1     Running   222        20d
+
+NAME                              TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)             AGE
+service/kubernetes                ClusterIP   10.43.0.1      <none>        443/TCP             21d
+service/quality-default-quality   ClusterIP   10.43.244.50   <none>        9000/TCP,9500/TCP   7d1h
+service/quality-default           ClusterIP   10.43.68.44    <none>        8000/TCP,5001/TCP   7d1h
+
+NAME                                        READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/quality-default-0-quality   1/1     1            1           7d1h
+
+NAME                                                   DESIRED   CURRENT   READY   AGE
+replicaset.apps/quality-default-0-quality-6d4664bd99   1         1         1       7d1h
+
+$ kubectl get all -n seldon-system
+NAME                                            READY   STATUS    RESTARTS   AGE
+pod/seldon-controller-manager-99f687d8d-5nv74   1/1     Running   81         7d6h
+
+NAME                             TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+service/seldon-webhook-service   ClusterIP   10.43.220.83   <none>        443/TCP   7d16h
+
+NAME                                        READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/seldon-controller-manager   1/1     1            1           7d16h
+
+NAME                                                  DESIRED   CURRENT   READY   AGE
+replicaset.apps/seldon-controller-manager-99f687d8d   1         1         1       7d6h
+
+$ kubectl get all -n data
+NAME                                    READY   STATUS    RESTARTS   AGE
+pod/nifi-1                              0/1     Pending   0          13d
+pod/kafka-client-util                   1/1     Running   33         14d
+pod/mqtt-cbdf9fb4-c2grj                 1/1     Running   33         14d
+pod/kibana-67c68595b7-hgmlb             1/1     Running   32         14d
+pod/mysql-79ffd9d957-xc6xx              1/1     Running   1          4h30m
+pod/mlflow-0                            1/1     Running   19         7d20h
+pod/elasticsearch-0                     1/1     Running   33         14d
+pod/nats-7d86c64647-lmktk               1/1     Running   32         13d
+pod/sentimentanalysis-9b98675f9-bf6jw   1/1     Running   49         13d
+pod/basic-auth-plugin-bc899c574-t55r2   1/1     Running   32         13d
+pod/alertmanager-6fcb5b9b7b-c7hqb       1/1     Running   32         13d
+pod/nifi-0                              1/1     Running   32         13d
+pod/logstash-7b445484d8-tn4ww           1/1     Running   32         14d
+pod/prometheus-78dc788984-m7q4z         1/1     Running   32         13d
+pod/zookeeper-0                         1/1     Running   33         14d
+pod/zookeeper-1                         1/1     Running   33         14d
+pod/queue-worker-5c76c4bd84-dg9db       1/1     Running   47         13d
+pod/gateway-58fd85c86b-5klq4            2/2     Running   79         13d
+pod/faas-idler-6df76476c9-6dhdp         1/1     Running   88         13d
+pod/hive-dccc9f446-6wsg2                1/1     Running   2          4h27m
+pod/minio-698d6d54c8-xkvpq              1/1     Running   29         9d
+pod/kafka-1                             1/1     Running   41         14d
+pod/kafka-0                             1/1     Running   42         14d
+pod/jupyter-notebook                    1/1     Running   0          86m
+
+NAME                             TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                        AGE
+service/zookeeper                ClusterIP   10.43.215.75    <none>        2181/TCP                       14d
+service/zookeeper-headless       ClusterIP   None            <none>        2181/TCP,3888/TCP,2888/TCP     14d
+service/kafka                    ClusterIP   10.43.166.24    <none>        9092/TCP                       14d
+service/kafka-headless           ClusterIP   None            <none>        9092/TCP                       14d
+service/mqtt                     ClusterIP   10.43.133.39    <none>        1883/TCP                       14d
+service/elasticsearch            ClusterIP   10.43.243.188   <none>        9200/TCP                       14d
+service/logstash                 ClusterIP   10.43.69.80     <none>        5044/TCP                       14d
+service/kibana                   ClusterIP   10.43.142.124   <none>        80/TCP                         14d
+service/nifi                     ClusterIP   None            <none>        8080/TCP,6007/TCP              13d
+service/gateway                  ClusterIP   10.43.169.202   <none>        8080/TCP                       13d
+service/nats                     ClusterIP   10.43.142.201   <none>        4222/TCP                       13d
+service/basic-auth-plugin        ClusterIP   10.43.70.145    <none>        8080/TCP                       13d
+service/alertmanager             ClusterIP   10.43.17.222    <none>        9093/TCP                       13d
+service/prometheus               ClusterIP   10.43.21.25     <none>        9090/TCP                       13d
+service/sentimentanalysis        ClusterIP   10.43.190.146   <none>        8080/TCP                       13d
+service/minio-service            ClusterIP   10.43.248.161   <none>        9000/TCP                       8d
+service/minio-service-headless   ClusterIP   None            <none>        9000/TCP                       8d
+service/mlflow                   ClusterIP   10.43.60.15     <none>        5000/TCP                       7d20h
+service/mysql-service            ClusterIP   10.43.161.77    <none>        3306/TCP                       4h30m
+service/hive                     ClusterIP   10.43.178.75    <none>        10000/TCP,9083/TCP,10002/TCP   4h27m
+
+NAME                                READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/mqtt                1/1     1            1           14d
+deployment.apps/kibana              1/1     1            1           14d
+deployment.apps/mysql               1/1     1            1           4h30m
+deployment.apps/nats                1/1     1            1           13d
+deployment.apps/sentimentanalysis   1/1     1            1           13d
+deployment.apps/basic-auth-plugin   1/1     1            1           13d
+deployment.apps/alertmanager        1/1     1            1           13d
+deployment.apps/logstash            1/1     1            1           14d
+deployment.apps/prometheus          1/1     1            1           13d
+deployment.apps/queue-worker        1/1     1            1           13d
+deployment.apps/gateway             1/1     1            1           13d
+deployment.apps/faas-idler          1/1     1            1           13d
+deployment.apps/hive                1/1     1            1           4h27m
+deployment.apps/minio               1/1     1            1           9d
+
+NAME                                          DESIRED   CURRENT   READY   AGE
+replicaset.apps/mqtt-cbdf9fb4                 1         1         1       14d
+replicaset.apps/kibana-67c68595b7             1         1         1       14d
+replicaset.apps/mysql-79ffd9d957              1         1         1       4h30m
+replicaset.apps/nats-7d86c64647               1         1         1       13d
+replicaset.apps/sentimentanalysis-9b98675f9   1         1         1       13d
+replicaset.apps/basic-auth-plugin-bc899c574   1         1         1       13d
+replicaset.apps/alertmanager-6fcb5b9b7b       1         1         1       13d
+replicaset.apps/logstash-7b445484d8           1         1         1       14d
+replicaset.apps/prometheus-78dc788984         1         1         1       13d
+replicaset.apps/queue-worker-5c76c4bd84       1         1         1       13d
+replicaset.apps/gateway-58fd85c86b            1         1         1       13d
+replicaset.apps/faas-idler-6df76476c9         1         1         1       13d
+replicaset.apps/hive-dccc9f446                1         1         1       4h27m
+replicaset.apps/minio-698d6d54c8              1         1         1       9d
+
+NAME                             READY   AGE
+statefulset.apps/mlflow          1/1     7d20h
+statefulset.apps/elasticsearch   1/1     14d
+statefulset.apps/nifi            1/2     13d
+statefulset.apps/zookeeper       2/2     14d
+statefulset.apps/kafka           2/2     14d
+
+```
+
 ### GitLab (in-cluster CI/CD)  
 ```
 kubectl apply -f ./003-data/2000-gitlab/00-namespace.yml
