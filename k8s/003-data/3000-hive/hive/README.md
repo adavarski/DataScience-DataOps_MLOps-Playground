@@ -430,6 +430,6 @@ hive>
 hive> select * from exports.donors;
 
 ```
-Note: This chapter uses a custom Apache Hive container to project schema onto the distributed object-store. While the single Hive container is capable of executing queries through ODBC/thrift exposed over the hive:1000 Kubernetes Service, a more extensive Hive cluster is necessary for executing production workloads directly against Hive. 
+Note: This demo uses a custom Apache Hive container to project schema onto the distributed object-store. While the single Hive container is capable of executing queries through ODBC/thrift exposed over the hive:1000 Kubernetes Service, a more extensive Hive cluster is necessary for executing production workloads directly against Hive. 
 
 
