@@ -17,7 +17,7 @@ in an S3-compatible distributed storage system, such as the MinIO cluster (confi
 
 This repository is for the demonstration of Apache Hive utilizing a MySQL database for metadata storage, specifically for the projection of schema atop S3 object storage.
 
-Custom Hive container build instructions.
+Custom Hive container build instructions (download and uncompress both Apache Hive and its main dependency Apache Hadoop and extend Apache Hive’s capabilities by adding JAR files containing the functionality needed for connecting to S3-compatible object storage and MySQL for schema and metadata management)
 
 ```shell script
 # Download Apache Hive
@@ -37,6 +37,15 @@ tar -xzvf ./src/hadoop-3.1.2.tar.gz -C ./src
 docker build -t davarski-hive-s3m:3.1.2 .
 docker tag davarski-hive-s3m:3.1.2 davarski/hive-s3m:3.1.2-1.0.0
 ```
+Note: Hive, like many Java-based applications, uses XML files for configuration, in this case, hive-site.xml. However, packaging configuration values containing
+sensitive authentication tokens, passwords, and environment-specific services locations would be an anti-pattern causing security concerns and limiting
+container reusability. Mounting a configuration file from a filesystem (or ConfigMaps in the case of Kubernetes) is a standard method of configuring
+containers and provides considerable flexibility for admins or developers using the container; however, this method limits the ability to leverage values
+from existing Secrets and ConfigMap values available in Kubernetes. The technique described in this section creates a configuration file template to be
+populated by the container with environment variables at runtime (file named hive-site-template.xml). Shell script named entrypoint.sh as the container’s initial
+process. The entry point script uses sed to replace values in the hive-site.xml configuration file with values from the environment variables passed in through the container runtime, defined in the previous section. After applying the configuration, the script runs the utility schematool to add any MySQL database and tables Hive requires to store schema and metadata. Finally, the entry point script starts both a Hive server and a Hive Metastore server.
+
+
 # create MinIO bucket
 ```
 $ mc mb minio-cluster/test1
