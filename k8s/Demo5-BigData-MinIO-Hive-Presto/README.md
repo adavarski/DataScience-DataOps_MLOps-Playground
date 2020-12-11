@@ -1,15 +1,4 @@
-# BigData:Hive SQL-Engine with MinIO Data Lake Object Storage(S3)
-
-## Hive Overview
-
-Apache Hive is Data Warehouse software initially developed by Facebook and later given to the Apache Software Foundation. Organizations such as
-Netflix and FINRA use Hive to query massive volumes of structured data across distributed storage systems, including Hadoop’s HDFS and Amazon
-S3. Hive simplifies the complex MapReduce jobs typically required for querying Big Data by providing a standard SQL interface. While Hive is not
-a database, it delivers the ability to project schema onto any structured data stored in HDFS or S3-compatible storage. Amazon’s AWS offers the
-product Elastic MapReduce, including a version of Hive as a service. Apache Hive enables organizations to harness enormous quantities of
-structured data not managed by formal database management systems, steady streams of IoT data, exports from legacy systems, and ad hoc data
-ingestion. Apache Hive reduces the complexity and effort to perform Data Science activities, including business analytics, business intelligence, and
-Machine Learning, by providing an SQL interface, metadata, and schema onto a vast Data Lake. 
+# BigData:Hive/Presto SQL-Engines with MinIO Data Lake Object Storage(S3)
 
 ## Modern Data Warehouse
 
@@ -22,6 +11,16 @@ This demo on Data Warehouses extends a modern Data Lake with the distributed obj
 This demo considers modern Data Warehouses and Data Lakes as an open (employing containerization), cloud-native platform, the cloud represented by Kubernetes (container orchestration), and the platform as an ever-growing collection of data management applications exposed through APIs and graphical user interfaces with the ability to deploy business logic within. Many organizations and applications require access to a variety of data sources, from common RDBMS databases to distributed document, object, and key stores—resulting from trends in Digital Transformation, IoT, and Data Science activities such as Machine Learning. Correlating data from various sources is a common practice; however, depending on the relationships between these sources, the process can be challenging. Migrating all data sources to a commercial Data Warehouse may be cost-prohibitive, impose unacceptable limitations, or result in vendor lock-in. Constructing a modern, cloud-native, vendor-neutral Data Warehouse on Kubernetes may open up new possibilities even alongside commercial applications and PaaS offerings. A tremendous amount of functionality and flexibility is achieved with little effort and capital, starting small with a near-limitless ability to scale.
 This section adds Apache Hive to Kubernetes, applying new layers atop the data platform developed throughout this demo. Hive demonstrate the ability to represent  data sources such as MinIO (S3), creating a centralized data access point with distributed query execution.
 
+## Hive Overview
+
+Apache Hive is Data Warehouse software initially developed by Facebook and later given to the Apache Software Foundation. Organizations such as
+Netflix and FINRA use Hive to query massive volumes of structured data across distributed storage systems, including Hadoop’s HDFS and Amazon
+S3. Hive simplifies the complex MapReduce jobs typically required for querying Big Data by providing a standard SQL interface. While Hive is not
+a database, it delivers the ability to project schema onto any structured data stored in HDFS or S3-compatible storage. Amazon’s AWS offers the
+product Elastic MapReduce, including a version of Hive as a service. Apache Hive enables organizations to harness enormous quantities of
+structured data not managed by formal database management systems, steady streams of IoT data, exports from legacy systems, and ad hoc data
+ingestion. Apache Hive reduces the complexity and effort to perform Data Science activities, including business analytics, business intelligence, and
+Machine Learning, by providing an SQL interface, metadata, and schema onto a vast Data Lake. 
 
 ## Create Hive docker image
 
