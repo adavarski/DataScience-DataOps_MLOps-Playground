@@ -1,4 +1,4 @@
-# Hive overview
+# Hive DWH Overview
 
 Apache Hive is Data Warehouse software initially developed by Facebook and later given to the Apache Software Foundation. Organizations such as
 Netflix and FINRA use Hive to query massive volumes of structured data across distributed storage systems, including Hadoop’s HDFS and Amazon
@@ -10,7 +10,7 @@ ingestion. Apache Hive reduces the complexity and effort to perform Data Science
 Machine Learning, by providing an SQL interface, metadata, and schema onto a vast Data Lake.
 
 
-## Hive docker image build/test
+## Hive docker image create and test
 
 This section creates a custom Apache Hive container configured to use MySQL for the storage of schema and metadata related to objects residing
 in an S3-compatible distributed storage system, such as the MinIO cluster (configured before). Apache Hive, like many Big Data applications evolved outside the Cloud-Native and Kubernetes ecosystems, therefore requiring a bit more effort in onboarding it into the cluster. The following starts with building a custom container suitable for use with Kubernetes and local experimentation.
@@ -89,7 +89,7 @@ kubectl apply -f ../30-deployment.yml
 ```
 
 ```
-mc mb minio0cluster/test2
+mc mb minio-cluster/test2
 CREATE DATABASE IF NOT EXISTS test2;
 CREATE EXTERNAL TABLE IF NOT EXISTS test2.message (id int,message string) row format delimited fields terminated by ',' lines terminated by "\n" location 's3a://test2/messages';
 INSERT INTO test2.message VALUES (1, "Test1");
@@ -239,7 +239,7 @@ Handling connection for 10002
 
 ### JupyterLab/Jupyter Notebook (Jupyter environment)
 
-Pre: Create MinIO bucket exports
+Pre: Create MinIO bucket: exports
 ```
 $ mc mb minio-cluster/exports 
 Bucket created successfully `minio-cluster/exports`.
@@ -293,6 +293,8 @@ Port-forward the test-notebook Pod with the following command:
 kubectl port-forward jupyter-notebook 8888:8888 -n data
 ``
 Browse to http://localhost:8888//?token=5bebb78cc162e7050332ce46371ca3adc82306fac0bc082a
+
+Preparing Test Data:
 
 ```
 !pip install Faker==2.0.3
@@ -350,11 +352,11 @@ for i in range(1,1000):
     os.remove(tmp_file)
     print(f'{i:02}: {filename}')
 ```
+Example Output:
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/pictures/Hive-MinIO-Juputer-1.png" width="800">
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/pictures/Hive-MinIO-Jupyter-2.png" width="800">
-
 
 Check MinIO bucket
 
@@ -401,9 +403,6 @@ Time taken: 2.187 seconds
 hive> 
 
 hive> select * from exports.donors;
-OK
-Time taken: 1.901 seconds
-
 
 ```
 Note: This chapter uses a custom Apache Hive container to project schema onto the distributed object-store. While the single Hive container is capable of executing queries through ODBC/thrift exposed over the hive:1000 Kubernetes Service, a more extensive Hive cluster is necessary for executing production workloads directly against Hive. 
