@@ -470,6 +470,7 @@ kubectl apply -f ./003-data/3000-hive/30-deployment.yml
 cd ./003-data/4000-presto/
 git clone git@github.com:apk8s/presto-chart.git
 helm upgrade --install presto-data --namespace data --values values.yml ./presto-chart/presto
+kubectl apply -f ./50-ingress.yml
 ```
 
 
