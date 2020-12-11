@@ -916,6 +916,8 @@ Fix k3s CoreDNS for local development to use local DNS server if needed.
 
 ## Demo4: [DeepML with TensorFlow 2.0](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo4-DeepML-TensorFlow)
 
+## Demo5: [DWH:Hive SQL-Engine with MinIO(S3) Data Lake Object Storage](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo5-DWH-MinIO-Hive)
+
 ## Clean environment
 
 ```
