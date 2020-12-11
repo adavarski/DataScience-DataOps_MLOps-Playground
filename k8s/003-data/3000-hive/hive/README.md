@@ -451,7 +451,7 @@ beeline -u jdbc:hive2:// -f /tmp/create-table.hql
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/pictures/diagram-beeline.png" width="800">
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/pictures/beeline-hive-metastore.png" width="800">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/pictures/beeline-hive-metastore.png" width="200">
 
 Example:
 
