@@ -1,4 +1,4 @@
-# hive docker image build/test
+# Hive (docker image build/test)
 
 This repository is for the demonstration of Apache Hive utilizing a MySQL database for metadata storage, specifically for the projection of schema atop S3 object storage.
 
