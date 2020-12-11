@@ -1,4 +1,4 @@
-# hive docker image build
+# hive docker image build/test
 
 This repository is for the demonstration of Apache Hive utilizing a MySQL database for metadata storage, specifically for the projection of schema atop S3 object storage.
 
@@ -63,6 +63,9 @@ SELECT * FROM test2.message;
 Example:
 
 ```
+$ mc mb minio-cluster/test2
+Bucket created successfully `minio-cluster/test2`.
+
 $ kubectl get svc/hive -n data
 NAME   TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                        AGE
 hive   ClusterIP   10.43.178.75   <none>        10000/TCP,9083/TCP,10002/TCP   36m
