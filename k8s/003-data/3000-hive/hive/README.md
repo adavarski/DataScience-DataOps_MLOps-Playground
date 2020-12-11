@@ -217,3 +217,14 @@ $ mc cat minio-cluster/test2/messages/000000_0_copy_1
 
 
 ```
+
+### hive UI
+```
+$ kubectl port-forward hive-dccc9f446-6wsg2 10002:10002 -n data
+Forwarding from 127.0.0.1:10002 -> 10002
+Forwarding from [::1]:10002 -> 10002
+Handling connection for 10002
+
+```
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/003-data/3000-hive/hive/Hive-UI.png" width="800">
+
