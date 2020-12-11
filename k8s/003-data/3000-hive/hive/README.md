@@ -455,13 +455,65 @@ beeline -u jdbc:hive2:// -f /tmp/create-table.hql
 
 Example: 
 
-Note: To create tables for test data, I use Option 1 in this example
+Create two csv files and cp to MinIO buckets: hive:
+
+```
+# Minio example
+# mc config host add minio-cluster http://minio.data.davar.com:9000 minio minio123
+mc mb minio-cluster/hive
+mc cp ./dummy-data/iris.csv minio-cluster/hive/warehouse/iris/iris.csv
+mc cp ./dummy-data/users.csv minio-cluster/hive/warehouse/users/users.csv
+```
+
+Example Output:
+
+```
+$ head -n5 dummy-data/users.csv 
+1,Zik,Zhvu
+2,John,Doe
+3,Somename,Somelastname
+
+$ head -n5 dummy-data/iris.csv 
+sepal_length,sepal_width,petal_length,petal_width,species
+5.1,3.5,1.4,0.2,setosa
+4.9,3,1.4,0.2,setosa
+4.7,3.2,1.3,0.2,setosa
+4.6,3.1,1.5,0.2,setosa
+
+$ mc mb minio-cluster/hive
+Bucket created successfully `minio-cluster/hive`.
+$ mc cp ./dummy-data/iris.csv minio-cluster/hive/warehouse/iris/iris.csv
+./dummy-data/iris.csv:                     3.63 KiB / 3.63 KiB ┃▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓┃ 
+$ mc cp ./dummy-data/users.csv minio-cluster/hive/warehouse/users/users.csv
+./dummy-data/users.csv:                    46 B / 46 B ┃▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓┃ 2.17 KiB/s 0s
+```
+
+Note: To create tables for test data, I use Option 1 in this example:
+
+```
+CREATE DATABASE warehouse;
+
+CREATE EXTERNAL TABLE warehouse.users (id DECIMAL, name STRING, 
+lastname STRING) 
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+LOCATION 's3a://hive/warehouse/users/';
+
+CREATE EXTERNAL TABLE warehouse.iris (sepal_length DECIMAL, sepal_width DECIMAL, 
+petal_length DECIMAL, petal_width DECIMAL, species STRING) 
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+LOCATION 's3a://hive/warehouse/iris/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+```
+Example Output:
 
 ```
 $ kubectl exec -it hive-dccc9f446-6wsg2 bash -n data
 kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
-root@hive-dccc9f446-6wsg2:/# ls -al /opt/hive/bin/beeline
--rwxr-xr-x 1 root root 881 Aug 22  2019 /opt/hive/bin/beeline
 root@hive-dccc9f446-6wsg2:/# /opt/hive/bin/beeline -u jdbc:hive2://
 SLF4J: Class path contains multiple SLF4J bindings.
 SLF4J: Found binding in [jar:file:/opt/hive/lib/log4j-slf4j-impl-2.10.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]
@@ -469,244 +521,47 @@ SLF4J: Found binding in [jar:file:/opt/hadoop/share/hadoop/common/lib/slf4j-log4
 SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
 SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
 Connecting to jdbc:hive2://
-Hive Session ID = b5f5eb2e-3478-4c75-a337-f5afcf61ca55
-20/12/11 14:03:23 [main]: WARN session.SessionState: METASTORE_FILTER_HOOK will be ignored, since hive.security.authorization.manager is set to instance of HiveAuthorizerFactory.
-20/12/11 14:03:23 [main]: WARN metastore.ObjectStore: datanucleus.autoStartMechanismMode is set to unsupported value null . Setting it to value: ignored
-20/12/11 14:03:25 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
-20/12/11 14:03:25 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
-20/12/11 14:03:25 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
-20/12/11 14:03:25 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
-20/12/11 14:03:25 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
-20/12/11 14:03:25 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
-20/12/11 14:03:26 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
-20/12/11 14:03:26 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
-20/12/11 14:03:26 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
-20/12/11 14:03:26 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
-20/12/11 14:03:26 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
-20/12/11 14:03:26 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+Hive Session ID = 923ef7db-a6d5-471a-9a7f-79b10d30fdae
+20/12/11 15:32:40 [main]: WARN session.SessionState: METASTORE_FILTER_HOOK will be ignored, since hive.security.authorization.manager is set to instance of HiveAuthorizerFactory.
+20/12/11 15:32:41 [main]: WARN metastore.ObjectStore: datanucleus.autoStartMechanismMode is set to unsupported value null . Setting it to value: ignored
+20/12/11 15:32:42 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 15:32:42 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 15:32:42 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 15:32:42 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 15:32:42 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 15:32:42 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 15:32:43 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 15:32:43 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 15:32:43 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 15:32:43 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 15:32:43 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
+20/12/11 15:32:43 [main]: WARN DataNucleus.MetaData: Metadata has jdbc-type of null yet this is not valid. Ignored
 Connected to: Apache Hive (version 3.1.2)
 Driver: Hive JDBC (version 3.1.2)
 Transaction isolation: TRANSACTION_REPEATABLE_READ
 Beeline version 3.1.2 by Apache Hive
-0: jdbc:hive2://> 
-0: jdbc:hive2://> SHOW DATABASES;
+0: jdbc:hive2://> CREATE DATABASE warehouse;
+20/12/11 15:32:52 [HiveServer2-Background-Pool: Thread-23]: WARN metastore.ObjectStore: Failed to get database hive.warehouse, returning NoSuchObjectException
 OK
-+----------------+
-| database_name  |
-+----------------+
-| default        |
-| exports        |
-+----------------+
-2 rows selected (1.411 seconds)
-0: jdbc:hive2://> SHOW TABLES IN exports;
-OK
-+-----------+
-| tab_name  |
-+-----------+
-| donors    |
-+-----------+
-1 row selected (0.165 seconds)
-0: jdbc:hive2://> 
-
-```
-
-Create two csv files and two MinIO buckets:
-
-```
-# Minio example
-mc config host add minio-cluster http://minio.data.davar.com:9000 minio minio123
-mc mb minio-cluster/hive
-mc cp ./dummy-data/iris.csv minio-cluster/hive/warehouse/iris/iris.csv
-mc cp ./dummy-data/users.csv minio-cluster/hive/warehouse/users/users.csv
-```
-
-```
-$ cd ./dummy-data
-$ cat users.csv 
-1,Zik,Zhvu
-2,John,Doe
-3,Somename,Somelastname
-
-$ cat iris.csv 
-sepal_length,sepal_width,petal_length,petal_width,species
-5.1,3.5,1.4,0.2,setosa
-4.9,3,1.4,0.2,setosa
-4.7,3.2,1.3,0.2,setosa
-4.6,3.1,1.5,0.2,setosa
-5,3.6,1.4,0.2,setosa
-5.4,3.9,1.7,0.4,setosa
-4.6,3.4,1.4,0.3,setosa
-5,3.4,1.5,0.2,setosa
-4.4,2.9,1.4,0.2,setosa
-4.9,3.1,1.5,0.1,setosa
-5.4,3.7,1.5,0.2,setosa
-4.8,3.4,1.6,0.2,setosa
-4.8,3,1.4,0.1,setosa
-4.3,3,1.1,0.1,setosa
-5.8,4,1.2,0.2,setosa
-5.7,4.4,1.5,0.4,setosa
-5.4,3.9,1.3,0.4,setosa
-5.1,3.5,1.4,0.3,setosa
-5.7,3.8,1.7,0.3,setosa
-5.1,3.8,1.5,0.3,setosa
-5.4,3.4,1.7,0.2,setosa
-5.1,3.7,1.5,0.4,setosa
-4.6,3.6,1,0.2,setosa
-5.1,3.3,1.7,0.5,setosa
-4.8,3.4,1.9,0.2,setosa
-5,3,1.6,0.2,setosa
-5,3.4,1.6,0.4,setosa
-5.2,3.5,1.5,0.2,setosa
-5.2,3.4,1.4,0.2,setosa
-4.7,3.2,1.6,0.2,setosa
-4.8,3.1,1.6,0.2,setosa
-5.4,3.4,1.5,0.4,setosa
-5.2,4.1,1.5,0.1,setosa
-5.5,4.2,1.4,0.2,setosa
-4.9,3.1,1.5,0.1,setosa
-5,3.2,1.2,0.2,setosa
-5.5,3.5,1.3,0.2,setosa
-4.9,3.1,1.5,0.1,setosa
-4.4,3,1.3,0.2,setosa
-5.1,3.4,1.5,0.2,setosa
-5,3.5,1.3,0.3,setosa
-4.5,2.3,1.3,0.3,setosa
-4.4,3.2,1.3,0.2,setosa
-5,3.5,1.6,0.6,setosa
-5.1,3.8,1.9,0.4,setosa
-4.8,3,1.4,0.3,setosa
-5.1,3.8,1.6,0.2,setosa
-4.6,3.2,1.4,0.2,setosa
-5.3,3.7,1.5,0.2,setosa
-5,3.3,1.4,0.2,setosa
-7,3.2,4.7,1.4,versicolor
-6.4,3.2,4.5,1.5,versicolor
-6.9,3.1,4.9,1.5,versicolor
-5.5,2.3,4,1.3,versicolor
-6.5,2.8,4.6,1.5,versicolor
-5.7,2.8,4.5,1.3,versicolor
-6.3,3.3,4.7,1.6,versicolor
-4.9,2.4,3.3,1,versicolor
-6.6,2.9,4.6,1.3,versicolor
-5.2,2.7,3.9,1.4,versicolor
-5,2,3.5,1,versicolor
-5.9,3,4.2,1.5,versicolor
-6,2.2,4,1,versicolor
-6.1,2.9,4.7,1.4,versicolor
-5.6,2.9,3.6,1.3,versicolor
-6.7,3.1,4.4,1.4,versicolor
-5.6,3,4.5,1.5,versicolor
-5.8,2.7,4.1,1,versicolor
-6.2,2.2,4.5,1.5,versicolor
-5.6,2.5,3.9,1.1,versicolor
-5.9,3.2,4.8,1.8,versicolor
-6.1,2.8,4,1.3,versicolor
-6.3,2.5,4.9,1.5,versicolor
-6.1,2.8,4.7,1.2,versicolor
-6.4,2.9,4.3,1.3,versicolor
-6.6,3,4.4,1.4,versicolor
-6.8,2.8,4.8,1.4,versicolor
-6.7,3,5,1.7,versicolor
-6,2.9,4.5,1.5,versicolor
-5.7,2.6,3.5,1,versicolor
-5.5,2.4,3.8,1.1,versicolor
-5.5,2.4,3.7,1,versicolor
-5.8,2.7,3.9,1.2,versicolor
-6,2.7,5.1,1.6,versicolor
-5.4,3,4.5,1.5,versicolor
-6,3.4,4.5,1.6,versicolor
-6.7,3.1,4.7,1.5,versicolor
-6.3,2.3,4.4,1.3,versicolor
-5.6,3,4.1,1.3,versicolor
-5.5,2.5,4,1.3,versicolor
-5.5,2.6,4.4,1.2,versicolor
-6.1,3,4.6,1.4,versicolor
-5.8,2.6,4,1.2,versicolor
-5,2.3,3.3,1,versicolor
-5.6,2.7,4.2,1.3,versicolor
-5.7,3,4.2,1.2,versicolor
-5.7,2.9,4.2,1.3,versicolor
-6.2,2.9,4.3,1.3,versicolor
-5.1,2.5,3,1.1,versicolor
-5.7,2.8,4.1,1.3,versicolor
-6.3,3.3,6,2.5,virginica
-5.8,2.7,5.1,1.9,virginica
-7.1,3,5.9,2.1,virginica
-6.3,2.9,5.6,1.8,virginica
-6.5,3,5.8,2.2,virginica
-7.6,3,6.6,2.1,virginica
-4.9,2.5,4.5,1.7,virginica
-7.3,2.9,6.3,1.8,virginica
-6.7,2.5,5.8,1.8,virginica
-7.2,3.6,6.1,2.5,virginica
-6.5,3.2,5.1,2,virginica
-6.4,2.7,5.3,1.9,virginica
-6.8,3,5.5,2.1,virginica
-5.7,2.5,5,2,virginica
-5.8,2.8,5.1,2.4,virginica
-6.4,3.2,5.3,2.3,virginica
-6.5,3,5.5,1.8,virginica
-7.7,3.8,6.7,2.2,virginica
-7.7,2.6,6.9,2.3,virginica
-6,2.2,5,1.5,virginica
-6.9,3.2,5.7,2.3,virginica
-5.6,2.8,4.9,2,virginica
-7.7,2.8,6.7,2,virginica
-6.3,2.7,4.9,1.8,virginica
-6.7,3.3,5.7,2.1,virginica
-7.2,3.2,6,1.8,virginica
-6.2,2.8,4.8,1.8,virginica
-6.1,3,4.9,1.8,virginica
-6.4,2.8,5.6,2.1,virginica
-7.2,3,5.8,1.6,virginica
-7.4,2.8,6.1,1.9,virginica
-7.9,3.8,6.4,2,virginica
-6.4,2.8,5.6,2.2,virginica
-6.3,2.8,5.1,1.5,virginica
-6.1,2.6,5.6,1.4,virginica
-7.7,3,6.1,2.3,virginica
-6.3,3.4,5.6,2.4,virginica
-6.4,3.1,5.5,1.8,virginica
-6,3,4.8,1.8,virginica
-6.9,3.1,5.4,2.1,virginica
-6.7,3.1,5.6,2.4,virginica
-6.9,3.1,5.1,2.3,virginica
-5.8,2.7,5.1,1.9,virginica
-6.8,3.2,5.9,2.3,virginica
-6.7,3.3,5.7,2.5,virginica
-6.7,3,5.2,2.3,virginica
-6.3,2.5,5,1.9,virginica
-6.5,3,5.2,2,virginica
-6.2,3.4,5.4,2.3,virginica
-5.9,3,5.1,1.8,virginica
-
-
-$ mc mb minio-cluster/users
-$ mc mb minio-cluster/iris
-
-$ mc cp users.csv minio-cluster/users
-users.csv:                           46 B / 46 B ┃▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓┃ 1.25 KiB/s 0s
-
-$ mc cp iris.csv minio-cluster/iris
-iris.csv:                            3.63 KiB / 3.63 KiB ┃▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓┃ 88.09 KiB/s 0s
-
-```
-Table creation on S3 for users & iris data set (check users.csv & iris.csv)
-
-```
-0: jdbc:hive2://> CREATE DATABASE users;
-20/12/11 14:12:42 [HiveServer2-Background-Pool: Thread-34]: WARN metastore.ObjectStore: Failed to get database hive.users, returning NoSuchObjectException
-OK
-No rows affected (0.22 seconds)
-0: jdbc:hive2://> CREATE EXTERNAL TABLE users.users (id DECIMAL, name STRING, 
+No rows affected (0.978 seconds)
+0: jdbc:hive2://> CREATE EXTERNAL TABLE warehouse.users (id DECIMAL, name STRING, 
 . . . . . . . . > lastname STRING) 
 . . . . . . . . > ROW FORMAT DELIMITED 
 . . . . . . . . > FIELDS TERMINATED BY ','
 . . . . . . . . > LINES TERMINATED BY '\n'
-. . . . . . . . > LOCATION 's3a://users/';
+. . . . . . . . > LOCATION 's3a://hive/warehouse/users/';
 OK
-No rows affected (0.483 seconds)
-0: jdbc:hive2://> select * from users.users;
+No rows affected (1.589 seconds)
+0: jdbc:hive2://> CREATE EXTERNAL TABLE warehouse.iris (sepal_length DECIMAL, sepal_width DECIMAL, 
+. . . . . . . . > petal_length DECIMAL, petal_width DECIMAL, species STRING) 
+. . . . . . . . > ROW FORMAT DELIMITED 
+. . . . . . . . > FIELDS TERMINATED BY ','
+. . . . . . . . > LINES TERMINATED BY '\n'
+. . . . . . . . > LOCATION 's3a://hive/warehouse/iris/'
+. . . . . . . . > TBLPROPERTIES ("skip.header.line.count"="1");
+OK
+No rows affected (0.158 seconds)
+0: jdbc:hive2://> select * from warehouse.users;
 OK
 +-----------+-------------+-----------------+
 | users.id  | users.name  | users.lastname  |
@@ -715,24 +570,8 @@ OK
 | 2         | John        | Doe             |
 | 3         | Somename    | Somelastname    |
 +-----------+-------------+-----------------+
-3 rows selected (1.731 seconds)
-0: jdbc:hive2://> 
-
-0: jdbc:hive2://> CREATE DATABASE iris;
-20/12/11 14:17:09 [HiveServer2-Background-Pool: Thread-43]: WARN metastore.ObjectStore: Failed to get database hive.iris, returning NoSuchObjectException
-OK
-No rows affected (0.16 seconds)
-
-0: jdbc:hive2://> CREATE EXTERNAL TABLE iris.iris (sepal_length DECIMAL, sepal_width DECIMAL, 
-. . . . . . . . > petal_length DECIMAL, petal_width DECIMAL, species STRING) 
-. . . . . . . . > ROW FORMAT DELIMITED 
-. . . . . . . . > FIELDS TERMINATED BY ','
-. . . . . . . . > LINES TERMINATED BY '\n'
-. . . . . . . . > LOCATION 's3a://iris/'
-. . . . . . . . > TBLPROPERTIES ("skip.header.line.count"="1");
-OK
-No rows affected (0.532 seconds)
-0: jdbc:hive2://> select * from iris.iris;
+3 rows selected (1.527 seconds)
+0: jdbc:hive2://> select * from warehouse.iris;
 OK
 +--------------------+-------------------+--------------------+-------------------+---------------+
 | iris.sepal_length  | iris.sepal_width  | iris.petal_length  | iris.petal_width  | iris.species  |
@@ -890,21 +729,21 @@ OK
 | 7                  | 3                 | 5                  | 2                 | virginica     |
 | 6                  | 3                 | 5                  | 2                 | virginica     |
 | 6                  | 3                 | 5                  | 2                 | virginica     |
-| NULL               | NULL              | NULL               | NULL              | NULL          |
 +--------------------+-------------------+--------------------+-------------------+---------------+
-151 rows selected (0.423 seconds)
+150 rows selected (0.281 seconds)
 0: jdbc:hive2://> show databases;
 OK
 +----------------+
 | database_name  |
 +----------------+
 | default        |
-| exports        |
-| iris           |
-| users          |
+| warehouse      |
 +----------------+
-4 rows selected (0.114 seconds)
-
+2 rows selected (0.069 seconds)
 
 
 ```
+
+
+
+
