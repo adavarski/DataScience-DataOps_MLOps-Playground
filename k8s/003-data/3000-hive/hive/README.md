@@ -46,11 +46,11 @@ docker login
 docker push davarski/hive-s3m:3.1.2-1.0.0
 ```
 
-K8s test:
+# K8s:
 ```
-kubectl apply -f ./10-mysql-metadata_backend.yml  
-kubectl apply -f ./20-service.yml  
-kubectl apply -f ./30-deployment.yml 
+kubectl apply -f ../10-mysql-metadata_backend.yml  
+kubectl apply -f ../20-service.yml  
+kubectl apply -f ../30-deployment.yml 
 ```
 ```
 mc mb minio0cluster/test2
