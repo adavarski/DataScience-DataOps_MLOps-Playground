@@ -797,3 +797,9 @@ An Ingress configuration, exposes the Presto UI at https://presto.data.davar.com
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo5-BigData-MinIO-Hive-Presto/pictures/Presto-UI-queries-jupyter.png" width="800">
 
+Monitoring and observability are critical, for both Big Data and web-scale data operations. The Presto web user interface supports drill-downs into each query providing query details including resource utilization, timeline, error information, stages, and tasks related to the execution. Additionally, Presto provides a Live Plan, as shown bellow depicting the execution flow between stages in real time through a network diagram.
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo5-BigData-MinIO-Hive-Presto/pictures/Presto-query-liveplan.png" width="800">
+
+Presto is a comprehensive solution for building a modern Data Warehouse within Kubernetes; its support for a range of data sources fits the growing needs of IoT and Machine Learning, providing the ability to retrieve, coalesce, correlate, transform, and analyze limitless quantities and structures of data.
+
