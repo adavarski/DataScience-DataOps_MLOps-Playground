@@ -788,9 +788,12 @@ df = pd.DataFrame(
 )
 df
 ```
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo5-BigData-MinIO-Hive-Presto/pictures/Presto-JupyterNotebook.png" width="500">
+
+
 
 An Ingress configuration, exposes the Presto UI at https://presto.data.davar.com as depicted in: 
 
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo5-BigData-MinIO-Hive-Presto/pictures/Presto-UI-queries.png" width="800">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo5-BigData-MinIO-Hive-Presto/pictures/Presto-UI-queries-jupyter.png" width="800">
 
