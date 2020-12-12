@@ -286,7 +286,7 @@ kubectl apply -f ./003-data/000-namespace/003-issuer.yaml
 kubectl apply -f ./003-data/000-namespace/005-clusterissuer.yml
 ```
 
-## SaaS deploy 
+## PaaS/SaaS services deploy 
 
 ### Monitoring
 
@@ -385,7 +385,7 @@ $ helm upgrade k8s-data-openfaas –install openfaas/openfaas --namespace data -
 ```
 kubectl apply -f ./003-data/070-openfaas/50-ingress.yml
 ```
-Note: Visit https://faas.data.davar.com in a web browser for OpenFaaS UI portal. 
+Note: Visit https://faas.data.davar.com in a web browser for OpenFaaS UI portal. User is admin, pasword is:
 
 ```
 $ echo $(kubectl -n data get secret basic-auth -o jsonpath="{.data.basic-auth-password}" | base64 --decode)
