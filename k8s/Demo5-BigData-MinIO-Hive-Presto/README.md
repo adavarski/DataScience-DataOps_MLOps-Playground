@@ -758,7 +758,7 @@ rows = cur.fetchall()
 rows
 ```
 ```
-curr.execute('SELECT * from system.runtime.nodes;)
+cur.execute('SELECT * FROM system.runtime.nodes')
 rows = cur.fetchall()
 
 df = pd.DataFrame(
@@ -766,10 +766,10 @@ df = pd.DataFrame(
     columns=[d[0] for d in cur.description]
 )
 
-df.loc[:, 'http_url':'state']
+df
 ```
 ```
-curr.execute('DESCRIBE hive.warehouse.users;)
+cur.execute('DESCRIBE hive.warehouse.users')
 rows = cur.fetchall()
 
 df = pd.DataFrame(
@@ -779,7 +779,7 @@ df = pd.DataFrame(
 df
 ```
 ```
-curr.execute('SELECT * from hive.warehouse.users;)
+cur.execute('SELECT * from hive.warehouse.users')
 rows = cur.fetchall()
 
 df = pd.DataFrame(
