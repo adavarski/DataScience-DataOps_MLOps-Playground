@@ -834,6 +834,9 @@ NAME                                                  DESIRED   CURRENT   READY 
 replicaset.apps/seldon-controller-manager-99f687d8d   1         1         1       7d12h
 
 ```
+Note: GitOps
+GitOps, a process popularized by Weaveworks, is another trending concept within the scope of Kubernetes CI/CD. GitOps involves the use of applications reacting to `git push events`. GitOps focuses primarily on Kubernetes clusters matching the state described by configuration residing in a Git repository. On a simplistic level, GitOps aims to replace `kubectl apply` with `git push`. Popular and well-supported GitOps implementations include GitLab, ArgoCD, Flux, and Jenkins X.
+
 
 ### GitLab (in-cluster CI/CD)  
 ```
