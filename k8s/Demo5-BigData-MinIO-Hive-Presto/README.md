@@ -747,7 +747,7 @@ import pandas as pd
 conn=prestodb.dbapi.connect(
      host='presto-data.data',
      port=80,
-     user=os.environment['HOSTNAME'],
+     user=os.environ['HOSTNAME']
 )
 cur = conn.cursor()
 
