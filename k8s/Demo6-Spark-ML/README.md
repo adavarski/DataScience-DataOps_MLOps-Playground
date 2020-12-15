@@ -52,6 +52,17 @@ Spark UI (ingress):
 
 ## Running queries against S3
 
+Spark job against Demo5 Dataset: 
+```
+$ mc ls minio-cluster/iris
+[2020-12-11 16:15:23 EET] 3.6KiB iris.csv
+$ mc cat minio-cluster/iris/iris.csv
+sepal_length,sepal_width,petal_length,petal_width,species
+5.1,3.5,1.4,0.2,setosa
+4.9,3,1.4,0.2,setosa
+...
+```
+
 Now, let's fire up a Spark shell and try out some commands:
 
 ```
@@ -86,16 +97,6 @@ sc.hadoopConfiguration.set("fs.s3a.secret.key", "minio123")
 sc.hadoopConfiguration.set("fs.s3a.path.style.access", "true")
 ```
 
-Spark job against Demo5 Dataset: 
-```
-$ mc ls minio-cluster/iris
-[2020-12-11 16:15:23 EET] 3.6KiB iris.csv
-$ mc cat minio-cluster/iris/iris.csv
-sepal_length,sepal_width,petal_length,petal_width,species
-5.1,3.5,1.4,0.2,setosa
-4.9,3,1.4,0.2,setosa
-...
-```
 
 ```
 import org.apache.spark._
@@ -251,6 +252,11 @@ scala>
 
 
 ```
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Spark-UI-app.png" width="800">
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Spark-UI-worker.png" width="800">
+
 
 ## Further notes
 
