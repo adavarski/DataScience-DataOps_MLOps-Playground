@@ -16,7 +16,7 @@ spec:
       subdomain: spark-master-headless
       containers:
         - name: spark-master
-          image: nitishtiwari/spark-hadoop:2.3.0
+          image: davarski/spark-s3:2.3.0
           imagePullPolicy: Always
           command: ["/start-master"]
           ports:

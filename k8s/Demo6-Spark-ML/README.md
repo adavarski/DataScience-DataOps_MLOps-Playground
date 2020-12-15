@@ -8,9 +8,9 @@ Create a Docker Container and push to public repo
 
 ```
 cd spark-s3
-docker build -t davarski/spark-hadoop:2.3.0 .
+docker build -t davarski/spark-s3:2.3.0 .
 docker login
-docker push davarski/spark-hadoop:2.3.0
+docker push davarski/spark-s3:2.3.0
 ```
 
 Deploy the Spark master Replication Controller and Service:
