@@ -957,7 +957,7 @@ Fix k3s CoreDNS for local development to use local DNS server if needed.
 
 ## Demo5: [BigData:MinIO Data Lake with Hive/Presto SQL-Engines](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo5-BigData-MinIO-Hive-Presto)
 
-## Demo6: [Spark with S3(MinIO) data source for large-scale data processing and ML](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo6-Spark-ML)
+## Demo6: [Spark with S3(MinIO) as data source for large-scale data processing and ML](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo6-Spark-ML)
 
 ## Clean environment
 
