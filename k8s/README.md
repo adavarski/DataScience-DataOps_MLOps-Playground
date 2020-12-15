@@ -230,7 +230,7 @@ deployment.apps/coredns configured
 service/kube-dns unchanged
 ```
 
-### Crate eth namespace: data
+### Crate namespace: data
 
 ```bash
 kubectl apply -f ./003-data/000-namespace/00-namespace.yml
