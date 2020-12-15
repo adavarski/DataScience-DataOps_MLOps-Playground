@@ -838,6 +838,31 @@ NAME                                                  DESIRED   CURRENT   READY 
 replicaset.apps/seldon-controller-manager-99f687d8d   1         1         1       7d12h
 
 ```
+### Apache Spark with S3(MinIO) as data source
+
+```
+kubectl apply -f ./003-data/5000-spark/10-spark-master-controller.yaml
+kubectl apply -f ./003-data/5000-spark/20-spark-master-service.yaml
+kubectl apply -f ./003-data/5000-spark/50-ingress.yaml
+kubectl apply -f ./003-data/5000-spark/60-spark-worker-controller.yaml
+
+```
+Check Spark cluster:
+```
+$ kubectl get all -n data|grep spark
+pod/spark-master-controller-4nljh       1/1     Running   8          67m
+pod/spark-worker-controller-jrhjg       1/1     Running   0          46m
+pod/spark-worker-controller-2pzk6       1/1     Running   0          46m
+replicationcontroller/spark-master-controller   1         1         1       67m
+replicationcontroller/spark-worker-controller   2         2         2       46m
+service/spark-master-headless    ClusterIP   None            <none>        <none>                       46m
+service/spark-master             ClusterIP   10.43.5.150     <none>        7077/TCP,8080/TCP            46m
+
+$ kubectl get ing -n data|grep spark
+spark-ingress      <none>   spark.data.davar.com     192.168.0.100   80, 443   44m
+```
+
+
 Note: GitOps
 GitOps, a process popularized by Weaveworks, is another trending concept within the scope of Kubernetes CI/CD. GitOps involves the use of applications reacting to `git push events`. GitOps focuses primarily on Kubernetes clusters matching the state described by configuration residing in a Git repository. On a simplistic level, GitOps aims to replace `kubectl apply` with `git push`. Popular and well-supported GitOps implementations include GitLab, ArgoCD, Flux, and Jenkins X.
 
