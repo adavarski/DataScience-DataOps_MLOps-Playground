@@ -44,6 +44,11 @@ Warning: extensions/v1beta1 Ingress is deprecated in v1.14+, unavailable in v1.2
 spark-ingress      <none>   spark.data.davar.com     192.168.0.100   80, 443   108s
 
 ```
+Spark UI (ingress):
+
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Spark-UI-ingress.png" width="800">
+
 
 ## Running queries against S3
 
