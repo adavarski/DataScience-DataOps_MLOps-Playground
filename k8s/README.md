@@ -297,9 +297,13 @@ cd kube-prometheus
 kubectl create -f manifests/setup
 until kubectl get servicemonitors --all-namespaces ; do date; sleep 1; echo ""; done
 kubectl create -f manifests/
+$ kubectl --namespace monitoring port-forward svc/prometheus-k8s 9090
+$ kubectl --namespace monitoring port-forward svc/alertmanager-main 9093
 $ kubectl --namespace monitoring port-forward svc/grafana 3000
 ````
 Open http://localhost:3000 on a local workstation, and log in to Grafana with the default administrator credentials, username: admin, password: admin. Explore the prebuilt dashboards for monitoring many aspects of the Kubernetes cluster, including Nodes, Namespaces, and Pods.
+
+#to teardown the stack: kubectl delete --ignore-not-found=true -f manifests/ -f manifests/setup
 
 
 ### Messaging
