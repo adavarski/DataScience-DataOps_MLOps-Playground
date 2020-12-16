@@ -111,7 +111,7 @@ import org.apache.spark.mllib.tree.DecisionTree
 import org.apache.spark.mllib.tree.model.DecisionTreeModel
 import org.apache.spark.mllib.util.MLUtils
 
-val conf = new SparkConf().setAppName("YouTube")
+val conf = new SparkConf().setAppName("iris")
 val sqlContext = new SQLContext(sc)
 
 import sqlContext.implicits._
