@@ -190,7 +190,7 @@ import org.apache.spark.mllib.util.MLUtils
 
 scala> 
 
-scala> val conf = new SparkConf().setAppName("YouTube")
+scala> val conf = new SparkConf().setAppName("iris")
 conf: org.apache.spark.SparkConf = org.apache.spark.SparkConf@71687d8f
 
 scala> val sqlContext = new SQLContext(sc)
