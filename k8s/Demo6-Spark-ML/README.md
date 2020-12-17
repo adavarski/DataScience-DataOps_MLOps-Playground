@@ -1,4 +1,4 @@
-# Apache Spark
+# Apache Spark and MLLib
 
 This example shows how to deploy a stateless Apache Spark cluster with S3 support on Kubernetes. This is based on the "official" [kubernetes/spark](https://github.com/kubernetes/examples/tree/master/staging/spark) example, which also contains a few more details on the deployment steps.
 
@@ -422,6 +422,7 @@ Countless open source contributors have devoted time and effort in developing th
 Examples:
 
 ----------- Spark MLlib: Multiclass Classification with Logistic Regression
+
 Logistic regression is a linear classifier that predicts probabilities. It is popular for its ease of use and fast training speed and is frequently used for both binary classification and multiclass classification. A linear classifier such as logistic regression is suitable when your data has a clear decision boundary. In cases where the classes are not linearly separable, nonlinear classifiers such as tree-based ensembles should be considered.
 
 Example1:
