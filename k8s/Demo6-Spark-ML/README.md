@@ -1598,12 +1598,16 @@ Momentum SGD (AEAMSGD), and Downpour SGD.
 
 
 Examples: 
+
 1.Elephas: Distributed Deep Learning with Keras and Spark
+
 Example: Handwritten Digit Recognition with MNIST Using Elephas
 with Keras and Spark
 
 2.Distributed Keras (Dist-Keras)
+
 Example: Handwritten Digit Recognition with MNIST Using Dist-Keras with Keras and Spark
+
 Example: Dogs and Cats Image Classification
 
 
