@@ -339,7 +339,7 @@ Machine learning is one of Spark’s main applications. Spark MLlib includes pop
 
 ### Spark MLlib Algorithms
 Spark MLlib includes a plethora of machine learning algorithms for various tasks. We cover some of them in succeeding sections.
-
+```
 Classification
 • Logistic Regression (Binomial and Multinomial)
 • Decision Tree
@@ -370,7 +370,7 @@ Collaborative Filtering
 Frequent Pattern Mining
 • FP-Growth
 • PrefixSpan
-
+```
 
 --------------------------------------------------------------------------------------
 # Supervised Learning:
