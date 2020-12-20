@@ -3410,7 +3410,7 @@ We start the Jupyter Notebook and import SparkSession and create a new
 SparkSession object to use Spark:
 ```
 from pyspark.sql import SparkSession
-spark=SparkSession.builder.appName('lin_reg').getOrCreate()
+spark=SparkSession.builder.appName('recommender').getOrCreate()
 ```
 
 2: Read the Dataset
