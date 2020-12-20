@@ -1656,31 +1656,31 @@ Prerequisites
 
 To utilize Spark with Kubernetes, you will need:
 
-    A Kubernetes cluster that has role-based access controls (RBAC) and DNS services enabled
-    Sufficient cluster resources to be able to run a Spark session (at a practical level, this means at least three nodes with two CPUs and eight gigabytes of free memory)
-    A properly configured kubectl that can be used to interface with the Kubernetes API
-    Authority as a cluster administrator
-    Access to a public Docker repository or your cluster configured so that it is able to pull images from a private repository
-    Basic understanding of Apache Spark and its architecture
+- A Kubernetes cluster that has role-based access controls (RBAC) and DNS services enabled
+Sufficient cluster resources to be able to run a Spark session (at a practical level, this means at least three nodes with two CPUs and eight gigabytes of free memory)
+- A properly configured kubectl that can be used to interface with the Kubernetes API
+- Authority as a cluster administrator
+- Access to a public Docker repository or your cluster configured so that it is able to pull images from a private repository
+- Basic understanding of Apache Spark and its architecture
 
 In this Appendix1, we are going to focus on directly connecting Spark to Kubernetes without making use of the [Spark Kubernetes operator](https://github.com/GoogleCloudPlatform/spark-on-k8s-operator). The Kubernetes operator simplifies several of the manual steps and allows the use of custom resource definitions to manage Spark deployments.
 
 Overview
 
 In this Appendix1, we will:
-    - Create a Docker container containing a Spark application that can be deployed on top of Kubernetes
-    - Integrate Spark with `kubectl` so that is able to start and monitor the status of running jobs
-    - Demonstrate how to launch Spark applications using `spark-submit`
-    - Start the Spark Shell and demonstrate how interactive sessions interact with the Kubernetes cluster
+- Create a Docker container containing a Spark application that can be deployed on top of Kubernetes
+- Integrate Spark with `kubectl` so that is able to start and monitor the status of running jobs
+- Demonstrate how to launch Spark applications using `spark-submit`
+- Start the Spark Shell and demonstrate how interactive sessions interact with the Kubernetes cluster
 
 Spark Essentials
 
 Spark is a general cluster technology designed for distributed computation. While primarily used for analytic and data processing purposes, its model is flexible enough to handle distributed operations in a fault tolerant manner. It is a framework that can be used to build powerful data applications.
 
 Every Spark application consists of three building blocks:
-    - The `Driver` boots and controls all processes. The driver serves as the master node in a Spark application or interactive session. It manages the job of splitting data operations into tasks and then scheduling them to run on executors (which themselves run on nodes of the cluster).
-    - The `Cluster Manager` helps the driver schedule work across nodes in the cluster using executors. Spark supports several different types of executors. The most common is Hadoop, but Mesos and Kubernetes are both available as options.
-    - The `Workers` run executors. Executors are distributed across the cluster and do the heavy lifting of a Spark program -data aggregation, machine learning training, and other miscellaneous number crunching. Except when running in "local" mode, executors run on some kind of a cluster to leverage a distributed environment with plenty of resources. They typically are created when a Spark application begins and often run for the entire lifetime of the Spark application. This pattern is called static allocation, and it is also possible to have dynamic allocation of executors which means that they will be initialized when data actually needs to be processed.
+- The `Driver` boots and controls all processes. The driver serves as the master node in a Spark application or interactive session. It manages the job of splitting data operations into tasks and then scheduling them to run on executors (which themselves run on nodes of the cluster).
+- The `Cluster Manager` helps the driver schedule work across nodes in the cluster using executors. Spark supports several different types of executors. The most common is Hadoop, but Mesos and Kubernetes are both available as options.
+- The `Workers` run executors. Executors are distributed across the cluster and do the heavy lifting of a Spark program -data aggregation, machine learning training, and other miscellaneous number crunching. Except when running in "local" mode, executors run on some kind of a cluster to leverage a distributed environment with plenty of resources. They typically are created when a Spark application begins and often run for the entire lifetime of the Spark application. This pattern is called static allocation, and it is also possible to have dynamic allocation of executors which means that they will be initialized when data actually needs to be processed.
 
 In a traditional Spark application, a driver can either run inside or outside of a cluster. Depending on where it executes, it will be described as running in "client mode" or "cluster mode."
 
