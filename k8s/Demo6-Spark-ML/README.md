@@ -2037,9 +2037,7 @@ The dependency installation is split over multiple lines in order to decrease th
 ### Build/tag/testing the image.
 
 
-
 When the container finishes building, we will want to test it locally to ensure that the application starts.
-
 
 
 ```
@@ -2061,6 +2059,7 @@ sudo k3s crictl pull davarski/spark301-k8s-minio-jupyter
 ```
 
 Testing the Image Locally
+
 ```
 # Test the container image locally to ensure that it starts as expected.
 # Jupyter Lab/Notebook is started using the command jupyter lab.
@@ -2070,6 +2069,7 @@ docker run -it --rm -p 8888:8888 \
     jupyter lab --ip 0.0.0.0
 ```
 Example output:
+
 ```
 $ docker run -it --rm -p 8888:8888 davarski/spark301-k8s-minio-jupyter jupyter lab --ip 0.0.0.0
 ++ id -u
@@ -2143,6 +2143,7 @@ kubectl run jupyter-test-pod --generator=run-pod/v1 -it --rm=true \
   --command -- jupyter lab --ip 0.0.0.0
 ```
 Example output:
+
 ```
 $ kubectl run jupyter-test-pod --generator=run-pod/v1 -it --rm=true --image=davarski/spark301-k8s-minio-jupyter --serviceaccount=spark-driver  --command -- jupyter lab --ip 0.0.0.0
 Flag --generator has been deprecated, has no effect and will be removed in the future.
@@ -2352,6 +2353,8 @@ Output:
 Approximate sum: 45.0
 
 ```
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/k3s-spark-jupyter.png" width="800">
+
 
 Check k8s pods:
 ```
@@ -2362,7 +2365,7 @@ dnsutils                                1/1     Running     308        28d
 pyspark-shell-88a623767bd18995-exec-2   1/1     Running     0          19s
 pyspark-shell-88a623767bd18995-exec-1   1/1     Running     0          20s
 ```
-
+Note: exit() into cell will termintate pyspark-shell-88a623767bd18995-exec-2 & pyspark-shell-88a623767bd18995-exec-1 pods
 
 ### Cloud Native Applications (with MinIO:S3)
 
