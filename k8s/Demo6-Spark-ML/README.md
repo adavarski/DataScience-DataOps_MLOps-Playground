@@ -2844,3 +2844,6 @@ test_predictions=lr_model.evaluate(test_df)
 print(test_predictions.r2)
 print(test_predictions.meanSquaredError)
 ```
+Example Outputs:
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Spark-ML-jupyter-linear-regression.png" width="800">
+
