@@ -12,14 +12,14 @@ Core Spark:
 
 
 * `Dockerfile.k8s-minio.driver`: extension of the Spark executor image that provides additional components, such as kubectl so that the image can be used to run headless driver components on a Kubernetes cluster.
-        - Tagged as `davarski/spark301-k8s-minio-driver`
-        - Parent: `davarski/spark301-k8s-minio-base`
+	- Tagged as `davarski/spark301-k8s-minio-driver`
+	- Parent: `davarski/spark301-k8s-minio-base`
 
 Jupyter and general Data Science:
 
 * `Dockerfile.k8s-minio.jupyter`: minimal Jupyter image that provdes the core components of the Scientific Python stack: NumPy, Pandas, Matplotlib, Seaborn, Boken, and SciPy.
-        - Tagged as `davarski/spark301-k8s-minio-jupyter`
-        - Parent: `davarski/spark301-k8s-minio-driver`
+	- Tagged as `davarski/spark301-k8s-minio-jupyter`
+	- Parent: `davarski/spark301-k8s-minio-driver`
 
 * `Dockerfile.hub-jupyter`: JupyterLab Python image used in deployments with a broad set of data utilities for working with Data Engineering and Data Science libraries for NLP, Machine Vision, Geographic Information Systems, and Medical Informatics.
         - Tagged as `davarski/spark301-k8s-minio-kafka:latesta`
