@@ -1716,7 +1716,7 @@ Pods are container runtimes which are instantiated from container images, and wi
 
 In Docker, container images are built from a set of instructions collectively called a Dockerfile. Each line of a Dockerfile has an instruction and a value. Instructions are things like "run a command", "add an environment variable", "expose a port", and so-forth.
 
-Base Image
+- Base Image
 
 The code listing shows a [multi-stage Dockerfile](https://docs.docker.com/develop/develop-images/multistage-build/) which will build our base Spark environment. This will be used for running executors and as the foundation for the driver. In the first stage of the build we download the Apache Spark runtime to a temporary directory, extract it, and then copy the runtime components for Spark to a new container image. Using a multi-stage process allows us to automate the entire container build using the packages from the [Apache Spark downloads page](https://spark.apache.org/downloads.html).
 
@@ -1727,7 +1727,7 @@ Using the Docker image, we can build and tag the image. When it finishes, we nee
 We use a DockerHub  public Docker registry. The image needs to be hosted somewhere accessible in order for Kubernetes to be able to use it. While it is possible to pull from a private registry, this involves additional steps and is not covered in this Appendix1.
 
 
-Driver Image
+- Driver Image
 
 For the driver, we need a small set of additional resources that are not required by the executor/base image, including a copy of Kube Control that will be used by Spark to manage workers. The container is the same as the executor image in most other ways and because of that we use the executor image as the base.
 
@@ -1757,4 +1757,218 @@ sudo k3s crictl pull davarski/spark301-k8s-minio-base
 sudo k3s crictl pull davarski/spark301-k8s-minio-driver
 sudo k3s crictl pull davarski/spark301-k8s-minio-jupyter
 ```
+
+
+### Service Accounts and Authentication
+
+For the driver pod to be able to connect to and manage the cluster, it needs two important pieces of data for authentication and authorization:
+
+- The CA certificate, which is used to connect to the kubelet control daemon
+- The auth (or bearer) token, which identifies a user and the scope of its permissions
+
+There are a variety of strategies which might be used to make this information available to the pod, such as creating a secret with the values and mounting the secret as a read-only volume. A Kubernetes secret lets you store and manage sensitive information such as passwords. An easier approach, however, is to use a service account that has been authorized to work as a cluster admin. One of the cool things that Kubernetes does when running a pod under a service account is to create a volumeSource (basically a read-only mount) with details about the user context in which a pod is running.
+
+Inside of the mount will be two files that provide the authentication details needed by kubectl:
+
+    /var/run/secrets/kubernetes.io/serviceaccount/ca.crt: CA certificate
+    /var/run/secrets/kubernetes.io/serviceaccount/token: Kubernetes authentication token
+
+- Driver Service Account
+
+The set of commands below will create a special service account (spark-driver) that can be used by the driver pods. It is configured to provide full administrative access to the namespace.
+```
+# Create spark-driver service account
+kubectl create serviceaccount spark-driver
+
+# Create a cluster and namespace "role-binding" to grant the account administrative privileges
+kubectl create rolebinding spark-driver-rb --clusterrole=cluster-admin --serviceaccount=default:spark-driver
+```
+
+- Executor Service Account
+
+While it is possible to have the executor reuse the spark-driver account, it's better to use a separate user account for workers. This allows for finer-grained tuning of the permissions. The worker account uses the "edit" permission, which allows for read/write access to most resources in a namespace but prevents it from modifying important details of the namespace itself.
+```
+# Create Spark executor account
+kubectl create serviceaccount spark-minion
+
+# Create rolebinding to offer "edit" privileges
+kubectl create rolebinding spark-minion-rb --clusterrole=edit --serviceaccount=default:spark-minion
+```
+
+### Running a Test Job
+
+With the images created and service accounts configured, we can run a test of the cluster using an instance of the spark301-k8s-minio-driver image. The command below will create a pod instance from which we can launch Spark jobs.
+
+Creating a pod to deploy cluster and client mode Spark applications is sometimes referred to as deploying a "jump", "edge" , or "bastian" pod. It's variant of deploying a Bastion Host, where high-value or sensitive resources run in one environment and the bastion serves as a proxy.
+
+```
+# Create a jump pod using the Spark driver container and service account
+kubectl run spark-test-pod --generator=run-pod/v1 -it --rm=true \
+  --image=davarski/spark301-k8s-minio-driver \
+  --serviceaccount=spark-driver \
+  --command -- /bin/bash
+```
+
+The kubectl command creates a deployment and driver pod, and will drop into a BASH shell when the pod becomes available. The remainder of the commands in this section will use this shell.
+
+Apache's Spark distribution contains an example program that can be used to calculate Pi. Since it works without any input, it is useful for running tests. We can check that everything is configured correctly by submitting this application to the cluster. Spark commands are submitted using spark-submit. In the container images created above, spark-submit can be found in the /opt/spark/bin folder.
+
+spark-submit commands can become quite complicated. For that reason, let's configure a set of environment variables with important runtime parameters. While we define these manually here, in applications they can be injected from a ConfigMap or as part of the pod/deployment manifest.
+
+```
+# Define environment variables with accounts and auth parameters
+export SPARK_NAMESPACE=default
+export SA=spark-minion
+export K8S_CACERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+export K8S_TOKEN=/var/run/secrets/kubernetes.io/serviceaccount/token
+
+# Docker runtime image
+export DOCKER_IMAGE=davarski/spark301-k8s-minio-base
+export SPARK_DRIVER_NAME=spark-test1-pi
+```
+The command below submits the job to the cluster. It will deploy in "cluster" mode and references the `spark-examples` JAR from the container image. We tell Spark which program within the JAR to execute by defining a --class option. In this case, we wish to run `org.apache.spark.examples.SparkPi`
+
+```
+/opt/spark/bin/spark-submit --name sparkpi-test1 \
+   --master k8s://https://kubernetes.default:443 \
+  --deploy-mode cluster  \
+  --class org.apache.spark.examples.SparkPi  \
+  --conf spark.kubernetes.driver.pod.name=$SPARK_DRIVER_NAME  \
+  --conf spark.kubernetes.authenticate.subdmission.caCertFile=$K8S_CACERT  \
+  --conf spark.kubernetes.authenticate.submission.oauthTokenFile=$K8S_TOKEN  \
+  --conf spark.kubernetes.authenticate.driver.serviceAccountName=$SA  \
+  --conf spark.kubernetes.namespace=$SPARK_NAMESPACE  \
+  --conf spark.executor.instances=2  \
+  --conf spark.kubernetes.container.image=$DOCKER_IMAGE  \
+  --conf spark.kubernetes.container.image.pullPolicy=Always \
+  local:///opt/spark/examples/jars/spark-examples_2.12-3.0.1.jar 1000
+```
+
+
+
+The Kubernetes control API is available within the cluster within the `default` namespace and should be used as the Spark master. If Kubernetes DNS is available, it can be accessed using a namespace URL (`https://kubernetes.default:443` in the example above). Note the `k8s://https://` form of the URL. as this is not a typo. The `k8s://` prefix is how Spark knows the provider type.
+
+The `local://` path of the `jar` above references the file in the executor Docker image, not on jump pod that we used to submit the job. Both the driver and executors rely on the path in order to find the program logic and start the task.
+
+If you watch the pod list while the job is running using `kubectl get pods`, you will see a "driver" pod be initialized with the name provided in the `SPARK_DRIVER_NAME` variable. This will in turn launch executor pods where the work will actually be performed. When the program has finished running, the driver pod will remain with a "Completed" status. You can retrieve the results from the pod logs using:
+
+```
+# Retrieve the results of the program from the cluster
+kubectl logs $SPARK_DRIVER_NAME
+
+Toward the end of the application log you should see a result line similar to the one below:
+
+20/12/19 10:56:11 INFO DAGScheduler: Job 0 finished: reduce at SparkPi.scala:38, took 16.059215 s
+Pi is roughly 3.1416641114166413
+20/12/19 10:56:11 INFO SparkUI: Stopped Spark web UI at http://spark-test-pod.default:4040
+20/12/19 10:56:11 INFO KubernetesClusterSchedulerBackend: Shutting down all executors
+20/12/19 10:56:11 INFO KubernetesClusterSchedulerBackend$KubernetesDriverEndpoint: Asking each executor to shut down
+20/12/19 10:56:11 WARN ExecutorPodsWatchSnapshotSource: Kubernetes client has been closed (this is expected if the application is shutting down.)
+20/12/19 10:56:11 INFO MapOutputTrackerMasterEndpoint: MapOutputTrackerMasterEndpoint stopped!
+20/12/19 10:56:12 INFO MemoryStore: MemoryStore cleared
+20/12/19 10:56:12 INFO BlockManager: BlockManager stopped
+20/12/19 10:56:12 INFO BlockManagerMaster: BlockManagerMaster stopped
+20/12/19 10:56:12 INFO OutputCommitCoordinator$OutputCommitCoordinatorEndpoint: OutputCommitCoordinator stopped!
+20/12/19 10:56:12 INFO SparkContext: Successfully stopped SparkContext
+20/12/19 10:56:12 INFO ShutdownHookManager: Shutdown hook called
+20/12/19 10:56:12 INFO ShutdownHookManager: Deleting directory /tmp/spark-4a81c68d-6ffd-4b9c-831b-4587fccc4d12
+20/12/19 10:56:12 INFO ShutdownHookManager: Deleting directory /tmp/spark-fb05ba62-8eed-41ea-bd6d-f6aea49021b5
+
+```
+
+### Client Mode Applications
+
+When we switch from cluster to client mode, instead of running in a separate pod, the driver will run within the jump pod instance. This requires an additional degree of preparation, specifically:
+
+- Because executors need to be able to connect to the driver application, we need to ensure that it is possible to route traffic to the pod and that we have published a port which the executors can use to communicate. To make the pod instance (easily) routable, we will create a headless service.
+- Since the driver will be running from the jump pod, we need to modify the `SPARK_DRIVER_NAME` environment variable to reference that rather than an external (to be launched) pod.
+- We need to provide additional configuration options to reference the driver host and port. These should then be passed to `spark-submit` via the `spark.driver.host` and `spark.driver.port` options, respectively.
+
+#### Running Client Mode Applications Using `spark-submit`
+
+To test client mode on the cluster, let's make the changes outlined above and then submit SparkPi a second time.
+
+To start, because the driver will be running from the jump pod, let's modify `SPARK_DRIVER_NAME` environment variable and specify which port the executors should use for communicating their status.
+```
+# Modify the name of the spark driver 
+export SPARK_DRIVER_NAME=spark-test-pod
+export SPARK_DRIVER_PORT=20020
+```
+Next, to route traffic to the pod, we need to either have a domain or IP address. In Kubernetes, the most convenient way to get a stable network identifier is to create a service object. The command below will create a "headless" service that will allow other pods to look up the jump pod using its name and namespace.
+```
+# Expose the jump pod using a headless service
+kubectl expose pod $SPARK_DRIVER_NAME --port=$SPARK_DRIVER_PORT \
+  --type=ClusterIP --cluster-ip=None
+```
+Taking into account the changes above, the new `spark-submit` command will be similar to the one below:
+```
+/opt/spark/bin/spark-submit --name sparkpi-test1 \
+   --master k8s://https://kubernetes.default:443 \
+  --deploy-mode client  \
+  --class org.apache.spark.examples.SparkPi  \
+  --conf spark.kubernetes.driver.pod.name=$SPARK_DRIVER_NAME  \
+  --conf spark.kubernetes.authenticate.subdmission.caCertFile=$K8S_CACERT  \
+  --conf spark.kubernetes.authenticate.submission.oauthTokenFile=$K8S_TOKEN  \
+  --conf spark.kubernetes.authenticate.driver.serviceAccountName=$SA  \
+  --conf spark.kubernetes.namespace=$SPARK_NAMESPACE  \
+  --conf spark.executor.instances=2  \
+  --conf spark.kubernetes.container.image=$DOCKER_IMAGE  \
+  --conf spark.kubernetes.container.image.pullPolicy=Always \
+  --conf spark.driver.host=$HOSTNAME.$SPARK_NAMESPACE \
+  --conf spark.driver.port=$SPARK_DRIVER_PORT \
+  local:///opt/spark/examples/jars/spark-examples_2.12-3.0.1.jar 1000
+```
+Upon submitting the job, the driver will start and launch executors that report their progress. For this reason, we will see the results reported directly to `stdout` of the jump pod, rather than requiring we fetch the logs of a secondary pod instance.
+
+As in the previous example, you should be able to find a line reporting the calculated value of Pi.
+
+#### Starting the `pyspark` Shell
+
+At this point, we've assembled all the pieces to show how an interactive Spark program (like the `pyspark` shell) might be launched. Similar to the client mode application, the shell will directly connect with executor pods which allows for calculations and other logic to be distributed, aggregated, and reported back without needing a secondary pod to manage the application execution.
+
+The command below shows the options and arguments required to start the shell. It is similar to the spark-submit commands we've seen previously (with many of the same options), but there are some distinctions. The most consequential differences are:
+
+- The shell is started using the `pyspark` script rather than `spark-submit` (`pyspark` is located in the same `/opt/spark/bin` directory as `spark-submit`)
+- There is no main class or `jar` file referenced
+
+/opt/spark/bin/pyspark --name pyspark-test1 \
+   --master k8s://https://kubernetes.default:443 \
+  --deploy-mode client  \
+  --conf spark.kubernetes.driver.pod.name=$SPARK_DRIVER_NAME  \
+  --conf spark.kubernetes.authenticate.subdmission.caCertFile=$K8S_CACERT  \
+  --conf spark.kubernetes.authenticate.submission.oauthTokenFile=$K8S_TOKEN  \
+  --conf spark.kubernetes.authenticate.driver.serviceAccountName=$SA  \
+  --conf spark.kubernetes.namespace=$SPARK_NAMESPACE  \
+  --conf spark.executor.instances=2  \
+  --conf spark.kubernetes.container.image=$DOCKER_IMAGE  \
+  --conf spark.kubernetes.container.image.pullPolicy=Always \
+  --conf spark.driver.host=$HOSTNAME.$SPARK_NAMESPACE \
+  --conf spark.driver.port=$SPARK_DRIVER_PORT
+
+After launch, it will take a few seconds or minutes for Spark to pull the executor container images and configure pods. When ready, the shell prompt will load. At that point, we can run a distributed Spark calculation to test the configuration:
+```
+# Create a distributed data set to test the session.
+t = sc.parallelize(range(10))
+
+# Calculate the approximate sum of values in the dataset
+r = t.sumApprox(3)
+print('Approximate sum: %s' % r)
+```
+If everything works as expected, you should see something similar to the output below:
+```
+Approximate sum: 45
+```
+
+The PySpark shell runs as a client application in Kubernetes
+
+You can exit the shell by typing exit() or by pressing Ctrl+D. The spark-test-pod instance will delete itself automatically because the --rm=true option was used when it was created. You will need to manually remove the service created using kubectl expose. If you followed the earlier instructions, kubectl delete svc spark-test-pod should remove the object.
+
+### Next Steps
+
+Running Spark on the same Kubernetes infrastructure that you use for application deployment allows you to consolidate Big Data workloads inside the same infrastructure you use for everything else. In this Apendix1, we've seen how you can use jump pods and custom images to run Spark applications in both cluster and client mode.
+
+While useful by itself, this foundation opens the door to deploying Spark alongside more complex analytic environments such as Jupyter or JupyterHub. In Apendix2 of this Demo, we will show how to extend the driver container with additional Python components and access our cluster resources from a Jupyter Kernel.
+
+
+
 
