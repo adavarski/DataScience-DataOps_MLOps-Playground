@@ -1,5 +1,5 @@
-# Root JupyterLab Images
-This repository contains the Docker build files for the JupyterLab images that are part of the k8s integrated data science and analytics platform. The container images package dependencies and libraries for computer vision, machine learning, and other Data Science work.
+# JupyterLab Images
+This repository contains the Docker build files for the JupyterLab images that are part of the k8s integrated Data Scienc and Analytics platform. The container images package dependencies and libraries for computer vision, machine learning, and other Data Science work.
 
 This repository is stuctured in a series of layers. Images at the bottom provide light-weight Spark and Dask executors, images in the middle provide components for running headless Spark driver applications within a Kubernetes environment, and images at the top provide Jupyter and high-level libraries for interactively working with data.
 
