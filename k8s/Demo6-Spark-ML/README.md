@@ -1704,12 +1704,43 @@ The ability to launch client mode applications is important because that is how 
 
 ## Proof of Concept
 
-Proof of Concept
-
 Any relatively complex technical project usually starts with a proof of concept to show that the goals are feasible. Spark on top of Kubernetes has a lot of moving parts, so it's best to start small and get more complicated after we have ensured that lower-level pieces work. To that end, in this post we will use a minimalist set of containers with the basic Spark runtime and toolset to ensure that we can get all of the parts and pieces configured in our cluster. Specifically, we will:
 
 - Build the containers for the driver and executors using a multi-stage Dockerfile. We use a multi-stage Docker container to show how the entire build process can be automated. The Dockerfile can be modified later to inject additional components specific to the types of analysis, or other tools you might need.
 - Create a service account and configure the authentication parameters required by Spark to connect to the Kubernetes control plane and launch workers.
 - Start the containers and submit a sample job (calculating Pi) to test the setup.
 
+### Building Containers
+
+Pods are container runtimes which are instantiated from container images, and will provide the environment in which all of the Spark workloads run. While there are several container runtimes, the most popular is Docker. In this section, we'll create a set of container images that provide the fundamental tools and libraries needed by our environment.
+
+In Docker, container images are built from a set of instructions collectively called a Dockerfile. Each line of a Dockerfile has an instruction and a value. Instructions are things like "run a command", "add an environment variable", "expose a port", and so-forth.
+
+Base Image
+
+The code listing shows a [multi-stage Dockerfile](https://docs.docker.com/develop/develop-images/multistage-build/) which will build our base Spark environment. This will be used for running executors and as the foundation for the driver. In the first stage of the build we download the Apache Spark runtime to a temporary directory, extract it, and then copy the runtime components for Spark to a new container image. Using a multi-stage process allows us to automate the entire container build using the packages from the [Apache Spark downloads page](https://spark.apache.org/downloads.html).
+
+In the second step, we configure the Spark container, set environment variables, patch a set of dependencies to avoid errors, and specify a non-root user which will be used to run Spark when the container starts.
+
+Using the Docker image, we can build and tag the image. When it finishes, we need to push it to an external repository for it to be available for our Kubernetes cluster. The command in the listing shows how this might be done.
+
+We use a DockerHub  public Docker registry. The image needs to be hosted somewhere accessible in order for Kubernetes to be able to use it. While it is possible to pull from a private registry, this involves additional steps and is not covered in this Appendix1.
+
+```
+cd ./jupyter/docker
+docker login
+docker build -f ./Dockerfile.k8s-minio.executor -t davarski/spark301-k8s-minio-base .
+docker push davarski/spark301-k8s-minio-base
+docker build -f ./Dockerfile.k8s-minio.driver -t davarski/spark301-k8s-minio-driver .
+docker push davarski/spark301-k8s-minio-driver
+docker build -f ./Dockerfile.k8s-minio.jupyter -t davarski/spark301-k8s-minio-jupyter .
+docker push davarski/spark301-k8s-minio-jupyter
+```
+Pull images into k8s(k3s):
+```
+export KUBECONFIG=~/.kube/k3s-config-jupyter 
+sudo k3s crictl pull davarski/spark301-k8s-minio-base
+sudo k3s crictl pull davarski/spark301-k8s-minio-driver
+sudo k3s crictl pull davarski/spark301-k8s-minio-jupyter
+```
 
