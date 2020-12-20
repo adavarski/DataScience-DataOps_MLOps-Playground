@@ -3733,3 +3733,7 @@ cluster_vis = plt.figure(figsize=(12,10)).gca(projection='3d')
 cluster_vis.scatter(pandas_df.sepal_length, pandas_df.sepal_width, pandas_df.petal_length, c=pandas_df.prediction,depthshade=False)
 plt.show()
 ```
+
+## Natural Language Processing
+
+
