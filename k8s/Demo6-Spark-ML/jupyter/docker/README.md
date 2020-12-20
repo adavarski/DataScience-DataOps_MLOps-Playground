@@ -22,8 +22,8 @@ Jupyter and general Data Science:
 	- Parent: `davarski/spark301-k8s-minio-driver`
 
 * `Dockerfile.hub-jupyter`: JupyterLab Python image used in deployments with a broad set of data utilities for working with Data Engineering and Data Science libraries for NLP, Machine Vision, Geographic Information Systems, and Medical Informatics.
-        - Tagged as `davarski/spark301-k8s-minio-kafka:latesta`
-        - Parent: `davarski/spark301-k8s-minio-jupyter`
+	- Tagged as `davarski/spark301-k8s-minio-kafka:latesta`
+	- Parent: `davarski/spark301-k8s-minio-jupyter`
 
 * `Dockerfile.k8s-minio.deep-learning`: Deep Learning image that includes NVIDIA drivers, CUDA utilities, TensorFlow, and PyTorch.
         - Tagged as `davarski/spark301-k8s-minio-dl:latest`
