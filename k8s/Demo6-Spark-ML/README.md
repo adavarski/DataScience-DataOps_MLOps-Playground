@@ -2850,6 +2850,8 @@ Example Output:
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Spark-ML-jupyter-linear-regression.png" width="800">
 
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/jupyter/ipynb/Linear_Regression.ipynb
+
 ## Logistic Regression
 
 The dataset that we are going to use for this example is a dummy dataset
@@ -3395,6 +3397,10 @@ new_preditions=rf.transform(new_df)
 A new predictions table would contain the column with the model
 predictions
 
+Example Output:
+
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/jupyter/ipynb/Random_Forests.ipynb
+
 ## Recommender Systems
 
 The dataset that we are going to use for this chapter is a subset from
@@ -3591,6 +3597,9 @@ executes the above steps in sequence and generates recommendations for
 active users. The complete code is available on the GitHub repo with this
 function built in.
 
+Example Output: 
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/jupyter/ipynb/Recommender_Systems.ipynb
+
 ## Clustering
 
 The dataset that we are going to use for this chapter is the famous open
@@ -3733,6 +3742,7 @@ cluster_vis = plt.figure(figsize=(12,10)).gca(projection='3d')
 cluster_vis.scatter(pandas_df.sepal_length, pandas_df.sepal_width, pandas_df.petal_length, c=pandas_df.prediction,depthshade=False)
 plt.show()
 ```
+Example Output: https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/jupyter/ipynb/Clustering.ipynb
 
 ## Natural Language Processing
 
