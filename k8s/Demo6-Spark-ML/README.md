@@ -3590,3 +3590,143 @@ and Faust (1994). This can be nicely wrapped in a single function that
 executes the above steps in sequence and generates recommendations for
 active users. The complete code is available on the GitHub repo with this
 function built in.
+
+## Clustering
+
+The dataset that we are going to use for this chapter is the famous open
+sourced IRIS dataset and contains a total of 150 records with 5 columns
+(sepal length, sepal width, petal length, petal width, species). There are
+50 records for each type of species. We will try to group these into clusters
+without using the species label information.
+
+Upload `./jupyter/dataset/iris_dataset.csv` into Jupyter env:
+
+1: Create the SparkSession Object
+We start Jupyter Notebook and import SparkSession and create a new
+SparkSession object to use Spark:
+```
+from pyspark.sql import SparkSession
+spark=SparkSession.builder.appName('K_means').getOrCreate()
+```
+2: Read the Dataset
+We then load and read the dataset within Spark using a dataframe. We
+have to make sure we have opened PySpark from the same directory folder
+where the dataset is available or else we have to mention the directory path
+of the data folder.
+```
+df=spark.read.csv('iris_dataset.csv',inferSchema=True,header=True)
+```
+3: Exploratory Data Analysis
+In this section, we explore the dataset by viewing it and validating its
+shape.
+```
+print((df.count(), len(df.columns)))
+```
+So, the above output confirms the size of our dataset and we can then
+validate the datatypes of the input values to check if we need to change/
+cast any columns' datatypes.
+```
+df.printSchema()
+```
+There is a total of five columns out of which four are numerical and the
+label column is categorical.
+```
+from pyspark.sql.functions import rand
+df.orderBy(rand()).show(10,False)
+df.groupBy('species').count().orderBy('count').show(10,False)
+```
+So, it confirms that there are an equal number of records for each
+species available in the dataset
+
+4: Feature Engineering
+This is the part where we create a single vector combining all input
+features by using Spark’s VectorAssembler. It creates only a single
+feature that captures the input values for that particular row. So,
+instead of four input columns (we are not considering a label column
+since it's an unsupervised machine learning technique), it essentially
+translates it into a single column with four input values in the form
+of a list.
+```
+from pyspark.ml.linalg import Vector
+from pyspark.ml.feature import VectorAssembler
+input_cols=['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
+vec_assembler = VectorAssembler(inputCols = input_cols,outputCol='features')
+final_data = vec_assembler.transform(df)
+```
+5: Build K-Means Clustering Model
+The final data contains the input vector that can be used to run K-means
+clustering. Since we need to declare the value of ‘K’ in advance before
+using K-means, we can use elbow method to figure out the right value
+of ‘K’. In order to use the elbow method, we run K-means clustering for
+different values of ‘K’. First, we import K-means from the PySpark library
+and create an empty list that would capture the variability or SSE (within
+cluster distance) for each value of K.
+```
+from pyspark.ml.clustering import KMeans
+errors=[]
+for k in range(2,10):
+    kmeans = KMeans(featuresCol='features',k=k)
+    model = kmeans.fit(final_data)
+    intra_distance = model.computeCost(final_data)
+    errors.append(intra_distance)
+```    
+Note The ‘K’ should have a minimum value of 2 to be able to build
+clusters.
+
+Now, we can plot the intracluster distance with the number of clusters
+using numpy and matplotlib.
+
+```
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+cluster_number = range(2,10)
+plt.xlabel('Number of Clusters (K)')
+plt.ylabel('SSE')
+plt.scatter(cluster_number,errors)
+plt.show()
+```
+In this case, k=3 seems to be the best number of clusters as we can see
+a sort of elbow formation between three and four values. We build final
+clusters using k=3.
+```
+kmeans = KMeans(featuresCol='features',k=3)
+model = kmeans.fit(final_data)
+model.transform(final_data).groupBy('prediction').count().show()
+```
+K-Means clustering gives us three different clusters based on the IRIS
+data set. We certainly are making a few of the allocations wrong as only
+one category has 50 records in the group, and the rest of the categories
+are mixed up. We can use the transform function to assign the cluster
+number to the original dataset and use a groupBy function to validate the
+groupings.
+```
+predictions=model.transform(final_data)
+predictions.groupBy('species','prediction').count().show()
+```
+As it can be observed, the setosa species is perfectly grouped
+along with versicolor, almost being captured in the same cluster,
+but verginica seems to fall within two different groups. K-means can
+produce different results every time as it chooses the starting point
+(centroid) randomly every time. Hence, the results that you might get
+in you K-means clustering might be totally different from these results
+unless we use a seed to reproduce the results. The seed ensures the
+split and the initial centroid values remain consistent throughout the
+analysis.
+
+6: Visualization of Clusters
+In the final step, we can visualize the new clusters with the help of Python’s
+matplotlib library. In order to do that, we convert our Spark dataframe into
+a Pandas dataframe first.
+```
+pandas_df = predictions.toPandas()
+pandas_df.head()
+```
+We import the required libraries to plot the third visualization and
+observe the clusters.
+```
+from mpl_toolkits.mplot3d import Axes3D
+cluster_vis = plt.figure(figsize=(12,10)).gca(projection='3d')
+cluster_vis.scatter(pandas_df.sepal_length, pandas_df.sepal_width, pandas_df.petal_length, c=pandas_df.prediction,depthshade=False)
+plt.show()
+```
