@@ -1080,6 +1080,10 @@ https://github.com/phiroict/terraform-aws-kafka-cluster; https://github.com/dwmk
 Note4.It's beter to use k8s Operators (ref: https://github.com/adavarski/k8s-operators-playground) than Helm Cahrts
 ```
 
+Appendix1 : Spark on k8s (production)
+When it was released, Apache Spark 2.3 introduced native support for running on top of Kubernetes. Spark [2.4](https://spark.apache.org/docs/2.4.0/index.html) extended this and brought better integration with the Spark shell. In this appendix1, we'll look at how to get up and running with Spark on top of a Kubernetes cluster.
+
+
 
 
 
