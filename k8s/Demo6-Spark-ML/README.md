@@ -3160,7 +3160,7 @@ data set with a few thousand rows and six columns. We have to use five
 input variables to predict the target variable using the random forest
 model.
 
-Upload `./jupyter/dataset/iris.csv` into Jupyter env:
+Upload `./jupyter/dataset/affairs.csv` into Jupyter env:
 
 
 1: Create the Spark Session Object
@@ -3296,8 +3296,7 @@ test_df.groupBy('affairs').count().show()
 In this part, we build and train the random forest model using features
 such as input and Status as the output colum.
 ```
-from pyspark.ml.classification import
-RandomForestClassifier
+from pyspark.ml.classification import RandomForestClassifier
 rf_classifier=RandomForestClassifier(labelCol='affairs',numTrees=50).fit(train_df)
 ```
 There are many hyperparameters that can be set to tweak the
@@ -3346,8 +3345,7 @@ The precision rate on test data is 71%
 
 AUC
 ```
-rf_auc=BinaryClassificationEvaluator(labelCol='affairs').
-evaluate(rf_predictions)
+rf_auc=BinaryClassificationEvaluator(labelCol='affairs').evaluate(rf_predictions)
 print( rf_auc)
 
 ```
