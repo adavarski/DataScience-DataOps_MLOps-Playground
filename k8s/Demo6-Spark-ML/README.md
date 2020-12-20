@@ -1683,7 +1683,7 @@ Summarizes the available deployment modes.
 
 In a traditional Spark application, a driver can either run inside or outside of a cluster. Depending on where it executes, it will be described as running in "client mode" or "cluster mode."
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/spark-architecture.png" width="800
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/spark-architecture.png" width="800>
 
 
 
