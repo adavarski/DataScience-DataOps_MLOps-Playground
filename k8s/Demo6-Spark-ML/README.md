@@ -2918,7 +2918,7 @@ df.groupBy('Country').count().show()
 So, the maximum number of visitors are from Indonesia, followed by
 India:
 ```
-df.groupBy('Search_Engine').count().show()
+df.groupBy('Platform').count().show()
 ```
 The Yahoo search engine users are the highest in numbers.
 ```
@@ -2936,12 +2936,12 @@ We have the highest conversion rate from Malaysia, followed by India.
 The average number of web page visits is highest in Malaysia and lowest in
 Brazil.
 ```
-df.groupBy('Search_Engine').mean().show()
+df.groupBy('Platform').mean().show()
 ```
 We have the highest conversion rate from user visitors use the Google
 search engine.
 ```
-df.groupBy(Status).mean().show()
+df.groupBy('Status').mean().show()
 ```
 We can clearly see there is a strong connection between the conversion
 status and the number of pages viewed along with repeat visits.
@@ -2963,21 +2963,21 @@ column. So, in the below example, all of the three values of search engine
 (Yahoo, Google, Bing) are assigned values (0.0,1.0,2.0). This is visible in the
 column named search_engine_num.
 ```
-search_engine_indexer = StringIndexer(inputCol="Search_Engine", outputCol="Search_Engine_Num").fit(df)
+search_engine_indexer = StringIndexer(inputCol="Platform", outputCol="Platform_Num").fit(df)
 df = search_engine_indexer.transform(df)
 df.show(3,False)
-df.groupBy('Search_Engine').count().orderBy('count', ascending=False).show(5,False)
-df.groupBy(‘Search_Engine_Num').count().orderBy('count', ascending=False).show(5,False)
+df.groupBy('Platform').count().orderBy('count', ascending=False).show(5,False)
+df.groupBy('Platform_Num').count().orderBy('count', ascending=False).show(5,False)
 ```
 The next step is to represent each of these values into the form of a
 one hot encoded vector. However, this vector is a little different in terms of
 representation as it captures the values and position of the values in the vector.
 ```
 from pyspark.ml.feature import OneHotEncoder
-search_engine_encoder=OneHotEncoder(inputCol="Search_Engine_Num", outputCol="Search_Engine_Vector")
+search_engine_encoder=OneHotEncoder(inputCol="Platform_Num", outputCol="Platform_Vector")
 df = search_engine_encoder.transform(df)
 df.show(3,False)
-df.groupBy('Search_Engine_Vector').count().orderBy('count', ascending=False).show(5,False)
+df.groupBy('Platform_Vector').count().orderBy('count', ascending=False).show(5,False)
 
 ```
 
@@ -2997,7 +2997,7 @@ represented with just the help of two columns. For example, if we need to
 represent Search Engine using one hot encoding, conventionally, we can
 do it as represented below.
 ```
-Search Engine Google Yahoo Bing
+Platform Google Yahoo Bing
 ----------------------------------
 Google 1 0 0
 Yahoo 0 1 0
@@ -3007,7 +3007,7 @@ Bing 0 0 1
 Another way of representing the above information in an optimized
 way is just using two columns instead of three as shown below.
 ```
-Search Engine Google Yahoo
+Platform Google Yahoo
 -----------------------------------
 Google 1 0
 Yahoo 0 1
@@ -3032,7 +3032,7 @@ single vector that would act as the input feature for the model.
 So, we select the input columns that we need to use to create the single
 feature vector and name the output vector as features.
 ```
-df_assembler = VectorAssembler(inputCols=['Search_Engine_Vector','Country_Vector','Age', 'Repeat_Visitor','Web_pages_viewed'], outputCol="features")
+df_assembler = VectorAssembler(inputCols=['Platform_Vector','Country_Vector','Age', 'Repeat_Visitor','Web_pages_viewed'], outputCol="features")
 df = df_assembler.transform(df)
 df.printSchema()
 ```
@@ -3152,3 +3152,247 @@ print(precision)
 ```
 So, the recall rate and precision rate are also in the same range, which
 is due to the fact that our target class was well balanced.
+
+## Random Forests
+
+The dataset that we are going to use for this example is an open source
+data set with a few thousand rows and six columns. We have to use five
+input variables to predict the target variable using the random forest
+model.
+
+Upload `./jupyter/dataset/iris.csv` into Jupyter env:
+
+
+1: Create the Spark Session Object
+We start the Jupyter Notebook and import SparkSession and create a new
+SparkSession object to use Spark.
+
+```
+from pyspark.sql import SparkSession
+spark=SparkSession.builder.appName('random_forest').getOrCreate()
+```
+2: Read the Dataset
+We then load and read the dataset within Spark using Dataframe. We have
+to make sure we have opened the PySpark from the same directory folder
+where the dataset is available or else we have to mention the directory path
+of the data folder.
+```
+df=spark.read.csv('affairs.csv',inferSchema=True,header=True)
+```
+
+3: Exploratory Data Analysis
+In this section, we drill deeper into the dataset by viewing the dataset and
+validating the shape of the dataset and various statistical measures of the
+variables. We start with checking the shape of the dataset.
+```
+print((df.count(), len(df.columns)))
+```
+So, the above output confirms the size of our dataset and we can then
+validate the data types of the input values to check if we need to change/
+cast any columns data types.
+```
+df.printSchema()
+```
+As we can see there are no categorical columns which need to be
+converted into numerical form. Let’s have a look at the dataset using show
+function in Spark:
+
+```
+df.show(5)
+```
+We can now use the describe function to go over statistical measures of
+the dataset.
+```
+df.describe().select('summary','rate_marriage','age','yrs_married','children','religious').show()
+```
+We can observe that the average age of people is close to 29 years, and
+they have been married for 9 years.
+Let us explore individual columns to understand the data in deeper
+detail. The groupBy function used along with counts returns us the
+frequency of each of the categories in the data.
+
+```
+df.groupBy('affairs').count().show()
+```
+
+So, we have more than 33% of the people who are involved in some
+sort of extramarital affair out of a total number of people.
+```
+df.groupBy('rate_marriage').count().show()
+```
+The majority of the people rate their marriage very high (4 or 5), and
+the rest rate it on the lower side. Let’s drill down a little bit further to
+understand if the marriage rating is related to the affair variable or not.
+```
+df.groupBy('rate_marriage','affairs').count().orderBy('rate_marriage','affairs','count',ascending=True).show()
+```
+Clearly, the figures indicate a high percentage of people having affairs
+when rating their marriages low. This might prove to be a useful feature for
+the prediction. We will explore other variables as well in a similar manner.
+```
+df.groupBy('religious','affairs').count().orderBy('religious','affairs','count',ascending=True).show()
+```
+We have a similar story from ratings on religious perspective as well
+as the number of people who have rated lower on religious features and a
+higher percentage of affair involvement.
+```
+df.groupBy('children','affairs').count().orderBy('children','affairs','count',ascending=True).show()
+```
+
+The above table does not clearly indicate any of the trends regarding
+the relation between the number of children and chances of being
+involved in an affair. Let us use the groupBy function along with the mean
+to know more about the dataset.
+```
+df.groupBy('affairs').mean().show()
+```
+So, the people who have affairs rate their marriages low and a little on
+the higher side from an age standpoint. They have also been married for a
+higher number of years and are less religious.
+
+4: Feature Engineering
+This is the part where we create a single vector combining all input
+features by using Spark’s VectorAssembler.
+```
+from pyspark.ml.feature import VectorAssembler
+```
+We need to assemble all of the input columns into a single vector
+that would act as the input feature for the model. So,we select the input
+columns that we need to use to create the single feature vector and name
+the output vector as features.
+```
+df_assembler = VectorAssembler(inputCols=['rate_marriage', 'age', 'yrs_married', 'children','religious'], outputCol="features")
+df = df_assembler.transform(df)
+df.printSchema()
+```
+As we can see, now we have one extra column named features, which
+is nothing but a combination of all the input features represented as a
+single dense vector.
+```
+df.select(['features','affairs']).show(10,False)
+```
+Let us select only the features column as input and the affairs column
+as output for training the random forest model.
+```
+model_df=df.select(['features','affairs'])
+```
+5: Splitting the Dataset
+We have to split the dataset into training and test datasets in order to train
+and evaluate the performance of the random forest model. We split it into
+a 75/25 ratio and train our model on 75% of the dataset. We can print the
+shape of the train and test data to validate the size.
+```
+train_df,test_df=model_df.randomSplit([0.75,0.25])
+print(train_df.count())
+train_df.groupBy('affairs').count().show()
+```
+This ensures we have balanced set values for the target class (‘affairs’)
+into the training and test sets.
+```
+test_df.groupBy('affairs').count().show()
+```
+
+6: Build and Train Random Forest Model
+In this part, we build and train the random forest model using features
+such as input and Status as the output colum.
+```
+from pyspark.ml.classification import
+RandomForestClassifier
+rf_classifier=RandomForestClassifier(labelCol='affairs',numTrees=50).fit(train_df)
+```
+There are many hyperparameters that can be set to tweak the
+performance of the model, but we are chosing the deafault ones here
+except for one that is the number of decision trees that we want to build.
+
+7: Evaluation on Test Data
+Once we have trained our model on the training dataset, we can evaluate
+its performance on the test set.
+```
+rf_predictions=rf_classifier.transform(test_df)
+rf_predictions.show()
+```
+The first column in the predictions table is that of input features of the
+test data. The second column is the actual label or output of the test data.
+The third column (rawPrediction) represents the measure of confidence
+for both possible outputs. The fourth column is that of conditional
+probability of each class label, and the final column is the prediction by the
+random forest classifier.We can apply a groupBy function on the prediction
+column to find out the number of predictions made for the positive and
+negative classes.
+
+```
+rf_predictions.groupBy('prediction').count().show()
+```
+
+To evaluate these preditions, we will import the
+classificationEvaluators.
+```
+from pyspark.ml.evaluation import MulticlassClassificationEvaluator
+from pyspark.ml.evaluation import BinaryClassificationEvaluator
+```
+Accuracy
+```
+rf_accuracy=MulticlassClassificationEvaluator(labelCol='affairs',metricName='accuracy').evaluate(rf_predictions)
+print('The accuracy of RF on test data is {0:.0%}'.format(rf_accuracy))
+```
+The accuracy of RF on test data is 73%
+
+Precision
+```
+rf_precision=MulticlassClassificationEvaluator(labelCol='affairs',metricName='weightedPrecision').evaluate(rf_predictions)
+print('The precision rate on test data is {0:.0%}'.format(rf_precision))
+```
+The precision rate on test data is 71%
+
+AUC
+```
+rf_auc=BinaryClassificationEvaluator(labelCol='affairs').
+evaluate(rf_predictions)
+print( rf_auc)
+
+```
+[Out]: 0.738
+
+As mentioned in the earlier part, RF gives the importance of each
+feature in terms of predictive power, and it is very useful to figure out the
+critical variables that contribute the most to predictions.
+```
+rf_classifier.featureImportances
+```
+
+We used five features and the importance can be found out using the
+feature importance function. To know which input feature is mapped to
+which index values, we can use metadata information.
+```
+df.schema["features"].metadata["ml_attr"]["attrs"]
+```
+```
+[Out]:
+  {'idx': 0, 'name': 'rate_marriage'},
+  {'idx': 1, 'name': 'age'},
+  {'idx': 2, 'name': 'yrs_married'},
+  {'idx': 3, 'name': 'children'},
+  {'idx': 4, 'name': 'religious'}}
+```  
+So, rate_marriage is the most important feature from a prediction
+standpoint followed by yrs_married. The least significant variable seems to
+be Age.
+
+Step 8: Saving the Model
+Sometimes, after training the model, we just need to call the model for
+preditions, and hence it makes a lot of sense to persist the model object
+and reuse it for predictions. There are two parts to this.
+1. Save the ML model
+2. Load the ML model
+```
+from pyspark.ml.classification import RandomForestClassificationModel
+rf_classifier.save("/home/jovyan/work/RF_model")
+```
+This way we saved the model as object locally.The next
+step is to load the model again for predictions
+```
+rf=RandomForestClassificationModel.load("/home/jovyan/work/RF_model")
+new_preditions=rf.transform(new_df)
+```
+A new predictions table would contain the column with the model
+predictions
