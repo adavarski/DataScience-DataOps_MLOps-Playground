@@ -1643,7 +1643,7 @@ Example: Dogs and Cats Image Classification
 When it was released, Apache Spark 2.3 introduced native support for running on top of Kubernetes. Spark [2.4](https://spark.apache.org/docs/2.4.0/index.html) extended this and brought better integration with the Spark shell. In this Appendix1, we'll look at how to get up and running with Spark on top of a Kubernetes cluster.
 
 
-Prerequisites
+## Prerequisites
 
 To utilize Spark with Kubernetes, you will need:
 
@@ -1656,7 +1656,7 @@ Sufficient cluster resources to be able to run a Spark session (at a practical l
 
 In this Appendix1, we are going to focus on directly connecting Spark to Kubernetes without making use of the [Spark Kubernetes operator](https://github.com/GoogleCloudPlatform/spark-on-k8s-operator). The Kubernetes operator simplifies several of the manual steps and allows the use of custom resource definitions to manage Spark deployments.
 
-Overview
+## Overview
 
 In this Appendix1, we will:
 - Create a Docker container containing a Spark application that can be deployed on top of Kubernetes
@@ -1664,7 +1664,7 @@ In this Appendix1, we will:
 - Demonstrate how to launch Spark applications using `spark-submit`
 - Start the Spark Shell and demonstrate how interactive sessions interact with the Kubernetes cluster
 
-Spark Essentials
+## Spark Essentials
 
 Spark is a general cluster technology designed for distributed computation. While primarily used for analytic and data processing purposes, its model is flexible enough to handle distributed operations in a fault tolerant manner. It is a framework that can be used to build powerful data applications.
 
@@ -1673,7 +1673,7 @@ Every Spark application consists of three building blocks:
 - The `Cluster Manager` helps the driver schedule work across nodes in the cluster using executors. Spark supports several different types of executors. The most common is Hadoop, but Mesos and Kubernetes are both available as options.
 - The `Workers` run executors. Executors are distributed across the cluster and do the heavy lifting of a Spark program -data aggregation, machine learning training, and other miscellaneous number crunching. Except when running in "local" mode, executors run on some kind of a cluster to leverage a distributed environment with plenty of resources. They typically are created when a Spark application begins and often run for the entire lifetime of the Spark application. This pattern is called static allocation, and it is also possible to have dynamic allocation of executors which means that they will be initialized when data actually needs to be processed.
 
-Deployment modes
+### Deployment modes
 
 An attractive feature of Spark is its support for myriad deployment modes, enabling Spark to run in different configurations and environments. Because the cluster manager is agnostic to where it runs (as long as it can manage Spark’s executors and fulfill resource requests), Spark can be deployed in some of the most popular environments, such as Apache Hadoop YARN and Kubernetes, and can operate in different modes. 
 
@@ -1685,6 +1685,31 @@ In a traditional Spark application, a driver can either run inside or outside of
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/spark-architecture.png" width="800">
 
+Spark is composed of three components: A driver that tracks the general logic of a Spark program, a cluster manager which helps to find workers, and workers which execute data operations and report results.
 
+
+### Networking Considerations: Executor-Driver Communication in Kubernetes
+
+When Spark deploys an application inside of a Kubernetes cluster, Kubernetes doesn't handle the job of scheduling executor workload. Rather, its job is to spawn a small army of executors (as instructed by the cluster manager) so that workers are available to handle tasks. The driver then coordinates what tasks should be executed and which executor should take it on. Once work is assigned, executors execute the task and report the results of the operation back to the driver.
+
+This last piece is important. Since a cluster can conceivably have hundreds or even thousands of executors running, the driver doesn't actively track them and request a status. Instead, the executors themselves establish a direct network connection and report back the results of their work. In complex environments, firewalls and other network management layers can block these connections from the executor back to the master. If this happens, the job fails.
+
+This means that we need to take a degree of care when deploying applications. Kubernetes pods are often not able to actively connect to the launch environment (where the driver is running). If the job was started from within Kubernetes or is running in "cluster" mode, it's usually not a problem. All networking connections are from within the cluster, and the pods can directly see one another.
+
+In client mode (which is how most Spark shells run), this is a problem. The executor instances usually cannot see the driver which started them, and thus they are not able to communicate back their results and status. This means interactive operations will fail.
+
+Based on these requirements, the easiest way to ensure that your applications will work as expected is to package your driver or program as a pod and run that from within the cluster. In this post, we'll show how you can do that. First, we'll look at how to package Spark driver components in a pod and use that to submit work into the cluster using the "cluster mode." Then we'll show how a similar approach can be used to submit client mode applications, and the additional configuration required to make them work.
+
+The ability to launch client mode applications is important because that is how most interactive Spark applications run, such as the PySpark shell.
+
+## Proof of Concept
+
+Proof of Concept
+
+Any relatively complex technical project usually starts with a proof of concept to show that the goals are feasible. Spark on top of Kubernetes has a lot of moving parts, so it's best to start small and get more complicated after we have ensured that lower-level pieces work. To that end, in this post we will use a minimalist set of containers with the basic Spark runtime and toolset to ensure that we can get all of the parts and pieces configured in our cluster. Specifically, we will:
+
+- Build the containers for the driver and executors using a multi-stage Dockerfile. We use a multi-stage Docker container to show how the entire build process can be automated. The Dockerfile can be modified later to inject additional components specific to the types of analysis, or other tools you might need.
+- Create a service account and configure the authentication parameters required by Spark to connect to the Kubernetes control plane and launch workers.
+- Start the containers and submit a sample job (calculating Pi) to test the setup.
 
 
