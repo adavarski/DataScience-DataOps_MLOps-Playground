@@ -2713,4 +2713,134 @@ sc = pyspark.SparkContext(conf=conf)
 df = sc.read.format("csv").option("sep", ",").option("inferSchema", "true").option("header", "true").load("s3a://iris/iris.csv")
 ```
 
+### Linear Regression
 
+The dataset that we are going to use for this example is a dummy
+dataset and contains a total of 1,232 rows and 6 columns. We have to
+use 5 input variables to predict the target variable using the Linear
+Regression model.
+
+1: Create the SparkSession Object
+We start the Jupyter Notebook and import SparkSession and create a new
+SparkSession object to use Spark:
+```
+from pyspark.sql import SparkSession
+spark=SparkSession.builder.appName('lin_reg').getOrCreate()
+```
+
+2: Read the Dataset
+We then load and read the dataset within Spark using Dataframe. We have
+to make sure we have opened the PySpark from the same directory folder
+where the dataset is available or else we have to mention the directory path
+of the data folder:
+```
+df=spark.read.csv('Linear_regression_dataset.csv', inferSchema=True,header=True)
+```
+3: Exploratory Data Analysis
+In this section, we drill deeper into the dataset by viewing the dataset,
+validating the shape of the dataset, various statistical measures, and
+correlations among input and output variables. We start with checking the
+shape of the dataset.
+
+```
+print((df.count(), len(df.columns)))
+```
+The above output confirms the size of our dataset, and we can validate the
+datatypes of the input values to check if we need to do change/cast any columns
+datatypes. In this example, all columns contain Integer or double values.
+
+```
+df.printSchema()
+```
+There is a total of six columns out of which five are input columns
+( var_1 to var_5) and target column (output). We can now use describe
+function to go over statistical measures of the dataset.
+
+```
+df.describe().show(3,False)
+```
+This allows us to get a sense of distribution, measure of center, and
+spread for our dataset columns. We then take a sneak peek into the dataset
+using the head function and pass the number of rows that we want to view.
+
+```
+df.head(3)
+```
+We can check the correlation between input variables and output
+variables using the corr function:
+```
+from pyspark.sql.functions import corr
+df.select(corr('var_1','output')).show()
+```
+4: Feature Engineering
+This is the part where we create a single vector combining all input features
+by using Spark’s VectorAssembler. It creates only a single feature that
+captures the input values for that row. So, instead of five input columns, it
+essentially merges all input columns into a single feature vector column.
+
+```
+from pyspark.ml.linalg import Vector
+from pyspark.ml.feature import VectorAssembler
+```
+One can select the number of columns that would be used as input
+features and can pass only those columns through the VectorAssembler. In
+our case, we will pass all the five input columns to create a single feature
+vector column.
+```
+df.columns
+vec_assmebler=VectorAssembler(inputCols=['var_1','var_2', 'var_3', 'var_4', 'var_5'],outputCol='features')
+features_df=vec_assmebler.transform(df)
+features_df.printSchema()
+```
+As, we can see, we have an additional column (‘features’) that contains
+the single dense vector for all of the inputs.
+```
+features_df.select('features').show(5,False)
+```
+We take the subset of the dataframe and select only the features
+column and the output column to build the Linear Regression model.
+```
+
+model_df=features_df.select('features','output')
+model_df.show(5,False)
+print((model_df.count(), len(model_df.columns)))
+
+```
+
+5: Splitting the Dataset
+We have to split the dataset into a training and test dataset in order to train
+and evaluate the performance of the Linear Regression model built. We
+split it into a 70/30 ratio and train our model on 70% of the dataset. We can
+print the shape of train and test data to validate the size.
+
+```
+train_df,test_df=model_df.randomSplit([0.7,0.3])
+print((train_df.count(), len(train_df.columns)))
+print((test_df.count(), len(test_df.columns)))
+```
+6: Build and Train Linear Regression Model
+In this part, we build and train the Linear Regression model using features
+of the input and output columns. We can fetch the coefficients (B1, B2,
+B3, B4, B5) and intercept (B0) values of the model as well. We can also
+evaluate the performance of model on training data as well using r2. This
+model gives a very good accuracy (86%) on training datasets.
+
+```
+from pyspark.ml.regression import LinearRegression
+lin_Reg=LinearRegression(labelCol='output')
+lr_model=lin_Reg.fit(train_df)
+print(lr_model.coefficients)
+print(lr_model.intercept)
+training_predictions=lr_model.evaluate(train_df)
+print(training_predictions.r2)
+```
+7: Evaluate Linear Regression Model on Test Data
+The final part of this entire exercise is to check the performance of the model
+on unseen or test data. We use the evaluate function to make predictions for
+the test data and can use r2 to check the accuracy of the model on test data.
+The performance seems to be almost similar to that of training.
+```
+test_predictions=lr_model.evaluate(test_df)
+print(test_predictions.r2)
+print(test_predictions.meanSquaredError)
+```
