@@ -2508,7 +2508,7 @@ It provides a host of benefits including:
 - SSL/TLS termination
 - Named based virtual hosting
 
-While the specific configuration of these options is outside the scope of this article, providing Ingress using the NGINX controller offers a far more robust way to access the Jupyter instance than kubectl port-forward.
+While the specific configuration of these options is outside the scope of this article, providing Ingress using the NGINX/Traefik/etc. controller offers a far more robust way to access the Jupyter instance than `kubectl port-forward`.
 
 The code listing below shows an example of a TLS-terminated Ingress controller that will forward to the pod/service created earlier. The TLS certificate is provisioned using cert-manager. For details on cert-manager, see the project's homepage.
 
@@ -2535,7 +2535,7 @@ spec:
 
 ```
 
-Once it has been created and the certificates issued, the Jupyter instance should now be available outside the cluster at https://jupyter.data.davar.com.
+Once it has been created and the certificates issued, the Jupyter instance should now be available outside the cluster at `https://jupyter.data.davar.com`.
 
 To Infinity and Beyond
 
