@@ -7,9 +7,8 @@ Core Spark:
 
 
 * `Dockerfile.k8s-minio.executor`: core foundation image for environment. Provides a minimal Spark environment with Python, Scala, and R runtimes. It also includes the dependencies needed to work with files stored in Amazon S3 or MinIO (via the s3a storage driver for Spark).
-
-        - Tagged as `davarski/spark301-k8s-minio-base`
-        - Parent: `nvidia/cuda:11.0-runtime-ubuntu20.04`
+	- Tagged as `davarski/spark301-k8s-minio-base`
+	- Parent: `nvidia/cuda:11.0-runtime-ubuntu20.04`
 
 
 * `Dockerfile.k8s-minio.driver`: extension of the Spark executor image that provides additional components, such as kubectl so that the image can be used to run headless driver components on a Kubernetes cluster.
