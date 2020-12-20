@@ -346,6 +346,10 @@ Dataset is the main abstraction. DataFrames is the main programming interface fo
 
 Note: Analytical Massively Parallel Processing (MPP) Databases are databases that are optimized for analytical workloads: aggregating and processing large datasets (examples: Snowflake, Redshift, Impala, Presto, Azure DW, etc.)
 
+## Spark Ecosystem of Connections
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/k8s-spark-ecosystem-of-connections.png" width="800">
+
 
 ## Introduction to Spark MLlib
 Machine learning is one of Spark’s main applications. Spark MLlib includes popular machine learning algorithms for regression, classification, clustering, collaborative filtering, and frequent pattern mining. It also provides a wide set of features for building pipelines, model selection and tuning, and feature selection, extraction, and transformation.
