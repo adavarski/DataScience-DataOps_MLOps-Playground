@@ -2718,7 +2718,9 @@ df = sc.read.format("csv").option("sep", ",").option("inferSchema", "true").opti
 The dataset that we are going to use for this example is a dummy
 dataset and contains a total of 1,232 rows and 6 columns. We have to
 use 5 input variables to predict the target variable using the Linear
-Regression model.
+Regression model. 
+
+Upload `./jupyter/dataset/Linear_regression_dataset.csv` into Jupyter env:
 
 1: Create the SparkSession Object
 We start the Jupyter Notebook and import SparkSession and create a new
