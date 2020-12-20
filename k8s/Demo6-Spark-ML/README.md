@@ -1686,6 +1686,7 @@ Every Spark application consists of three building blocks:
 As the part of the Spark application responsible for instantiating a SparkSession , the Spark driver has multiple roles: it communicates with the cluster manager; it requests resources (CPU, memory, etc.) from the cluster manager for Spark’s executors (JVMs); and it transforms all the Spark operations into DAG computations, schedules them, and distributes their execution as tasks across the Spark executors. Once the resources are allocated, it communicates directly with the executors.
 
 - SparkSession
+
 In Spark 2.0, the SparkSession became a unified conduit to all Spark operations and data. Not only did it subsume previous entry points to Spark like the SparkContext , SQLContext , HiveContext , SparkConf , and StreamingContext , but it also made working with Spark simpler and easier.
 
 Note: Although in Spark 2.x the SparkSession subsumes all other con‐ texts, you can still access the individual contexts and their respective methods. In this way, the community maintained backward compatibility. That is, your old 1.x code with SparkContext or SQLContext will still work.
