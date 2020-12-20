@@ -2713,7 +2713,7 @@ sc = pyspark.SparkContext(conf=conf)
 df = sc.read.format("csv").option("sep", ",").option("inferSchema", "true").option("header", "true").load("s3a://iris/iris.csv")
 ```
 
-### Linear Regression
+## Linear Regression
 
 The dataset that we are going to use for this example is a dummy
 dataset and contains a total of 1,232 rows and 6 columns. We have to
@@ -2850,3 +2850,305 @@ Example Output:
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Spark-ML-jupyter-linear-regression.png" width="800">
 
+## Logistic Regression
+
+The dataset that we are going to use for this example is a dummy dataset
+and contains a total of 20,000 rows and 6 columns. We have to use 5 input
+variables to predict the target class using the logistic regression model.
+This dataset contains information regarding online users of a retail sports
+merchandise website. The data captures the country of user, platform
+used, age, repeat visitor or first-time visitor, and the number of web
+pages viewed on the website. It also has the information if the customer
+ultimately bought the product or not (conversion status).
+
+Upload `./jupyter/dataset/Log_Reg_dataset.csv` into Jupyter env:
+
+1: Create the Spark Session Object
+We start the Jupyter Notebook and import SparkSession and create a new
+SparkSession object to use Spark.
+
+```
+from pyspark.sql import SparkSession
+spark=SparkSession.builder.appName('log_reg').getOrCreate()
+```
+2: Read the Dataset
+We then load and read the dataset within Spark using Dataframe. We have
+to make sure we have opened the PySpark from the same directory folder
+where the dataset is available or else we have to mention the directory path
+of the data folder.
+```
+df=spark.read.csv('Log_Reg_dataset.csv',inferSchema=True,header=True)
+```
+3: Exploratory Data Analysis
+In this section, we drill deeper into the dataset by viewing the dataset
+and validating the shape of the it and various statistical measures of the
+variables. We start with checking the shape of the dataset:
+```
+print((df.count(), len(df.columns)))
+```
+
+So, the above output confirms the size of our dataset and we can then
+validate the datatypes of the input values to check if we need to change/
+cast any columns datatypes.
+```
+df.printSchema()
+```
+As we can see, there are two such columns (Country, Search_Engine),
+which are categorical in nature and hence need to be converted into
+numerical form. Let’s have a look at the dataset using the show function in
+Spark.
+```
+df.show(5)
+```
+We can now use the describe function to go over statistical measures of
+the dataset.
+```
+df.describe().show()
+```
+
+We can observe that the average age of visitors is close to 28 years, and
+they view around 9 web pages during the website visit.
+Let us explore individual columns to understand the data in deeper
+details. The groupBy function used along with counts returns the
+frequency of each of the categories in the data.
+```
+df.groupBy('Country').count().show()
+```
+
+So, the maximum number of visitors are from Indonesia, followed by
+India:
+```
+df.groupBy('Search_Engine').count().show()
+```
+The Yahoo search engine users are the highest in numbers.
+```
+ df.groupBy('Status').count().show()
+```
+
+We have an equal number of users who are converted and non-­
+converted.
+Let’s use the groupBy function along with the mean to know more
+about the dataset.
+```
+df.groupBy('Country').mean().show()
+```
+We have the highest conversion rate from Malaysia, followed by India.
+The average number of web page visits is highest in Malaysia and lowest in
+Brazil.
+```
+df.groupBy('Search_Engine').mean().show()
+```
+We have the highest conversion rate from user visitors use the Google
+search engine.
+```
+df.groupBy(Status).mean().show()
+```
+We can clearly see there is a strong connection between the conversion
+status and the number of pages viewed along with repeat visits.
+
+4: Feature Engineering
+This is the part where we convert the categorical variable into numerical
+form and create a single vector combining all the input features by using
+Spark’s VectorAssembler.
+```
+from pyspark.ml.feature import StringIndexer
+from pyspark.ml.feature import VectorAssembler
+```
+Since we are dealing with two categorical columns, we will have to
+convert the country and search engine columns into numerical form. The
+machine learning model cannot understand categorical values.
+The first step is to label the column using StringIndexer into
+numerical form. It allocates unique values to each of the categories of the
+column. So, in the below example, all of the three values of search engine
+(Yahoo, Google, Bing) are assigned values (0.0,1.0,2.0). This is visible in the
+column named search_engine_num.
+```
+search_engine_indexer = StringIndexer(inputCol="Search_Engine", outputCol="Search_Engine_Num").fit(df)
+df = search_engine_indexer.transform(df)
+df.show(3,False)
+df.groupBy('Search_Engine').count().orderBy('count', ascending=False).show(5,False)
+df.groupBy(‘Search_Engine_Num').count().orderBy('count', ascending=False).show(5,False)
+```
+The next step is to represent each of these values into the form of a
+one hot encoded vector. However, this vector is a little different in terms of
+representation as it captures the values and position of the values in the vector.
+```
+from pyspark.ml.feature import OneHotEncoder
+search_engine_encoder=OneHotEncoder(inputCol="Search_Engine_Num", outputCol="Search_Engine_Vector")
+df = search_engine_encoder.transform(df)
+df.show(3,False)
+df.groupBy('Search_Engine_Vector').count().orderBy('count', ascending=False).show(5,False)
+
+```
+
+The final feature that we would be using for building Logistic
+Regression is Search_Engine_Vector. Let’s understand what these column
+values represent.
+```
+(2,[0],[1.0]) represents a vector of length 2 , with 1 value :
+Size of Vector – 2
+Value contained in vector – 1.0
+Position of 1.0 value in vector – 0 th place
+```
+This kind of representation allows the saving of computational space
+and hence a faster time to compute. The length of the vector is equal to
+one less than the total number of elements since each value can be easily
+represented with just the help of two columns. For example, if we need to
+represent Search Engine using one hot encoding, conventionally, we can
+do it as represented below.
+```
+Search Engine Google Yahoo Bing
+----------------------------------
+Google 1 0 0
+Yahoo 0 1 0
+Bing 0 0 1
+-----------------------------------
+```
+Another way of representing the above information in an optimized
+way is just using two columns instead of three as shown below.
+```
+Search Engine Google Yahoo
+-----------------------------------
+Google 1 0
+Yahoo 0 1
+Bing 0 0
+-----------------------------------
+```
+Let’s repeat the same procedure for the other categorical column
+(Country).
+```
+country_indexer = StringIndexer(inputCol="Country", outputCol="Country_Num").fit(df)
+df = country_indexer.transform(df)
+df.groupBy('Country').count().orderBy('count',ascending=False).show(5,False)
+df.groupBy('Country_Num').count().orderBy('count', ascending=False).show(5,False)
+country_encoder = OneHotEncoder(inputCol="Country_Num", outputCol="Country_Vector")
+df = country_encoder.transform(df)
+df.select(['Country','Country_Num','Country_Vector']).show(3,False)
+df.groupBy('Country_Vector').count().orderBy('count', ascending=False).show(5,False)
+```
+Now that we have converted both the categorical columns into
+numerical forms, we need to assemble all of the input columns into a
+single vector that would act as the input feature for the model.
+So, we select the input columns that we need to use to create the single
+feature vector and name the output vector as features.
+```
+df_assembler = VectorAssembler(inputCols=['Search_Engine_Vector','Country_Vector','Age', 'Repeat_Visitor','Web_pages_viewed'], outputCol="features")
+df = df_assembler.transform(df)
+df.printSchema()
+```
+
+As we can see, now we have one extra column named features, which
+is nothing but a combination of all the input features represented as a
+single dense vector.
+
+```
+df.select(['features','Status']).show(10,False)
+```
+Let us select only features column as input and the Status column as
+output for training the logistic regression model.
+```
+model_df=df.select(['features','Status'])
+```
+5: Splitting the Dataset
+We have to split the dataset into a training and test dataset in order to train
+and evaluate the performance of the logistic regression model. We split it
+in a 75/25 ratio and train our model on 75% of the dataset. Another use of
+splitting the data is that we can use 75% of the data to apply cross-­validation
+in order to come up with the best Hyperparameters. Cross-­validation can be
+of a different type where one part of the training data is kept for training and
+the remaining part is used for validation purposes. K-fold cross-validation is
+primarily used to train the model with the best Hyperparameters.
+
+We can print the shape of train and test data to validate the size.
+```
+training_df,test_df=model_df.randomSplit([0.75,0.25])
+print(training_df.count())
+training_df.groupBy('Status').count().show()
+```
+This ensures we have a balance set of the target class (Status) into the
+training and test set.
+```
+print(test_df.count())
+test_df.groupBy('Status').count().show()
+```
+6: Build and Train Logistic Regression Model
+In this part, we build and train the logistic regression model using features
+as the input column and status as the output column.
+```
+from pyspark.ml.classification import LogisticRegression
+log_reg=LogisticRegression(labelCol='Status').fit(training_df)
+```
+Training Results
+We can access the predictions made by the model using the evaluate
+function in Spark that executes all the steps in an optimized way. That
+gives another Dataframe that contains four columns in total, including
+prediction and probability. The prediction column signifies the class
+label that the model has predicted for the given row and probability
+column contains two probabilities (probability for negative class at 0th
+index and probability for positive class at 1st index).
+```
+train_results=log_reg.evaluate(training_df).predictions
+train_results.filter(train_results['Status']==1).filter(train_results['prediction']==1).select(['Status','prediction','probability']).show(10,False)
+```
+
+So, in the above results, probability at the 0th index is for Status = 0
+and probability as 1st index is for Status =1.
+
+7: Evaluate Linear Regression Model on Test Data
+The final part of the entire exercise is to check the performance of the
+model on unseen or test data. We again make use of the evaluate function
+to make predictions on the test.
+We assign the predictions DataFrame to results and results DataFrame
+now contains five columns.
+```
+results=log_reg.evaluate(test_df).predictions
+results.printSchema()
+
+```
+We can filter the columns that we want to see using the select keyword.
+```
+results.select(['Status','prediction']).show(10,False)
+```
+Since this is a classification problem, we will use a confusion matrix to
+gauge the performance of the model.
+
+Confusion Matrix
+We will manually create the variables for true positives, true negatives,
+false positives, and false negatives to understand them better rather than
+using the direct inbuilt function.
+```
+tp = results[(results.Status == 1)].count()
+tn = results[(results.Status == 0)].count()
+fp = results[(results.Status == 1)].count()
+fn = results[(results.Status == 0)].count()
+```
+Accuracy
+As discussed already in the chapter, accuracy is the most basic metric
+for evaluating any classifier; however, this is not the right indicator of
+the performance of the model due to dependency on the target class
+balance.
+```
+accuracy=float((true_postives+true_negatives) /(results.count()))
+print(accuracy)
+```
+The accuracy of the model that we have built is around 94%.
+
+Recall
+Recall rate shows how much of the positive class cases we are able to
+predict correctly out of the total positive class observations.
+```
+recall = float(true_postives)/(true_postives + false_negatives)
+print(recall)
+````
+The recall rate of the model is around 0.94.
+
+Precision
+
+Precision rate talks about the number of true positives predicted
+correctly out of all the predicted positives observations:
+```
+precision = float(true_postives) / (true_postives + false_positives)
+print(precision)
+```
+So, the recall rate and precision rate are also in the same range, which
+is due to the fact that our target class was well balanced.
