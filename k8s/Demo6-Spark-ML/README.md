@@ -2642,7 +2642,7 @@ jupyter-notebook.pod.yaml.DEMO:    image: davarski/spark301-k8s-minio-jupyter:1.
 jupyter-notebook.pod.yaml.MINIO-BUCKET:    image: davarski/spark301-k8s-minio-jupyter:1.0.0
 ```
 
-Deploy:
+Apply yamls:
 
 ```
 kubectl apply -f jupyter-notebook.pod.yaml -f jupyter-notebook.svc.yaml -f jupyter-notebook.ingress.yaml
@@ -2654,7 +2654,6 @@ Check libs:
 $ kubectl exec -it spark-jupyter -- bash -c "ls /opt/spark/jars/*aws*"
 /opt/spark/jars/aws-java-sdk-core-1.11.923.jar	/opt/spark/jars/aws-java-sdk-kms-1.11.923.jar  /opt/spark/jars/aws-java-sdk-s3-1.11.923.jar  /opt/spark/jars/hadoop-aws-3.0.1.jar
 ```
-
 Login Jupyter and cell:
 
 ```
