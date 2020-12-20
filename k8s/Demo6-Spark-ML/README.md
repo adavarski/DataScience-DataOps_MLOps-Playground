@@ -3394,3 +3394,200 @@ new_preditions=rf.transform(new_df)
 ```
 A new predictions table would contain the column with the model
 predictions
+
+## Recommender Systems
+
+The dataset that we are going to use for this chapter is a subset from
+a famous open sourced movie lens dataset and contains a total of 0.1
+million records with three columns (User_Id,title,rating). We will train our
+recommender model using 75% of the data and test it on the rest of the
+25% user ratings.
+
+Upload `./jupyter/dataset/movie_ratings_df.csv` into Jupyter env:
+
+1: Create the SparkSession Object
+We start the Jupyter Notebook and import SparkSession and create a new
+SparkSession object to use Spark:
+```
+from pyspark.sql import SparkSession
+spark=SparkSession.builder.appName('lin_reg').getOrCreate()
+```
+
+2: Read the Dataset
+We then load and read the dataset within Spark using a dataframe. We
+have to make sure we have opened the PySpark from the same directory
+folder where the dataset is available or else we have to mention the
+directory path of the data folder.
+```
+df=spark.read.csv('movie_ratings_df.csv',inferSchema=True,header=True)
+```
+
+3: Exploratory Data Analysis
+In this section, we explore the dataset by viewing the dataset, validating
+the shape of the dataset, and getting a count of the number of movies rated
+and the number of movies that each user rated.
+```
+print((df.count(), len(df.columns)))
+```
+So, the above output confirms the size of our dataset and we can then
+validate the datatypes of the input values to check if we need to change/
+cast any columns’ datatypes.
+```
+df.printSchema()
+```
+
+There is a total of three columns out of which two are numerical and
+the title is categorical. The critical thing with using PySpark for building
+RS is that we need to have user_id and item_id in numerical form. Hence,
+we will convert the movie title to numerical values later. We now view a
+few rows of the dataframe using the rand function to shuffle the records in
+random order.
+
+```
+df.orderBy(rand()).show(10,False)
+df.groupBy('userId').count().orderBy('count',ascending=False).show(10,False)
+df.groupBy('userId').count().orderBy('count',ascending=True).show(10,False)
+```
+
+The user with the highest number of records has rated 737 movies, and
+each user has rated at least 20 movies.
+```
+df.groupBy('title').count().orderBy('count',ascending=False).show(10,False)
+```
+The movie with highest number of ratings is Star Wars (1977) and has
+been rated 583 times, and each movie has been rated by at least by 1 user.
+
+4: Feature Engineering
+We now convert the movie title column from categorical to numerical
+values using StringIndexer. We import the stringIndexer and Indextostring
+from the PySpark library.
+```
+from pyspark.sql.functions import *
+from pyspark.ml.feature import StringIndexer,IndexToString
+```
+Next, we create the stringindexer object by mentioning the input
+column and output column. Then we fit the object on the dataframe and
+apply it on the movie title column to create new dataframe with numerical
+values.
+```
+stringIndexer = StringIndexer(inputCol="title",
+outputCol="title_new")
+model = stringIndexer.fit(df)
+indexed = model.transform(df)
+```
+Let’s validate the numerical values of the title column by viewing few
+rows of the new dataframe (indexed).
+```
+indexed.show(10)
+```
+As we can see, we now we have an additional column (title_new) with
+numerical values representing the movie titles. We have to repeat the same
+procedure in case the user_id is also a categorical type. Just to validate the
+movie counts, we rerun the groupBy on a new dataframe.
+```
+indexed.groupBy('title_new').count().orderBy('count',ascending=False).show(10,False)
+```
+
+5: Splitting the Dataset
+Now that we have prepared the data for building the recommender model,
+we can split the dataset into training and test sets. We split it into a 75 to 25
+ratio to train the model and test its accuracy.
+```
+train,test=indexed.randomSplit([0.75,0.25])
+train.count()
+test.count()
+```
+6: Build and Train Recommender Model
+We import the ALS function from the PySpark ml library and build the
+model on the training dataset. There are multiple hyperparameters
+that can be tuned to improve the performance of the model. Two of the
+important ones are nonnegative =‘True’ doesn’t create negative ratings in
+recommendations and coldStartStrategy=‘drop’ to prevent any NaN ratings
+predictions.
+```
+from pyspark.ml.recommendation import ALS
+rec=ALS(maxIter=10,regParam=0.01,userCol='userId',itemCol='title_new',ratingCol='rating',nonnegative=True,coldStartStrategy="drop")
+rec_model=rec.fit(train)
+```
+7: Predictions and Evaluation on Test Data
+The final part of the entire exercise is to check the performance of the
+model on unseen or test data. We use the transform function to make
+predictions on the test data and RegressionEvaluate to check the RMSE
+value of the model on test data.
+```
+predicted_ratings=rec_model.transform(test)
+predicted_ratings.printSchema()
+predicted_ratings.orderBy(rand()).show(10)
+from pyspark.ml.evaluation import RegressionEvaluator
+evaluator=RegressionEvaluator(metricName='rmse',predictionCol='prediction',labelCol='rating')
+rmse=evaluator.evaluate(predictions)
+print(rmse)
+```
+The RMSE is not very high; we are making an error of one point in the
+actual rating and predicted rating. This can be improved further by tuning
+the model parameters and using the hybrid approach.
+
+8: Recommend Top Movies That Active User Might Like
+After checking the performance of the model and tuning the hyperparameters,
+we can move ahead to recommend top movies to users that they have not
+seen and might like. The first step is to create a list of unique movies in the
+dataframe.
+```
+unique_movies=indexed.select('title_new').distinct()
+unique_movies.count()
+
+```
+So, we have in total 1,664 distinct movies in the dataframe.
+```
+a = unique_movies.alias('a')
+```
+We can select any user within the dataset for which we need to
+recommend other movies. In our case, we go ahead with userId = 85.
+```
+user_id=85
+```
+
+We will filter the movies that this active user has already rated or seen.
+```
+watched_movies=indexed.filter(indexed['userId'] == user_id).select('title_new').distinct()
+watched_movies.count()
+b=watched_movies.alias('b')
+```
+So, there are total of 287 unique movies out of 1,664 movies that this
+active user has already rated. So, we would want to recommend movies
+from the remaining 1,377 items. We now combine both the tables to find
+the movies that we can recommend by filtering null values from the joined
+table.
+```
+total_movies = a.join(b, a.title_new == b.title_new,how='left')
+total_movies.show(10,False)
+remaining_movies=total_movies.where(col("b.title_new").isNull()).select(a.title_new).distinct()
+remaining_movies.count()
+remaining_movies=remaining_movies.withColumn("userId",lit(int(user_id)))
+remaining_movies.show(10,False)
+
+```
+Finally, we can now make the predictions on this remaining movie’s
+dataset for the active user using the recommender model that we built
+earlier. We filter only a few top recommendations that have the highest
+predicted ratings.
+```
+recommendations=rec_model.transform(remaining_movies).orderBy('prediction',ascending=False)
+recommendations.show(5,False)
+```
+
+So, movie titles 1433 and 1322 have the highest predicted rating for this
+active user (85). We can make it more intuitive by adding the movie title
+back to the recommendations. We use Indextostring function to create an
+additional column that returns the movie title.
+```
+movie_title = IndexToString(inputCol="title_new",outputCol="title",labels=model.labels)
+final_recommendations=movie_title.transform(recommendations)
+final_recommendations.show(10,False)
+```
+
+So, the recommendations for the userId (85) are Boys, Les (1997)
+and Faust (1994). This can be nicely wrapped in a single function that
+executes the above steps in sequence and generates recommendations for
+active users. The complete code is available on the GitHub repo with this
+function built in.
