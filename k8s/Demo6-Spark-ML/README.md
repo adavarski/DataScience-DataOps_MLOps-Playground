@@ -1638,7 +1638,7 @@ Example: Handwritten Digit Recognition with MNIST Using Dist-Keras with Keras an
 
 Example: Dogs and Cats Image Classification
 
-# Appendix1 : Spark on k8s (production)
+# Appendix1 : Spark on k8s (production) with Jupyter 
 
 When it was released, Apache Spark 2.3 introduced native support for running on top of Kubernetes. Spark [2.4](https://spark.apache.org/docs/2.4.0/index.html) extended this and brought better integration with the Spark shell. In this Appendix1, we'll look at how to get up and running with Spark on top of a Kubernetes cluster.
 
@@ -1726,13 +1726,27 @@ Using the Docker image, we can build and tag the image. When it finishes, we nee
 
 We use a DockerHub  public Docker registry. The image needs to be hosted somewhere accessible in order for Kubernetes to be able to use it. While it is possible to pull from a private registry, this involves additional steps and is not covered in this Appendix1.
 
+
+Driver Image
+
+For the driver, we need a small set of additional resources that are not required by the executor/base image, including a copy of Kube Control that will be used by Spark to manage workers. The container is the same as the executor image in most other ways and because of that we use the executor image as the base.
+
+
+As with the executor image, we need to build and tag the image, and then push to the registry.
+
 ```
 cd ./jupyter/docker
 docker login
+# Build and tag the base/executor image
 docker build -f ./Dockerfile.k8s-minio.executor -t davarski/spark301-k8s-minio-base .
+# Push the contaimer image to a public registry
 docker push davarski/spark301-k8s-minio-base
+
+# Build and tag the driver image
 docker build -f ./Dockerfile.k8s-minio.driver -t davarski/spark301-k8s-minio-driver .
+# Push the contaimer image to a public registry
 docker push davarski/spark301-k8s-minio-driver
+
 docker build -f ./Dockerfile.k8s-minio.jupyter -t davarski/spark301-k8s-minio-jupyter .
 docker push davarski/spark301-k8s-minio-jupyter
 ```
