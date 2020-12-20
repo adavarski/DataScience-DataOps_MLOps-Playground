@@ -3444,7 +3444,7 @@ few rows of the dataframe using the rand function to shuffle the records in
 random order.
 
 ```
-df.orderBy(rand()).show(10,False)
+#df.orderBy(rand()).show(10,False)
 df.groupBy('userId').count().orderBy('count',ascending=False).show(10,False)
 df.groupBy('userId').count().orderBy('count',ascending=True).show(10,False)
 ```
@@ -3470,8 +3470,7 @@ column and output column. Then we fit the object on the dataframe and
 apply it on the movie title column to create new dataframe with numerical
 values.
 ```
-stringIndexer = StringIndexer(inputCol="title",
-outputCol="title_new")
+stringIndexer = StringIndexer(inputCol="title",outputCol="title_new")
 model = stringIndexer.fit(df)
 indexed = model.transform(df)
 ```
@@ -3520,7 +3519,7 @@ predicted_ratings.printSchema()
 predicted_ratings.orderBy(rand()).show(10)
 from pyspark.ml.evaluation import RegressionEvaluator
 evaluator=RegressionEvaluator(metricName='rmse',predictionCol='prediction',labelCol='rating')
-rmse=evaluator.evaluate(predictions)
+rmse=evaluator.evaluate(predicted_ratings)
 print(rmse)
 ```
 The RMSE is not very high; we are making an error of one point in the
