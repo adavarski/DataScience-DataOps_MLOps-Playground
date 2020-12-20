@@ -3669,7 +3669,10 @@ for k in range(2,10):
     model = kmeans.fit(final_data)
     intra_distance = model.computeCost(final_data)
     errors.append(intra_distance)
-```    
+```  
+
+computeCost is deprecated and removed in 3.0.0. It causes the failure in https://github.com/rstudio/sparklyr/blob/master/tests/testthat/test-ml-clustering-kmeans-ext.R#L87
+
 Note The ‘K’ should have a minimum value of 2 to be able to build
 clusters.
 
