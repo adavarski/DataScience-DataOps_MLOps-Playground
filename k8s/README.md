@@ -115,7 +115,7 @@ minio.data     IN       A       192.168.0.101
 mlflow.data    IN       A       192.168.0.101
 quality.data   IN       A       192.168.0.101
 spark.data     IN       A       192.168.0.101
-
+jupyter.data   IN       A       192.168.0.101
 
 ;CNAME Record
 www     IN      CNAME    www.davar.com.
