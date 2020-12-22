@@ -3859,4 +3859,5 @@ Example Output: https://github.com/adavarski/DataScience-DataOps_MLOps-Playgroun
 
 # Appendix 4: Managing, Deploying, and Scaling Machine Learning Pipelines with Apache Spark (MLOps)
 
-
+End to End MLOps examples: Build machine learning pipelines with MLlib. Manage and deploy the models we train. Utilize MLflow to track, reproduce, and
+deploy our MLlib models using various model deployment scenarios, and architect scalable machine learning solutions.
