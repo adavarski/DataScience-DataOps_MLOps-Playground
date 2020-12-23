@@ -4054,3 +4054,17 @@ Check MLFlow UI http://mlflow.data.davar.com:
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Spark-MLOps-airbnb-experiment-FINISHED.png" width="800">
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Spark-MLOps-airbnb-experiment-UNFINISHED.png" width="800">
+
+
+Register Model :
+
+You can use the [MLflow Model Registry](https://mlflow.org/docs/latest/model-registry.html) to keep track of the models you are
+using and control how they are transitioned to/from staging, production, and archived. You can see a screenshot of the Model Registry 
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Spark-MLOps-registered-model.png" width="800">
+
+You can use the Model Registry with the other deployment options too.
+
+Seldon Core deploy (Ref: https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo3-AutoML-MLFlow-SeldonCore)
+
+
