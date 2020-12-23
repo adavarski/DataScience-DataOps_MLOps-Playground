@@ -3875,6 +3875,9 @@ mc ls minio-cluster/mlflow
 
 Upload ./mlflow/data/sf-airbnb-clean.parquet into  jupyter ./data folder (the same path as jupyter notebook)
 
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Spark-MLOps-airbnb-dataset.png" width="800">
+
 Cells:
 ```
 !pip install mlflow==1.8.0
@@ -4018,7 +4021,15 @@ if __name__ == "__main__":
 
 Example Ouptut:
 
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/jupyter-v1.0.0/ipynb/spark-airbnb-random-forest-mlflow.ipynb
+
+
 
 
 Check MLFlow UI :
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Spark-MLOps-airbnb-experiments.png" width="800">
+
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Spark-MLOps-airbnb-experiment-FINISHED.png" width="800">
 
