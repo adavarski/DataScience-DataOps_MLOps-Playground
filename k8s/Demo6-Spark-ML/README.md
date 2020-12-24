@@ -3862,7 +3862,12 @@ Example Output: https://github.com/adavarski/DataScience-DataOps_MLOps-Playgroun
 End to End MLOps examples: Build machine learning pipelines with MLlib. Manage and deploy the models we train. Utilize MLflow to track, reproduce, and
 deploy our MLlib models using various model deployment scenarios, and architect scalable machine learning solutions.
 
-
+Build new MLFlow docker image if needed and pushing it into DockerHub container registry.
+```
+$ cd mlflow
+$ docker build -t davarski/mlflow:1.8.0-v4 .
+$ docker push davarski/mlflow:1.8.0-v4
+```
 Deploy MLFlow on k8s and create MiniIO bucket
 ```
 export KUBECONFIG=~/.kube/k3s-config-jupyter
