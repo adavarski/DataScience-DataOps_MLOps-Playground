@@ -3913,7 +3913,9 @@ mc mb minio-cluster/mlflow
 mc ls minio-cluster/mlflow
 ```
 
-Upload ./mlflow/data/sf-airbnb-clean.parquet into  jupyter ./data folder (the same path as jupyter notebook)
+Dataset: http://insideairbnb.com/get-the-data.html
+
+Upload ./mlflow/data/sf-airbnb-clean.parquet into  jupyter ./data folder (the same path as jupyter notebook) : 
 
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Spark-MLOps-airbnb-dataset.png" width="800">
