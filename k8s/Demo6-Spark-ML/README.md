@@ -3924,11 +3924,11 @@ Note: Spark has two machine learning packages: spark.mllib and spark.ml. spark.m
 
 Pipeline API provides a high-level API built on top of DataFrames to organize your machine learning workflow. The Pipeline API is composed of a series of transformers and estimators. MLlib terminology:
 
-- Transformer
+- Transformer:
 Accepts a DataFrame as input, and returns a new DataFrame with one or more columns appended to it. Transformers do not learn any parameters from your data and simply apply rule-based transformations to either prepare data for model training or generate predictions using a trained MLlib model. They have a .transform() method.
-- Estimator
+- Estimator:
 Learns (or “fits”) parameters from your DataFrame via a .fit() method and returns a Model , which is a transformer.
-- Pipeline
+- Pipeline:
 Organizes a series of transformers and estimators into a single model. While pipelines themselves are estimators, the output of pipeline.fit() returns a Pipe
 lineModel , a transformer.
 
