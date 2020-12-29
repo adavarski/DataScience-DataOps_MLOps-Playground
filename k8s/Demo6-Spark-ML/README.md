@@ -4125,7 +4125,7 @@ You can use the Model Registry with the other deployment options too.
 Seldon Core deploy (Ref: https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo3-AutoML-MLFlow-SeldonCore)
 
 
-Examle(FULL: Data Cleansing)
+Examle (FULL: Including Data Cleansing)
 
 Untar https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/jupyter-v1.0.0/dataset/sf-airbnb.csv.tar.gz and upload to jupyter 
 
