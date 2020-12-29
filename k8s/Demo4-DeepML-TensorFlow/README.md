@@ -1448,7 +1448,7 @@ $ mc mb minio-cluster/tensorflow
 $ mc cp model.pkl minio-cluster/tensorflow/artifacts/model/model.pkl
 ```
 
-Databrick
+Databricks
 
 Use TensorFlow is through the Databricks platform.
 
