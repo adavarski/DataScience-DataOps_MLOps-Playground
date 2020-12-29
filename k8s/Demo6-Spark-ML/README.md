@@ -4129,18 +4129,18 @@ Seldon Core deploy (Ref: https://github.com/adavarski/DataScience-DataOps_MLOps-
 
 Use MLFlow is through the Databricks platform.
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Databrick-UI-overview.png" width="500">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Databrick-UI-overview.png" width="800">
 
 Log in to the Databricks account and spin up a cluster of desired size:
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Databricks-UI-Cluster-UP.png" width="500">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Databricks-UI-Cluster-UP.png" width="800">
 
 Example demo Notebook: https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/databrics/Databrics-MLFlow-demo.ipynb
 
 Check MLFlow UI:
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Databrics-MLFlow-experiments.png" width="500">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Databrics-MLFlow-experiments.png" width="800">
 
- <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Databrics-MLFlow-demo-run.png" width="500">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Databrics-MLFlow-demo-run.png" width="800">
 
 
