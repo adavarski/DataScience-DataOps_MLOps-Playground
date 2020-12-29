@@ -4125,7 +4125,7 @@ You can use the Model Registry with the other deployment options too.
 Seldon Core deploy (Ref: https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo3-AutoML-MLFlow-SeldonCore)
 
 
-# Appendix5: Databrics (ML and MLFLow)
+# Appendix5: Databricks (ML and MLFLow)
 
 Use MLFlow through the Databricks platform.
 
