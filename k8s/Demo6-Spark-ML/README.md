@@ -4407,7 +4407,12 @@ Full Notebook:
 
 https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/jupyter-v1.0.0/ipynb/spark-airbnb-cleansing-random-forest-mlflow.ipynb
 
+Check MLFlow UI:
 
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Spark-ML-airbnb-MLFlow-experimnets.png" width="800">
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Spark-ML-airbnb-MLFlow-run.png" width="800">
 
 # Appendix5: Databricks (ML and MLFLow)
 
