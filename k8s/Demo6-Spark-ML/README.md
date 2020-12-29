@@ -4125,3 +4125,19 @@ You can use the Model Registry with the other deployment options too.
 Seldon Core deploy (Ref: https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo3-AutoML-MLFlow-SeldonCore)
 
 
+# Appendix5: Databrics
+
+Use MLFlow is through the Databricks platform.
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/Databrick-Unified-Analytics-Platform.png" width="500">
+
+Log in to the Databricks account and spin up a cluster of desired size:
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/Databrick-environment.png" width="500">
+
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo4-DeepML-TensorFlow/pictures/Databrick-create-cluster.png" width="500">
+
+ 
+
+
