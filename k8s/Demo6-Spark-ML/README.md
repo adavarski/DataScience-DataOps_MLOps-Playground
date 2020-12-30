@@ -4583,12 +4583,14 @@ $ snowsql
 ```
 
 Bulk Data Loading
+
 To get data into a database table, you need to insert it. Insert statements can take a while since they need to be executed one row at a time. Bulk copying can take a large amount of data and insert it into a database all in one batch. The bulk data loading option in Snowflake allows batch loading of data from files that are in cloud storage, like AWS S3. If your data files are not currently in cloud storage, then there is an option to copy the data files from a local machine to a cloud storage staging area before loading them into Snowflake. This is known as Snowflake’s internal staging area. The data files are transmitted from a local machine to an internal, Snowflake-designated, cloud storage staging location and then loaded into tables using the COPY command.
 
-Tip External tables can be created instead of loading data into Snowflake. This would be useful when only a portion of data is needed.
+Tip: External tables can be created instead of loading data into Snowflake. This would be useful when only a portion of data is needed.
 
 
 Bulk Load Locations
+
 Snowflake supports loading data from files staged in any of the following
 cloud storage locations, regardless of the cloud platform for your
 Snowflake account:
@@ -4599,6 +4601,7 @@ user-supplied S3 bucket
 from any user-supplied GCP Cloud Storage container
 • Azure Blob storage, where files can be loaded directly
 from any user-supplied Azure container
+
 
 Data Loading with SnowSQL
 
@@ -4616,6 +4619,7 @@ select count(*) from ZIPCODES2000_SNOWSQL;
 ```
 
 Example Output:
+
 ```
 ADAVARSKI#COMPUTE_WH@(no database).(no schema)>CREATE WAREHOUSE DEVELOPMENT WITH WAREHOUSE_SIZE = 'XSMALL' WAREHOUSE_TYPE = 'STANDARD' AUTO_SUSPEND = 600 AUTO_RESUME = TRUE;
 +---------------------------------------------+                                 
@@ -4697,9 +4701,12 @@ Check Snowflake UI:
 DWH:
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-UI-DW-DEVELOPMENT.png" width="800">
 
+DB:AIRBNB:TABLE:ZIPCODES2000_SNOWSQL
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-Databrick-write-sampletable.png" width="800">
 
 
 Continuous Data Loading with Snowpipe
+
 ```
 #create a new database for testing snowpipe
 create database snowpipe data_retention_time_in_days = 1;
