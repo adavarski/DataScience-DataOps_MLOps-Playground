@@ -4594,6 +4594,7 @@ Bulk Load Locations
 Snowflake supports loading data from files staged in any of the following
 cloud storage locations, regardless of the cloud platform for your
 Snowflake account:
+
 • Snowflake-designated internal storage staging location
 • AWS S3, where files can be loaded directly from any
 user-supplied S3 bucket
