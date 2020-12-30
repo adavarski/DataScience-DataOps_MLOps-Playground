@@ -4703,9 +4703,11 @@ ADAVARSKI#DEVELOPMENT@AIRBNB.PUBLIC>
 Check Snowflake UI:
 
 DWH:
+
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-UI-DW-DEVELOPMENT.png" width="800">
 
 DB:AIRBNB:TABLE:ZIPCODES2000_SNOWSQL
+
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-Databrick-write-sampletable.png" width="800">
 
 
