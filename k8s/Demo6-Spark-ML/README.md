@@ -4489,17 +4489,30 @@ Check MLFlow UI:
 
 Snowflake Architecture:
 
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-architecture.png" width="800">
+
+Snowflake Layers:
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-layers.png" width="800">
+
 Snowflake was built from the ground up and designed to handle modern big data and analytics challenges. It combines the benefits of both SMP and MPP architectures and takes full advantage of the cloud.
 
 Similar to an SMP architecture, Snowflake uses a central storage that is accessible from all the compute nodes. In addition, similar to an MPP
 architecture, Snowflake processes queries using MPP compute clusters, also known as virtual warehouses. As a result, Snowflake combines the simplicity of data management and scalability with a shared-nothing architecture (like in MPP).
 
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-MPP-vs-SMP.png" width="800">
+
+
 Planning: Deciding on a Snowflake Edition
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-editions.png" width="800">
 
 
 Creating a Snowflake Account: 
 
 Click Start for Free in the upper-right corner of the page (www.snowflake.com). This will give you a 30-day trial of Snowflake plus 400 Snowflake credits to play with. Enter the following required details: name, company name, e-mail, phone number, Snowflake edition, cloud provider, and region. Finish by clicking Create Account, and in about 15 minutes, you will receive an e-mail with a link to your web interface.
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-UI-startup.png" width="800">
 
 
 Installing Snowsql
@@ -4679,6 +4692,12 @@ ADAVARSKI#DEVELOPMENT@AIRBNB.PUBLIC>select count(*) from ZIPCODES2000_SNOWSQL;
 ADAVARSKI#DEVELOPMENT@AIRBNB.PUBLIC>
 
 ```
+Check Snowflake UI:
+
+DWH:
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-UI-DW-DEVELOPMENT.png" width="800">
+
+
 
 Continuous Data Loading with Snowpipe
 ```
@@ -4751,6 +4770,13 @@ df.write \
     .option("dbtable", "sampletable") \
     .save() \
 ```
+
+Databrick:
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-Databricks-simple-notebook.png" width="800">
+
+
+Snowflake:
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-Databrick-write-sampletable.png" width="800">
 
 
 
