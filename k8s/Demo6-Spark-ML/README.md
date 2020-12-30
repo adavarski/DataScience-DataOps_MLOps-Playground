@@ -4414,7 +4414,7 @@ Check MLFlow UI:
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Spark-ML-airbnb-MLFlow-run.png" width="800">
 
-# Appendix5: Databricks (ML and MLFLow)
+# Appendix5: Databricks (ML and MLFLow)  
 
 Use MLFlow through the Databricks platform.
 
@@ -4484,3 +4484,4 @@ Check MLFlow UI:
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Databrics-MLFlow-demo-run.png" width="800">
 
 
+Apendix6: Apache Spark/Databricks with Snowflake
