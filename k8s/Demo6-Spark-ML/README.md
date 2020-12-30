@@ -4596,15 +4596,18 @@ cloud storage locations, regardless of the cloud platform for your
 Snowflake account:
 
 • Snowflake-designated internal storage staging location
+
 • AWS S3, where files can be loaded directly from any
 user-supplied S3 bucket
+
 • GCP Cloud Storage, where files can be loaded directly
 from any user-supplied GCP Cloud Storage container
+
 • Azure Blob storage, where files can be loaded directly
 from any user-supplied Azure container
 
 
-Data Loading with SnowSQL
+Data Loading with SnowSQL:
 
 ```
 CREATE WAREHOUSE DEVELOPMENT WITH WAREHOUSE_SIZE = 'XSMALL' WAREHOUSE_TYPE = 'STANDARD' AUTO_SUSPEND = 600 AUTO_RESUME = TRUE;
@@ -4742,7 +4745,7 @@ loaded data.
 select count(*) from snowpipe.public.snowtable
 ```
 
-Databricks part:
+Databricks (notebook):
 
 Create a new notebook using Databricks ➤ Create a blank notebook, call it snowflake_airbnb, and attach the existing
 cluster(MLOps).
