@@ -4503,6 +4503,9 @@ architecture, Snowflake processes queries using MPP compute clusters, also known
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-MPP-vs-SMP.png" width="800">
 
 
+Note: A specialty of the technical design of the Snowflake is that the data is stored in [micro-partitions](https://docs.snowflake.com/en/user-guide/tables-clustering-micropartitions.html),  which are immutable. This means that with any operations such as the addition or deletion of data, a new
+micro-partition is created, and the old one ceases to exist.
+
 Planning: Deciding on a Snowflake Edition
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-editions.png" width="800">
@@ -4746,6 +4749,10 @@ loaded data.
 # check count of rows in target table
 select count(*) from snowpipe.public.snowtable
 ```
+Data flow process between Snowflake data warehouse services and managed Apache Spark/Databricks.
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-Spark-bidirectional-data-transfer.png" width="800">
+
 
 Databricks (notebook):
 
