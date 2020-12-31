@@ -4418,8 +4418,7 @@ Check MLFlow UI:
 
 Databricks Unified Analytics Platform (elements):
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Databricks-Unified-Analytics-Platform.png
-" width="800">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Databricks-Unified-Analytics-Platform.png" width="800">
 
 Use MLFlow through the Databricks platform.
 
