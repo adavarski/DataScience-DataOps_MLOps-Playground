@@ -4805,7 +4805,9 @@ Snowflake:
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-Databrick-write-sampletable.png" width="800">
 
+Example Modern DW architecture with Snowflake:
 
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-modern-DW-architecture.png" width="800">
 
 
 
