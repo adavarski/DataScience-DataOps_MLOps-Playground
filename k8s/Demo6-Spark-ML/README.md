@@ -300,6 +300,15 @@ This component is used for building Machine Learning Models on Big Data in a dis
 -Spark GraphX/Graphframe
 This component excels in graph analytics and graph parallel execution. Graph frames can be used to understand the underlying relationships and visualize the insights from data.
 
+Summary:
+
+Apache Spark high-level components:
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Apache-Spark-high-level-componenets.png" width="800">
+
+Apache Spark components:
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Apache-Spark-Componenets-table.png" width="800">
 
 ## Cluster Managers
 Cluster managers manage and allocate cluster resources. Spark supports the standalone cluster manager that comes with Spark (Standalone Scheduler), YARN, Mesos, and Kubernetes.
