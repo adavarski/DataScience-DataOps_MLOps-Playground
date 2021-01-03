@@ -4507,18 +4507,18 @@ Snowflake summary: unlimited concurrency for queries, a consolidated DW, and a b
 
 Snowflake Architecture:
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-architecture.png" width="800">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-architecture.png" width="600">
 
 Snowflake Layers:
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-layers.png" width="800">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-layers.png" width="600">
 
 Snowflake was built from the ground up and designed to handle modern big data and analytics challenges. It combines the benefits of both SMP and MPP architectures and takes full advantage of the cloud.
 
 Similar to an SMP architecture, Snowflake uses a central storage that is accessible from all the compute nodes. In addition, similar to an MPP
 architecture, Snowflake processes queries using MPP compute clusters, also known as virtual warehouses. As a result, Snowflake combines the simplicity of data management and scalability with a shared-nothing architecture (like in MPP).
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-MPP-vs-SMP.png" width="800">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowflake-MPP-vs-SMP.png" width="600">
 
 
 Note: A specialty of the technical design of the Snowflake is that the data is stored in [micro-partitions](https://docs.snowflake.com/en/user-guide/tables-clustering-micropartitions.html),  which are immutable. This means that with any operations such as the addition or deletion of data, a new
@@ -4837,7 +4837,7 @@ Data flow process between Snowflake data warehouse services and managed Apache S
 
 Snowflake <-> Spark interaction:
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowfalke-spark-interaction-table.png" width="800">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Snowfalke-spark-interaction-table.png" width="600">
 
 
 Databricks (notebook):
