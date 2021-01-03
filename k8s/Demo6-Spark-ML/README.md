@@ -4431,7 +4431,7 @@ Databricks Unified Analytics Platform (elements):
 
 Databricks components:
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Databricks-Unified-analytics-Platform-components-table.png" width="800">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/Databricks-Unified-analytics-Platform-components-table.png" width="600">
 
 Use MLFlow through the Databricks platform.
 
