@@ -4893,3 +4893,126 @@ Example modern Analytics Solution/Platform architecture with Snowflake DWH:
 
 Note: Snowflake helped us to leverage big data and streaming capabilities that were impossible with the legacy solution. For big data, we were processing web logs for example within Apache Spark deployed on top of the EMR cluster. Snowflake accesses Parquet files, and we don’t need to load them into Snowflake. For the streaming use case, we leveraged DynamoDB streams and Kinesis Firehose, and all data is sent into an S3 bucket where Snowflake can consume it.
 
+# Appendix6: Apache Spark with Delta Lake 
+
+Building Reliable Data Lakes with Apache Spark
+
+In the previous Appendixes, we learned how to easily and effectively use Apache Spark to build scalable and performant data processing pipelines. However, in practice, expressing the processing logic only solves half of the end-to-end problem of building a pipeline. For a data engineer, data scientist, or data analyst, the ultimate goal of building pipelines is to query the processed data and get insights from it. The choice of storage solution determines the end-to-end (i.e., from raw data to insights) robustness and performance of the data pipeline. we will introduce the next wave of storage solution, called lakehouses, and explore some of the new open source processing engines in this space.
+
+Lakehouses: The Next Step in the Evolution of Storage Solutions
+The lakehouse is a new paradigm that combines the best elements of data lakes and data warehouses for OLAP workloads. Lakehouses are enabled by a new system
+design that provides data management features similar to databases directly on the low-cost, scalable storage used for data lakes. More specifically, they provide the following features:
+
+- Transaction support
+Similar to databases, lakehouses provide ACID guarantees in the presence ofconcurrent workloads.
+
+- Schema enforcement and governance
+Lakehouses prevent data with an incorrect schema being inserted into a table,and when needed, the table schema can be explicitly evolved to accommodate
+ever-changing data. The system should be able to reason about data integrity, andit should have robust governance and auditing mechanisms.
+
+- Support for diverse data types in open formats
+Unlike databases, but similar to data lakes, lakehouses can store, refine, analyze,and access all types of data needed for many new data applications, be it structured, semi-structured, or unstructured. To enable a wide variety of tools toaccess it directly and efficiently, the data must be stored in open formats with
+standardized APIs to read and write them.
+
+- Support for diverse workloads
+Powered by the variety of tools reading data using open APIs, lakehouses enablediverse workloads to operate on data in a single repository. Breaking down iso‐
+lated data silos (i.e., multiple repositories for different categories of data) enablesdevelopers to more easily build diverse and complex data solutions, from traditional SQL and streaming analytics to machine learning.
+
+- Support for upserts and deletes
+Complex use cases like change-data-capture (CDC) and slowly changing dimen‐sion (SCD) operations require data in tables to be continuously updated. Lakehouses allow data to be concurrently deleted and updated with transactionalguarantees.
+
+- Data governance
+Lakehouses provide the tools with which you can reason about data integrity andaudit all the data changes for policy compliance.Currently, there are a few open source systems, such as Apache Hudi, Apache Iceberg,and Delta Lake, that can be used to build lakehouses with these properties. At a very high level, all three projects have a similar architecture inspired by well-known data‐base principles. They are all open data storage formats that do the following:
+
+• Store large volumes of data in structured file formats on scalable filesystems.
+• Maintain a transaction log to record a timeline of atomic changes to the data
+(much like databases).
+• Use the log to define versions of the table data and provide snapshot isolation
+guarantees between readers and writers.
+• Support reading and writing to tables using Apache Spark.
+
+Within these broad strokes, each project has unique characteristics in terms of APIs,
+performance, and the level of integration with Apache Spark’s data source APIs. We
+will explore them next. Note that all of these projects are evolving fast, and therefore
+some of the descriptions may be outdated at the time you are reading them. Refer to
+the online documentation for each project for the most up-to-date information.
+
+Apache Hudi
+Initially built by Uber Engineering, Apache Hudi—an acronym for Hadoop Update
+Delete and Incremental—is a data storage format that is designed for incremental
+upserts and deletes over key/value-style data. The data is stored as a combination of
+columnar formats (e.g., Parquet files) and row-based formats (e.g., Avro files for
+recording incremental changes over Parquet files). Besides the common features
+mentioned earlier, it supports:
+• Upserting with fast, pluggable indexing
+• Atomic publishing of data with rollback support
+• Reading incremental changes to a table
+• Savepoints for data recovery
+• File size and layout management using statistics
+• Async compaction of row and columnar data
+Apache Iceberg
+Originally built at Netflix, Apache Iceberg is another open storage format for huge
+data sets. However, unlike Hudi, which focuses on upserting key/value data, Iceberg
+focuses more on general-purpose data storage that scales to petabytes in a single table
+and has schema evolution properties. Specifically, it provides the following additional
+features (besides the common ones):
+• Schema evolution by adding, dropping, updating, renaming, and reordering of
+columns, fields, and/or nested structures
+• Hidden partitioning, which under the covers creates the partition values for rows
+in a table
+• Partition evolution, where it automatically performs a metadata operation to
+update the table layout as data volume or query patterns change
+• Time travel, which allows you to query a specific table snapshot by ID or by
+timestamp
+• Rollback to previous versions to correct errors
+• Serializable isolation, even between multiple concurrent writers
+
+Delta Lake
+Delta Lake is an open source project hosted by the Linux Foundation, built by the
+original creators of Apache Spark. Similar to the others, it is an open data storage for‐
+mat that provides transactional guarantees and enables schema enforcement and evo‐
+lution. It also provides several other interesting features, some of which are unique.
+Delta Lake supports:
+• Streaming reading from and writing to tables using Structured Streaming sources
+and sinks
+• Update, delete, and merge (for upserts) operations, even in Java, Scala, and
+Python APIs
+• Schema evolution either by explicitly altering the table schema or by implicitly
+merging a DataFrame’s schema to the table’s during the DataFrame’s write. (In
+fact, the merge operation in Delta Lake supports advanced syntax for conditional
+updates/inserts/deletes, updating all columns together, etc., as you’ll see later in
+the chapter.)
+• Time travel, which allows you to query a specific table snapshot by ID or by
+timestamp
+• Rollback to previous versions to correct errors
+• Serializable isolation between multiple concurrent writers performing any SQL,
+batch, or streaming operations
+In the rest of this chapter, we are going to explore how such a system, along with
+Apache Spark, can be used to build a lakehouse that provides the aforementioned
+properties. Of these three systems, so far Delta Lake has the tightest integration with
+Apache Spark data sources (both for batch and streaming workloads) and SQL
+operations (e.g., MERGE ). Hence, we will use Delta Lake as the vehicle for further
+exploration.
+
+Note: This project is called Delta Lake because of its analogy to stream‐
+ing. Streams flow into the sea to create deltas—this is where all of
+the sediments accumulate, and thus where the valuable crops are
+grown. Jules S. Damji (one of our coauthors) came up with this!
+
+Building Lakehouses with Apache Spark and Delta Lake
+In this section, we are going to take a quick look at how Delta Lake and Apache Spark
+can be used to build lakehouses. Specifically, we will explore the following:
+• Reading and writing Delta Lake tables using Apache Spark
+• How Delta Lake allows concurrent batch and streaming writes with ACID
+guarantees
+• How Delta Lake ensures better data quality by enforcing schema on all writes,
+while allowing for explicit schema evolution
+• Building complex data pipelines using update, delete, and merge operations, all
+of which ensure ACID guarantees
+• Auditing the history of operations that modified a Delta Lake table and traveling
+back in time by querying earlier versions of the table
+The data we will use in this section is a modified version (a subset of columns in Par‐
+quet format) of the public Lending Club Loan Data. 1 It includes all funded loans from
+2012 to 2017. Each loan record includes applicant information provided by the appli‐
+cant as well as the current loan status (current, late, fully paid, etc.) and latest pay‐
+ment information.
