@@ -5341,3 +5341,10 @@ if __name__ == "__main__":
 
 Full notebook: 
 https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/deltalake/DeltaLake_aiirbnb_mlflow.ipynb
+
+Check MLFlow UI:
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/DeltaLake-mlflow-airbnb-experiments.png" width="800">
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/DeltaLake-MLFlow-airbnb-run.png" width="800">
+
