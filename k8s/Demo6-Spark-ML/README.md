@@ -4898,7 +4898,7 @@ Note: Snowflake helped us to leverage big data and streaming capabilities that w
 In the previous Appendixes, we learned how to easily and effectively use Apache Spark to build scalable and performant data processing pipelines. However, in practice, expressing the processing logic only solves half of the end-to-end problem of building a pipeline. For a data engineer, data scientist, or data analyst, the ultimate goal of building pipelines is to query the processed data and get insights from it. The choice of storage solution determines the end-to-end (i.e., from raw data to insights) robustness and performance of the data pipeline. We will introduce the next wave of storage solution, called lakehouses, and explore some of the new open source processing engines in this space.
 
 
-Lakehouses: The Next Step in the Evolution of Storage Solutions
+### Lakehouses: The Next Step in the Evolution of Storage Solutions
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/DeltaLake-lakehouse.jpeg" width="800">
 
@@ -4957,17 +4957,13 @@ upserts and deletes over key/value-style data. The data is stored as a combinati
 
 Originally built at Netflix, Apache Iceberg is another open storage format for huge data sets. However, unlike Hudi, which focuses on upserting key/value data, Iceberg focuses more on general-purpose data storage that scales to petabytes in a single table and has schema evolution properties. Specifically, it provides the following additional features (besides the common ones):
 
-• Schema evolution by adding, dropping, updating, renaming, and reordering of
-columns, fields, and/or nested structures
+• Schema evolution by adding, dropping, updating, renaming, and reordering of columns, fields, and/or nested structures
 
-• Hidden partitioning, which under the covers creates the partition values for rows
-in a table
+• Hidden partitioning, which under the covers creates the partition values for rows in a table
 
-• Partition evolution, where it automatically performs a metadata operation to
-update the table layout as data volume or query patterns change
+• Partition evolution, where it automatically performs a metadata operation to update the table layout as data volume or query patterns change
 
-• Time travel, which allows you to query a specific table snapshot by ID or by
-timestamp
+• Time travel, which allows you to query a specific table snapshot by ID or by timestamp
 
 • Rollback to previous versions to correct errors
 
@@ -5015,7 +5011,7 @@ of which ensure ACID guarantees
 • Auditing the history of operations that modified a Delta Lake table and traveling
 back in time by querying earlier versions of the table
 
-## Delta Lake (Overview and choice for Lakehouse)
+### Delta Lake (Overview and best choice for Lakehouse)
 
 Migrating from CSV to parquet files in our data lake storage has been a great initial choice for most of our needs. However, we still lacked some features on top of it that could make our life much easier, including ACID transactions, schema enforcements and updating events in parquet files.
 
@@ -5026,7 +5022,7 @@ After analysing all existing alternatives on the market including Hudi, Iceberg 
     - Multiple access points. Persisting all incoming data into Delta Lake allows the stakeholders to query low latency data through multiple systems including Apache Spark and Presto.
     - Time travel. Delta Lake allows reprocessing data from a particular time in the past which automates back-populating data, in addition to allowing analysis between particular date intervals for different use cases such as reports or training machine learning models.
 
-## Configuring Apache Spark with Delta Lake 
+## Configuring Apache Spark with Delta Lake  
 
 Add Delta Lake jar:
 
@@ -5165,7 +5161,7 @@ Full notebook:
 
 https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/deltalake/DeltaLake_test_local.ipynb
 
-Example2: Run spark apps that utilize Delta Lake (with MinIO: s3)
+Example2: Run spark apps that utilize Delta Lake (with MinIO:s3)
 
 Let's try to run Delta Lake using MinIO:S3 as the backing store for our parquet files and tables:
 
@@ -5285,6 +5281,8 @@ spark = SparkSession.builder.appName("DeltaLake-airbnb")\
 
 rawDF = spark.read.csv("s3a://airbnb/sf-airbnb.csv", header="true", inferSchema="true", multiLine="true", escape='"')
 
+...
+...
 ...
 
 cleanDF = posPricesDF.filter(col("minimum_nights") <= 365)
