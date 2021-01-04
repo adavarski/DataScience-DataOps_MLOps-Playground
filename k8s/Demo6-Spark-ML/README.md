@@ -5060,7 +5060,7 @@ Migrating from CSV to parquet files in our data lake storage has been a great in
 
 After analysing all existing alternatives on the market including Hudi, Iceberg and Delta Lake, we decided to start using Delta Lake based on its Apache Spark 3.x support. It provides all of the main requirements and fits perfectly in our architecture.
 
-    Efficiency. We decoupled the computation process from the storage allowing our architecture to scale more efficiently.
-    Low latency, high quality data. Using the upsert and schema enforcements features provided by Delta Lake, we can continuously deliver low latency and high quality data to all stakeholders in Financial Times.
-    Multiple access points. Persisting all incoming data into Delta Lake allows the stakeholders to query low latency data through multiple systems including Apache Spark and Presto.
-    Time travel. Delta Lake allows reprocessing data from a particular time in the past which automates back-populating data, in addition to allowing analysis between particular date intervals for different use cases such as reports or training machine learning models.
+    - Efficiency. We decoupled the computation process from the storage allowing our architecture to scale more efficiently.
+    - Low latency, high quality data. Using the upsert and schema enforcements features provided by Delta Lake, we can continuously deliver low latency and high quality data to all stakeholders.
+    - Multiple access points. Persisting all incoming data into Delta Lake allows the stakeholders to query low latency data through multiple systems including Apache Spark and Presto.
+    - Time travel. Delta Lake allows reprocessing data from a particular time in the past which automates back-populating data, in addition to allowing analysis between particular date intervals for different use cases such as reports or training machine learning models.
