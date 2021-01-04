@@ -4997,7 +4997,7 @@ In the rest of this appendix, we are going to explore how such a system, along w
 Note: This project is called Delta Lake because of its analogy to streaming. Streams flow into the sea to create deltas—this is where all of
 the sediments accumulate, and thus where the valuable crops are grown. Jules S. Damji (one of our coauthors) came up with this!
 
-Building Lakehouses with Apache Spark and Delta Lake
+### Building Lakehouses with Apache Spark and Delta Lake
 
 In this section, we are going to take a quick look at how Delta Lake and Apache Spark can be used to build lakehouses. Specifically, we will explore the following:
 
@@ -5014,8 +5014,6 @@ of which ensure ACID guarantees
 
 • Auditing the history of operations that modified a Delta Lake table and traveling
 back in time by querying earlier versions of the table
-
-The data we will use in this section is a modified version (a subset of columns in Parquet format) of the public Lending Club Loan Data. It includes all funded loans from 2012 to 2017. Each loan record includes applicant information provided by the applicant as well as the current loan status (current, late, fully paid, etc.) and latest payment information.
 
 ## Delta Lake (Overview and choice for Lakehouse)
 
