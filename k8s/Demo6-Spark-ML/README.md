@@ -4899,6 +4899,9 @@ Building Reliable Data Lakes with Apache Spark
 
 In the previous Appendixes, we learned how to easily and effectively use Apache Spark to build scalable and performant data processing pipelines. However, in practice, expressing the processing logic only solves half of the end-to-end problem of building a pipeline. For a data engineer, data scientist, or data analyst, the ultimate goal of building pipelines is to query the processed data and get insights from it. The choice of storage solution determines the end-to-end (i.e., from raw data to insights) robustness and performance of the data pipeline. we will introduce the next wave of storage solution, called lakehouses, and explore some of the new open source processing engines in this space.
 
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/DeltaLake-lakehouse.jpeg" width="800">
+
+
 Lakehouses: The Next Step in the Evolution of Storage Solutions
 The lakehouse is a new paradigm that combines the best elements of data lakes and data warehouses for OLAP workloads. Lakehouses are enabled by a new system
 design that provides data management features similar to databases directly on the low-cost, scalable storage used for data lakes. More specifically, they provide the following features:
