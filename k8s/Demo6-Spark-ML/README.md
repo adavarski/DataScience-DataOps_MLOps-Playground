@@ -5269,6 +5269,7 @@ rawDF = spark.read.csv("s3a://airbnb/sf-airbnb.csv", header="true", inferSchema=
 
 cleanDF = posPricesDF.filter(col("minimum_nights") <= 365)
 display(cleanDF)
+cleanDF.write.format("delta").save("s3a://airbnb/airbnb-clean")
 ```
 
 Check MinIO(s3)
