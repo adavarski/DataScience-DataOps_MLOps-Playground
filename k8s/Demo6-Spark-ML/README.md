@@ -5180,12 +5180,11 @@ spark.sql("select * from events").show(100)
 ```
 Check parquet and Hive DB:
 ```
-
+$ kubectl exec -it spark-jupyter -- bash
 jovyan@spark-jupyter:/$ ls -al ./home/jovyan/work/spark-warehouse/airbnb.db
 total 8
 drwxr-xr-x 2 jovyan analytics 4096 Jan  4 09:00 .
 drwxr-xr-x 3 jovyan analytics 4096 Jan  4 09:00 ..
-
 
 jovyan@spark-jupyter:/$ ls -al ./home/jovyan/work/data/events/
 total 20
@@ -5196,12 +5195,14 @@ drwxr-xr-x 2 jovyan analytics 4096 Jan  4 08:45 _delta_log
 -rw-r--r-- 1 jovyan analytics   16 Jan  4 08:45 .part-00000-4a434623-e8a7-470b-add8-5298f381a1d4-c000.snappy.parquet.crc
 ```
 
-Delta Lake stores our table as a parquet file in our local system.
+Delta Lake stores our table as a parquet file in our local system (k8s driver pod).
 
 Parquet files are a very efficient form of storage for column oriented data operations.
 
+Full notebook: 
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/deltalake/DeltaLake_test_local.ipynb
 
-Example2: run spark apps that utilize Delta Lake (with MinIO: s3)
+Example2: Run spark apps that utilize Delta Lake (with MinIO: s3)
 ```
 $ mc mb minio-cluster/airbnb
 $ mc ls minio-cluster
@@ -5226,7 +5227,7 @@ spark = SparkSession.builder.appName("DeltaLakeExample")\
 
 spark.range(10).write.format("delta").save("s3a://airbnb/events")
 spark.sql("CREATE TABLE IF NOT EXISTS events using delta location 's3a://airbnb/events'")
-
+spark.sql("select * from events").show(100)
 ```
 Check minio:
 ```
@@ -5235,7 +5236,10 @@ $ mc ls minio-cluster/airbnb/events/
 [2021-01-04 11:33:08 EET]     0B _delta_log/
 ```
 
-Example3: run spark apps that utilize Delta Lake (with MinIO: s3, Delta Lake and MLFlow)
+Full notebook: 
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/deltalake/DeltaLake_test_s3.ipynb
+
+Example3: Run spark apps that utilize Delta Lake (with MinIO: s3, Delta Lake and MLFlow)
 ```
 $ mc mb minio-cluster/mlflow
 Bucket created successfully `minio-cluster/mlflow`.
@@ -5335,4 +5339,5 @@ if __name__ == "__main__":
   mlflow_rf("./data",3,4)
 ```
 
-
+Full notebook: 
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/deltalake/DeltaLake_aiirbnb_mlflow.ipynb
