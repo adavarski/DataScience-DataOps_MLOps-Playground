@@ -5219,31 +5219,33 @@ Full notebook:
 
 https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/deltalake/DeltaLake_test_s3.ipynb
 
-Note: Working with the Hive metastore:
+Note1: Working with the Hive metastore:
 
 The hive metastore is used to describe the data within our parquet files using SQL concepts. By default, Spark uses a hive metastore on your k8s driver pod (in previous examples)
 
-Notice in our first line of our notebook
+Notice in our first line of our notebook (Example2)
 
+```
 CREATE TABLE IF NOT EXISTS events using delta location 's3a://<your bucket>/events'
-
+```
 We are helping the hive metastore map the concept of a table event to our parquet file on S3
 
 You can delete this metadata with a
-
+```
 DROP TABLE events
-
+```
 Try it on some simple test data and then try remapping it with another CREATE TABLE ;)
-
+```
 spark.sql("CREATE TABLE IF NOT EXISTS events using delta location '/tmp/events'")
 spark.sql("select * from events").show(100)
 spark.sql("DROP TABLE events")
 spark.sql("CREATE TABLE IF NOT EXISTS events using delta location '/tmp/events'")
 spark.sql("select * from events").show(100)
+```
 
 It's up to you how you keep your schemas up to date to accurately reflect what's in the parquet files when using SQL.
 
-Moving this to a real cluster
+Note2: Moving this to a real cluster
 
 On a real cluster, there's a number of changes you'll likely do:
 
@@ -5251,7 +5253,7 @@ On a real cluster, there's a number of changes you'll likely do:
     Use more powerful clusters that allow you to completely delegate the handling of running an app to worker rather than your machine delegating to cluster's workers. Research --deploy-mode cluster.
     Setup security for multiples machines and multiple user access to the cluster.
 
-Hive and MinIO: S3 is shared within the spark cluster( workers access)
+Note3: Hive and MinIO:S3 is shared within the spark cluster (for shared workers access)
 
 Example3: Run spark apps that utilize Delta Lake (with MinIO:s3, Delta Lake and MLFlow)
 
@@ -5264,7 +5266,10 @@ $ mc cp sf-airbnb.csv minio-cluster/airbnb
 sf-airbnb.csv:                       32.65 MiB / 32.65 MiB ┃▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓┃ 105.68 MiB/s 
 #Deploy MLFlow
 $ kubectl apply -f 40-statefulset.yml -f 50-service.yml -f 60-ingress.yml
+```
+Jupyter Notebook:
 
+```
 #Cells:
 from pyspark.sql import SparkSession
 spark = SparkSession.builder.appName("DeltaLake-airbnb")\
