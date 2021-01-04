@@ -4938,6 +4938,7 @@ some of the descriptions may be outdated at the time you are reading them. Refer
 the online documentation for each project for the most up-to-date information.
 
 Apache Hudi
+
 Initially built by Uber Engineering, Apache Hudi—an acronym for Hadoop Update
 Delete and Incremental—is a data storage format that is designed for incremental
 upserts and deletes over key/value-style data. The data is stored as a combination of
@@ -4958,6 +4959,7 @@ mentioned earlier, it supports:
 • Async compaction of row and columnar data
 
 Apache Iceberg
+
 Originally built at Netflix, Apache Iceberg is another open storage format for huge
 data sets. However, unlike Hudi, which focuses on upserting key/value data, Iceberg
 focuses more on general-purpose data storage that scales to petabytes in a single table
@@ -4981,6 +4983,7 @@ timestamp
 • Serializable isolation, even between multiple concurrent writers
 
 Delta Lake
+
 Delta Lake is an open source project hosted by the Linux Foundation, built by the
 original creators of Apache Spark. Similar to the others, it is an open data storage for‐
 mat that provides transactional guarantees and enables schema enforcement and evo‐
