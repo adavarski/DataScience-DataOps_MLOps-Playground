@@ -5141,3 +5141,198 @@ $ kubectl exec -it spark-jupyter -- bash -c "ls /opt/spark/jars/*delta*"
 
 ```
 Check Spark Delta Lake integration:
+
+This is a simple example for setting up a spark cluster (using only spark driver pod) to run spark apps that utilize Delta Lake. Delta Lake is a technology that helps:
+
+    Make data transformations storage more resiliant
+    Enable time travel
+    Make storage more efficient using parquet files
+
+Being able to run on a spark driver pod is a stepping stone to running on a cluster in the k8s as spark cluster manager. 
+
+Example1: run spark apps that utilize Delta Lake (local)
+
+This is an example pyspark app that does some simple things with Delta lake
+
+Cells:
+
+```
+from pyspark.sql import SparkSession
+```
+```
+# load up all the delta lake dependencies in our app
+# let's target our cluster on our local machine
+
+spark = SparkSession.builder.appName("DeltaLakeExample")\
+    .config("spark.jars.packages", "io.delta:delta-core_2.12:0.7.0") \
+    .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
+    .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
+    .getOrCreate()
+
+# write some numbers ---> creats parquet file
+spark.range(10).write.format("delta").save("./data/events")  
+
+# use the disk location as a table
+spark.sql("CREATE TABLE IF NOT EXISTS events using delta location './data/events'")
+
+# execute some sql against it
+spark.sql("select * from events").show(100)
+```
+Check parquet and Hive DB:
+```
+
+jovyan@spark-jupyter:/$ ls -al ./home/jovyan/work/spark-warehouse/airbnb.db
+total 8
+drwxr-xr-x 2 jovyan analytics 4096 Jan  4 09:00 .
+drwxr-xr-x 3 jovyan analytics 4096 Jan  4 09:00 ..
+
+
+jovyan@spark-jupyter:/$ ls -al ./home/jovyan/work/data/events/
+total 20
+drwxr-xr-x 3 jovyan analytics 4096 Jan  4 08:45 .
+drwxr-xr-x 3 jovyan analytics 4096 Jan  4 08:45 ..
+drwxr-xr-x 2 jovyan analytics 4096 Jan  4 08:45 _delta_log
+-rw-r--r-- 1 jovyan analytics  518 Jan  4 08:45 part-00000-4a434623-e8a7-470b-add8-5298f381a1d4-c000.snappy.parquet
+-rw-r--r-- 1 jovyan analytics   16 Jan  4 08:45 .part-00000-4a434623-e8a7-470b-add8-5298f381a1d4-c000.snappy.parquet.crc
+```
+
+Delta Lake stores our table as a parquet file in our local system.
+
+Parquet files are a very efficient form of storage for column oriented data operations.
+
+
+Example2: run spark apps that utilize Delta Lake (with MinIO: s3)
+```
+$ mc mb minio-cluster/airbnb
+$ mc ls minio-cluster
+[2021-01-04 09:54:57 EET]     0B airbnb/
+```
+
+Cells:
+```
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.appName("DeltaLakeExample")\
+    .config("spark.jars.packages", "io.delta:delta-core_2.12:0.7.0") \
+    .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
+    .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
+    .config("spark.delta.logStore.class", "org.apache.spark.sql.delta.storage.S3SingleDriverLogStore") \
+    .config("spark.hadoop.fs.s3a.access.key","minio") \
+    .config("spark.hadoop.fs.s3a.secret.key","minio123") \
+    .config("spark.hadoop.fs.s3a.endpoint", "http://minio-service.data.svc.cluster.local:9000") \
+    .config("spark.hadoop.fs.s3a.path.style.access", "true") \
+    .config("spark.hadoop.fs.s3a.connection.ssl.enabled", "false") \
+    .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem") \
+    .getOrCreate()
+
+spark.range(10).write.format("delta").save("s3a://airbnb/events")
+spark.sql("CREATE TABLE IF NOT EXISTS events using delta location 's3a://airbnb/events'")
+
+```
+Check minio:
+```
+$ mc ls minio-cluster/airbnb/events/
+[2021-01-04 11:31:44 EET]   518B part-00000-6cfc46ea-c82e-4d67-a9a9-878fa905707b-c000.snappy.parquet
+[2021-01-04 11:33:08 EET]     0B _delta_log/
+```
+
+Example3: run spark apps that utilize Delta Lake (with MinIO: s3, Delta Lake and MLFlow)
+```
+$ mc mb minio-cluster/mlflow
+Bucket created successfully `minio-cluster/mlflow`.
+$ mc mb minio-cluster/airbnb
+$ mc cp sf-airbnb.csv minio-cluster/airbnb
+sf-airbnb.csv:                       32.65 MiB / 32.65 MiB ┃▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓┃ 105.68 MiB/s 
+$ kubectl apply -f 40-statefulset.yml -f 50-service.yml -f 60-ingress.yml
+
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.appName("DeltaLake-airbnb")\
+    .config("spark.jars.packages", "io.delta:delta-core_2.12:0.7.0") \
+    .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
+    .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
+    .config("spark.delta.logStore.class", "org.apache.spark.sql.delta.storage.S3SingleDriverLogStore") \
+    .config("spark.hadoop.fs.s3a.access.key","minio") \
+    .config("spark.hadoop.fs.s3a.secret.key","minio123") \
+    .config("spark.hadoop.fs.s3a.endpoint", "http://minio-service.data.svc.cluster.local:9000") \
+    .config("spark.hadoop.fs.s3a.path.style.access", "true") \
+    .config("spark.hadoop.fs.s3a.connection.ssl.enabled", "false") \
+    .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem") \
+    .getOrCreate()
+
+
+rawDF = spark.read.csv("s3a://airbnb/sf-airbnb.csv", header="true", inferSchema="true", multiLine="true", escape='"')
+
+...
+
+cleanDF = posPricesDF.filter(col("minimum_nights") <= 365)
+display(cleanDF)
+```
+
+Check MinIO(s3)
+```
+$ mc ls minio-cluster/airbnb/airbnb-clean/
+[2021-01-04 12:27:49 EET] 186KiB part-00000-b20ab5cd-546f-462a-9062-c189c7417ff0-c000.snappy.parquet
+[2021-01-04 12:28:11 EET]     0B _delta_log/
+```
+MLflow:
+
+```
+def mlflow_rf(file_path, num_trees, max_depth):
+  with mlflow.start_run(run_name="random-forest") as run:
+    # Create train/test split
+    spark = SparkSession.builder.appName("App").getOrCreate()
+    airbnbDF = spark.read.parquet("s3a://airbnb/airbnb-clean/")
+    (trainDF, testDF) = airbnbDF.randomSplit([.8, .2], seed=42)
+
+    # Prepare the StringIndexer and VectorAssembler
+    categoricalCols = [field for (field, dataType) in trainDF.dtypes if dataType == "string"]
+    indexOutputCols = [x + "Index" for x in categoricalCols]
+
+    stringIndexer = StringIndexer(inputCols=categoricalCols, outputCols=indexOutputCols, handleInvalid="skip")
+
+    numericCols = [field for (field, dataType) in trainDF.dtypes if ((dataType == "double") & (field != "price"))]
+    assemblerInputs = indexOutputCols + numericCols
+    vecAssembler = VectorAssembler(inputCols=assemblerInputs, outputCol="features")
+    
+    # Log params: Num Trees and Max Depth
+    mlflow.log_param("num_trees", num_trees)
+    mlflow.log_param("max_depth", max_depth)
+
+    rf = RandomForestRegressor(labelCol="price",
+                               maxBins=40,
+                               maxDepth=max_depth,
+                               numTrees=num_trees,
+                               seed=42)
+
+    pipeline = Pipeline(stages=[stringIndexer, vecAssembler, rf])
+
+    # Log model
+    pipelineModel = pipeline.fit(trainDF)
+    mlflow.spark.log_model(pipelineModel, "model")
+
+    # Log metrics: RMSE and R2
+    predDF = pipelineModel.transform(testDF)
+    regressionEvaluator = RegressionEvaluator(predictionCol="prediction",
+                                            labelCol="price")
+    rmse = regressionEvaluator.setMetricName("rmse").evaluate(predDF)
+    r2 = regressionEvaluator.setMetricName("r2").evaluate(predDF)
+    mlflow.log_metrics({"rmse": rmse, "r2": r2})
+
+    # Log artifact: Feature Importance Scores
+    rfModel = pipelineModel.stages[-1]
+    pandasDF = (pd.DataFrame(list(zip(vecAssembler.getInputCols(),
+                                    rfModel.featureImportances)),
+                          columns=["feature", "importance"])
+              .sort_values(by="importance", ascending=False))
+    # First write to local filesystem, then tell MLflow where to find that file
+    pandasDF.to_csv("/tmp/feature-importance.csv", index=False)
+    os.makedirs("data", exist_ok=True)
+    mlflow.log_artifact("data", artifact_path="airbnb.ipynb")
+    
+if __name__ == "__main__":
+  mlflow_rf("./data",2,3)
+
+if __name__ == "__main__":
+  mlflow_rf("./data",3,4)
+```
+
+
