@@ -4944,27 +4944,40 @@ upserts and deletes over key/value-style data. The data is stored as a combinati
 columnar formats (e.g., Parquet files) and row-based formats (e.g., Avro files for
 recording incremental changes over Parquet files). Besides the common features
 mentioned earlier, it supports:
+
 • Upserting with fast, pluggable indexing
+
 • Atomic publishing of data with rollback support
+
 • Reading incremental changes to a table
+
 • Savepoints for data recovery
+
 • File size and layout management using statistics
+
 • Async compaction of row and columnar data
+
 Apache Iceberg
 Originally built at Netflix, Apache Iceberg is another open storage format for huge
 data sets. However, unlike Hudi, which focuses on upserting key/value data, Iceberg
 focuses more on general-purpose data storage that scales to petabytes in a single table
 and has schema evolution properties. Specifically, it provides the following additional
 features (besides the common ones):
+
 • Schema evolution by adding, dropping, updating, renaming, and reordering of
 columns, fields, and/or nested structures
+
 • Hidden partitioning, which under the covers creates the partition values for rows
 in a table
+
 • Partition evolution, where it automatically performs a metadata operation to
 update the table layout as data volume or query patterns change
+
 • Time travel, which allows you to query a specific table snapshot by ID or by
 timestamp
+
 • Rollback to previous versions to correct errors
+
 • Serializable isolation, even between multiple concurrent writers
 
 Delta Lake
@@ -4973,20 +4986,27 @@ original creators of Apache Spark. Similar to the others, it is an open data sto
 mat that provides transactional guarantees and enables schema enforcement and evo‐
 lution. It also provides several other interesting features, some of which are unique.
 Delta Lake supports:
+
 • Streaming reading from and writing to tables using Structured Streaming sources
 and sinks
+
 • Update, delete, and merge (for upserts) operations, even in Java, Scala, and
 Python APIs
+
 • Schema evolution either by explicitly altering the table schema or by implicitly
 merging a DataFrame’s schema to the table’s during the DataFrame’s write. (In
 fact, the merge operation in Delta Lake supports advanced syntax for conditional
 updates/inserts/deletes, updating all columns together, etc., as you’ll see later in
 the chapter.)
+
 • Time travel, which allows you to query a specific table snapshot by ID or by
 timestamp
+
 • Rollback to previous versions to correct errors
+
 • Serializable isolation between multiple concurrent writers performing any SQL,
 batch, or streaming operations
+
 In the rest of this chapter, we are going to explore how such a system, along with
 Apache Spark, can be used to build a lakehouse that provides the aforementioned
 properties. Of these three systems, so far Delta Lake has the tightest integration with
@@ -5002,15 +5022,21 @@ grown. Jules S. Damji (one of our coauthors) came up with this!
 Building Lakehouses with Apache Spark and Delta Lake
 In this section, we are going to take a quick look at how Delta Lake and Apache Spark
 can be used to build lakehouses. Specifically, we will explore the following:
+
 • Reading and writing Delta Lake tables using Apache Spark
+
 • How Delta Lake allows concurrent batch and streaming writes with ACID
 guarantees
+
 • How Delta Lake ensures better data quality by enforcing schema on all writes,
 while allowing for explicit schema evolution
+
 • Building complex data pipelines using update, delete, and merge operations, all
 of which ensure ACID guarantees
+
 • Auditing the history of operations that modified a Delta Lake table and traveling
 back in time by querying earlier versions of the table
+
 The data we will use in this section is a modified version (a subset of columns in Par‐
 quet format) of the public Lending Club Loan Data. 1 It includes all funded loans from
 2012 to 2017. Each loan record includes applicant information provided by the appli‐
