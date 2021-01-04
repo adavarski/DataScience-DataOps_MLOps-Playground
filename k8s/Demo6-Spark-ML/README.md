@@ -4897,7 +4897,7 @@ Note: Snowflake helped us to leverage big data and streaming capabilities that w
 
 Building Reliable Data Lakes with Apache Spark
 
-In the previous Appendixes, we learned how to easily and effectively use Apache Spark to build scalable and performant data processing pipelines. However, in practice, expressing the processing logic only solves half of the end-to-end problem of building a pipeline. For a data engineer, data scientist, or data analyst, the ultimate goal of building pipelines is to query the processed data and get insights from it. The choice of storage solution determines the end-to-end (i.e., from raw data to insights) robustness and performance of the data pipeline. we will introduce the next wave of storage solution, called lakehouses, and explore some of the new open source processing engines in this space.
+In the previous Appendixes, we learned how to easily and effectively use Apache Spark to build scalable and performant data processing pipelines. However, in practice, expressing the processing logic only solves half of the end-to-end problem of building a pipeline. For a data engineer, data scientist, or data analyst, the ultimate goal of building pipelines is to query the processed data and get insights from it. The choice of storage solution determines the end-to-end (i.e., from raw data to insights) robustness and performance of the data pipeline. We will introduce the next wave of storage solution, called lakehouses, and explore some of the new open source processing engines in this space.
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo6-Spark-ML/pictures/DeltaLake-lakehouse.jpeg" width="800">
 
@@ -4926,13 +4926,17 @@ lated data silos (i.e., multiple repositories for different categories of data) 
 Complex use cases like change-data-capture (CDC) and slowly changing dimen‐sion (SCD) operations require data in tables to be continuously updated. Lakehouses allow data to be concurrently deleted and updated with transactionalguarantees.
 
 - Data governance
+
 Lakehouses provide the tools with which you can reason about data integrity andaudit all the data changes for policy compliance.Currently, there are a few open source systems, such as Apache Hudi, Apache Iceberg,and Delta Lake, that can be used to build lakehouses with these properties. At a very high level, all three projects have a similar architecture inspired by well-known data‐base principles. They are all open data storage formats that do the following:
 
 • Store large volumes of data in structured file formats on scalable filesystems.
+
 • Maintain a transaction log to record a timeline of atomic changes to the data
 (much like databases).
+
 • Use the log to define versions of the table data and provide snapshot isolation
 guarantees between readers and writers.
+
 • Support reading and writing to tables using Apache Spark.
 
 Within these broad strokes, each project has unique characteristics in terms of APIs,
@@ -4941,7 +4945,7 @@ will explore them next. Note that all of these projects are evolving fast, and t
 some of the descriptions may be outdated at the time you are reading them. Refer to
 the online documentation for each project for the most up-to-date information.
 
-Apache Hudi
+### Apache Hudi
 
 Initially built by Uber Engineering, Apache Hudi—an acronym for Hadoop Update
 Delete and Incremental—is a data storage format that is designed for incremental
@@ -4962,7 +4966,7 @@ mentioned earlier, it supports:
 
 • Async compaction of row and columnar data
 
-Apache Iceberg
+### Apache Iceberg
 
 Originally built at Netflix, Apache Iceberg is another open storage format for huge
 data sets. However, unlike Hudi, which focuses on upserting key/value data, Iceberg
@@ -4986,7 +4990,7 @@ timestamp
 
 • Serializable isolation, even between multiple concurrent writers
 
-Delta Lake
+### Delta Lake
 
 Delta Lake is an open source project hosted by the Linux Foundation, built by the
 original creators of Apache Spark. Similar to the others, it is an open data storage for‐
@@ -5049,3 +5053,14 @@ quet format) of the public Lending Club Loan Data. 1 It includes all funded loan
 2012 to 2017. Each loan record includes applicant information provided by the appli‐
 cant as well as the current loan status (current, late, fully paid, etc.) and latest pay‐
 ment information.
+
+Delta Lake (overview and choice)
+
+Migrating from CSV to parquet files in our data lake storage has been a great initial choice for most of our needs. However, we still lacked some features on top of it that could make our life much easier, including ACID transactions, schema enforcements and updating events in parquet files.
+
+After analysing all existing alternatives on the market including Hudi, Iceberg and Delta Lake, we decided to start using Delta Lake based on its Apache Spark 3.x support. It provides all of the main requirements and fits perfectly in our architecture.
+
+    Efficiency. We decoupled the computation process from the storage allowing our architecture to scale more efficiently.
+    Low latency, high quality data. Using the upsert and schema enforcements features provided by Delta Lake, we can continuously deliver low latency and high quality data to all stakeholders in Financial Times.
+    Multiple access points. Persisting all incoming data into Delta Lake allows the stakeholders to query low latency data through multiple systems including Apache Spark and Presto.
+    Time travel. Delta Lake allows reprocessing data from a particular time in the past which automates back-populating data, in addition to allowing analysis between particular date intervals for different use cases such as reports or training machine learning models.
