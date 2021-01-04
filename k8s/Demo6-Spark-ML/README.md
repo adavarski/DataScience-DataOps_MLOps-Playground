@@ -5249,7 +5249,7 @@ Note2: Moving this to a real cluster
 
 On a real cluster, there's a number of changes you'll likely do:
 
-    Put your hive metastore on mysql or some other relational database so the cluster can share the same concept of tables
+    Put your hive metastore on mysql or some other relational database so the cluster can share the same concept of tables (if we delete driver pod we don't have hive airbnb db)
     Use more powerful clusters that allow you to completely delegate the handling of running an app to worker rather than your machine delegating to cluster's workers. Research --deploy-mode cluster.
     Setup security for multiples machines and multiple user access to the cluster.
 
