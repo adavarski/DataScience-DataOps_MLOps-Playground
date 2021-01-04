@@ -5064,3 +5064,80 @@ After analysing all existing alternatives on the market including Hudi, Iceberg 
     - Low latency, high quality data. Using the upsert and schema enforcements features provided by Delta Lake, we can continuously deliver low latency and high quality data to all stakeholders.
     - Multiple access points. Persisting all incoming data into Delta Lake allows the stakeholders to query low latency data through multiple systems including Apache Spark and Presto.
     - Time travel. Delta Lake allows reprocessing data from a particular time in the past which automates back-populating data, in addition to allowing analysis between particular date intervals for different use cases such as reports or training machine learning models.
+
+## Configuring Apache Spark with Delta Lake 
+
+Add Delta Lake jar
+```
+cd ./jupyter-2.0.0/docker
+
+# Add lines 
+
+$ grep -i delta *
+Dockerfile.k8s-minio.executor:RUN curl https://repo1.maven.org/maven2/io/delta/delta-core_2.12/0.7.0/delta-core_2.12-0.7.0.jar -o /opt/spark/jars/delta-core_2.12-0.7.0.jar
+
+$ grep 2.0.0 Docker*
+Dockerfile.cluster-dask:FROM davarski/spark301-k8s-minio-polyglot:2.0.0
+Dockerfile.cv:FROM davarski/spark301-minio-dask:2.0.0
+Dockerfile.hub-jupyter:FROM davarski/spark301-k8s-minio-jupyter:2.0.0
+Dockerfile.hub-polyglot:FROM davarski/spark301-k8s-minio-dl:latest:2.0.0
+Dockerfile.itk:FROM davarski/spark301-minio-dask:2.0.0
+Dockerfile.k8s-minio.deep-learning:FROM davarski/spark301-k8s-minio-kafka:2.0.0
+Dockerfile.k8s-minio.driver:FROM davarski/spark301-k8s-minio-base:2.0.0
+Dockerfile.k8s-minio.jupyter:FROM davarski/spark301-k8s-minio-driver:2.0.0
+Dockerfile.k8s-minio.ml-executor:FROM davarski/spark301-k8s-minio-base:2.0.0
+
+
+# Rebuild images with MinIO(S3)
+docker login
+# Build and tag the base/executor image
+docker build -f ./Dockerfile.k8s-minio.executor -t davarski/spark301-k8s-minio-base:2.0.0 .
+# Push the contaimer image to a public registry
+docker push davarski/spark301-k8s-minio-base:2.0.0
+
+# Build and tag the driver image
+docker build -f ./Dockerfile.k8s-minio.driver -t davarski/spark301-k8s-minio-driver:2.0.0 .
+# Push the contaimer image to a public registry
+docker push davarski/spark301-k8s-minio-driver:1.0.0
+
+# Build/tag/push the jupyter image
+docker build -f ./Dockerfile.k8s-minio.jupyter -t davarski/spark301-k8s-minio-jupyter:2.0.0 .
+docker push davarski/spark301-k8s-minio-jupyter:2.0.0
+```
+Pull images into k8s(k3s):
+```
+export KUBECONFIG=~/.kube/k3s-config-jupyter 
+sudo k3s crictl pull davarski/spark301-k8s-minio-base:2.0.0
+sudo k3s crictl pull davarski/spark301-k8s-minio-driver:2.0.0
+sudo k3s crictl pull davarski/spark301-k8s-minio-jupyter:2.0.0
+
+```
+Delete old deploy:
+```
+kubectl delete -f jupyter-notebook.svc.yaml -f jupyter-notebook.ingress.yaml -f jupyter-notebook.pod.yaml
+
+```
+
+Fix yamls: 
+```
+$ cd ./jupyter-2.0.0/k8s
+$ grep 2.0.0 *.yaml
+jupyter-notebook.pod.yaml:    image: davarski/spark301-k8s-minio-jupyter:2.0.0
+jupyter-notebook.pod.yaml.DEMO:    image: davarski/spark301-k8s-minio-jupyter:2.0.0
+jupyter-notebook.pod.yaml.MINIO-BUCKET:    image: davarski/spark301-k8s-minio-jupyter:2.0.0
+```
+
+Apply yamls:
+
+```
+kubectl apply -f jupyter-notebook.pod.yaml -f jupyter-notebook.svc.yaml -f jupyter-notebook.ingress.yaml
+```
+
+Check libs:
+
+```
+$ kubectl exec -it spark-jupyter -- bash -c "ls /opt/spark/jars/*delta*"
+/opt/spark/jars/delta-core_2.12-0.7.0.jar
+
+```
+Check Spark Delta Lake integration:
