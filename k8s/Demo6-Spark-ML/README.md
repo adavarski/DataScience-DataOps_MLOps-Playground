@@ -5054,7 +5054,7 @@ quet format) of the public Lending Club Loan Data. 1 It includes all funded loan
 cant as well as the current loan status (current, late, fully paid, etc.) and latest pay‐
 ment information.
 
-Delta Lake (overview and choice)
+## Delta Lake (overview and choice)
 
 Migrating from CSV to parquet files in our data lake storage has been a great initial choice for most of our needs. However, we still lacked some features on top of it that could make our life much easier, including ACID transactions, schema enforcements and updating events in parquet files.
 
