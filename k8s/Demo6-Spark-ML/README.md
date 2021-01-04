@@ -4903,6 +4903,7 @@ In the previous Appendixes, we learned how to easily and effectively use Apache 
 
 
 Lakehouses: The Next Step in the Evolution of Storage Solutions
+
 The lakehouse is a new paradigm that combines the best elements of data lakes and data warehouses for OLAP workloads. Lakehouses are enabled by a new system
 design that provides data management features similar to databases directly on the low-cost, scalable storage used for data lakes. More specifically, they provide the following features:
 
