@@ -165,7 +165,7 @@ Additionally, within the hub section, extraEnv is used to populate environment v
 $ helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
    
 $ helm repo update
-
+$ cd ../003-data/10000-jupterhub
 # Install (or upgrade/update) the JupyterHub Helm package.
 $ helm upgrade --install saas-hub jupyterhub/jupyterhub --namespace="data" --version="0.9-dcde99a" --values="values.yml"
 ```
