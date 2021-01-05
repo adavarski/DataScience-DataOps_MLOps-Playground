@@ -53,7 +53,7 @@ JuputerLab inside k8s cluster:
 
 JuputerHub high-level:
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo7-SaaS/pictures/SaaS-jhub-parts.png" width="500">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo7-SaaS/pictures/SaaS-jhub-parts.png" width="400">
 
 
 Note: JupyterLab, brings a robust and extendable suite of data science capabilities along with a command-line terminal. Operating JupyterLab within the cluster creates an incredibly efficient environment for both traditional data science, analytics, and experimentation, along with opportunities for development and operations through closer interaction with the Kubernetes API.
@@ -149,7 +149,7 @@ Realm, Client, and User
 
 Keycloak provides identity management and authentication to multiple tenants through the configuration of realms. JupyterHub is configured later to authenticate users using Oauth2, belonging to the realm "saas". A Keycloak client associated with a realm grants access to applications such as JupyterHub looking to authenticate users. This section sets up a realm, client, and user used to provision JupyterLab servers later. Using a web browser, visit the new Ingress https://auth.data.davar.com/auth/ as set up via yaml manifests. Log in to Keycloak using the "sysop" credential defined in /9000-keycloak/15-secret.yml . After logging in, master is the default realm shown in the upper left of the user interface and depicted bellow:
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo7-SaaS/pictures/SaaS-Keycloack-add-realm-saas.png" width="700">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo7-SaaS/pictures/SaaS-Keycloack-add-realm-saas.png" width="800">
 
 Open the "Add realm" menu by clicking the drop-down to the right of the realm title and create the new realm "saas".
 
@@ -174,7 +174,7 @@ https://saas.data.davar.com/hub/oauth_callback later defined in the “JupyterHu
 
 Finally, create one or more users in the "saas" realm by choosing Users under the Manage section of the left-hand menu. After adding a user, assign a password under the Credentials tab. Use a strong password; any users assigned to this realm are later given access to a JupyterLab environment with permissions to read and write data and execute code from within the cluster.
 
-<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo7-SaaS/pictures/SaaS-Keycloack-user-password-realm-saas.png" width="700">
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo7-SaaS/pictures/SaaS-Keycloack-user-password-realm-saas.png" width="800">
 
 
 ### SaaS Namespace
