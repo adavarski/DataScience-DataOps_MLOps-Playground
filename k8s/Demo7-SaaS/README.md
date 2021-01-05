@@ -51,6 +51,11 @@ JuputerLab inside k8s cluster:
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo7-SaaS/pictures/SaaS-JupyterLab-inside-k8s.png" width="500">
 
+JuputerHub high-level:
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo7-SaaS/pictures/SaaS-jhub-parts.png" width="500">
+
+
 Note: JupyterLab, brings a robust and extendable suite of data science capabilities along with a command-line terminal. Operating JupyterLab within the cluster creates an incredibly efficient environment for both traditional data science, analytics, and experimentation, along with opportunities for development and operations through closer interaction with the Kubernetes API.
 
 The following sections demonstrate the setup of a Kubernetes Namespace, sample RBAC, and ServiceAccount permissions allowing JupyterLab access to Kubernetes resources. JupyterHub is configured to provision JupyterLab environments(Spark driver with jupyter inside + spark workers/executors we can run via SparkSession), authenticating against Keycloak. So SaaS is based on JupyterHub/Lab.
