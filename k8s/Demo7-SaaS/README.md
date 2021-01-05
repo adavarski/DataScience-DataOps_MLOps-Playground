@@ -1,16 +1,63 @@
 ## SAAS: IAM:Keycloak + JupyterHUB/JupyterLAB (Spark clusters per tenant/user with k8s as Cluster Manager) 
 
 
-Creates a user-provisioned Spark clusters connected to other SaaS servcies (Kafka, ELK, etc) directly within the cluster as shownas bellow:
+Pre: Create JuputerLab images (for spark cluster k8s pods)
 
-<img>
+```
+cd ./jupyter-2.0.0/docker
 
-JupyterLab, brings a robust and extendable suite of data science capabilities along with a command-line terminal. Operating JupyterLab within the cluster creates an incredibly efficient environment for both traditional data science, analytics, and experimentation, along with opportunities for development and operations through closer interaction with the Kubernetes API.
+$ grep 2.0.0 Docker*
+Dockerfile.cluster-dask:FROM davarski/spark301-k8s-minio-polyglot:2.0.0
+Dockerfile.cv:FROM davarski/spark301-minio-dask:2.0.0
+Dockerfile.hub-jupyter:FROM davarski/spark301-k8s-minio-jupyter:2.0.0
+Dockerfile.hub-polyglot:FROM davarski/spark301-k8s-minio-dl:latest:2.0.0
+Dockerfile.itk:FROM davarski/spark301-minio-dask:2.0.0
+Dockerfile.k8s-minio.deep-learning:FROM davarski/spark301-k8s-minio-kafka:2.0.0
+Dockerfile.k8s-minio.driver:FROM davarski/spark301-k8s-minio-base:2.0.0
+Dockerfile.k8s-minio.jupyter:FROM davarski/spark301-k8s-minio-driver:2.0.0
+Dockerfile.k8s-minio.ml-executor:FROM davarski/spark301-k8s-minio-base:2.0.0
+
+# Build images 
+docker login
+# Build and tag the base/executor image
+docker build -f ./Dockerfile.k8s-minio.executor -t davarski/spark301-k8s-minio-base:2.0.0 .
+# Push the contaimer image to a public registry
+docker push davarski/spark301-k8s-minio-base:2.0.0
+
+# Build and tag the driver image
+docker build -f ./Dockerfile.k8s-minio.driver -t davarski/spark301-k8s-minio-driver:2.0.0 .
+# Push the contaimer image to a public registry
+docker push davarski/spark301-k8s-minio-driver:1.0.0
+
+# Build/tag/push the jupyter image
+docker build -f ./Dockerfile.k8s-minio.jupyter -t davarski/spark301-k8s-minio-jupyter:2.0.0 .
+docker push davarski/spark301-k8s-minio-jupyter:2.0.0
+```
+Pull images into k8s(k3s):
+```
+export KUBECONFIG=~/.kube/k3s-config-jupyter 
+sudo k3s crictl pull davarski/spark301-k8s-minio-base:2.0.0
+sudo k3s crictl pull davarski/spark301-k8s-minio-driver:2.0.0
+sudo k3s crictl pull davarski/spark301-k8s-minio-jupyter:2.0.0
+
+```
+Creates a user-provisioned Spark clusters connected to other SaaS servcies (MinIO, Hive, Kafka, ELK, etc) directly within the cluster as shownas bellow:
+
+JupyterHub/Lab in the "saas" namespace:
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo7-SaaS/pictures/SaaS-JupyterHub-JupyterLab-in-the-saas-namespace.png" width="500">
+
+JuputerLab inside k8s cluster:
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo7-SaaS/pictures/SaaS-JupyterLab-inside-k8s.png" width="500">
+
+Note: JupyterLab, brings a robust and extendable suite of data science capabilities along with a command-line terminal. Operating JupyterLab within the cluster creates an incredibly efficient environment for both traditional data science, analytics, and experimentation, along with opportunities for development and operations through closer interaction with the Kubernetes API.
 
 The following sections demonstrate the setup of a Kubernetes Namespace, sample RBAC, and ServiceAccount permissions allowing JupyterLab access to Kubernetes resources. JupyterHub is configured to provision JupyterLab environments(Spark driver with jupyter inside + spark workers/executors we can run via SparkSession), authenticating against Keycloak. So SaaS is based on JupyterHub/Lab.
 
+Notes:
 
-JupyterHub (per user/tenant):
+JupyterHub (per user/tenant) snip:
 ```
 singleuser:
   image:
@@ -20,9 +67,9 @@ singleuser:
 ```
 
 
-Example Notebook:
+Example Notebook(snip):
 
-(Ref: Demo6: using spark driver pod and running 2 spark workers and Spark using k8s as Cluster Manager)
+(Ref: Demo6:  https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo6-Spark-ML : using spark driver pod and running 2 spark workers and Spark using k8s as Cluster Manager)
 
 ```
 import pyspark
@@ -97,28 +144,33 @@ Realm, Client, and User
 
 Keycloak provides identity management and authentication to multiple tenants through the configuration of realms. JupyterHub is configured later to authenticate users using Oauth2, belonging to the realm "saas". A Keycloak client associated with a realm grants access to applications such as JupyterHub looking to authenticate users. This section sets up a realm, client, and user used to provision JupyterLab servers later. Using a web browser, visit the new Ingress https://auth.data.davar.com/auth/ as set up via yaml manifests. Log in to Keycloak using the "sysop" credential defined in /9000-keycloak/15-secret.yml . After logging in, master is the default realm shown in the upper left of the user interface and depicted bellow:
 
-<img>
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo7-SaaS/pictures/SaaS-Keycloack-add-realm-saas.png" width="700">
 
 Open the "Add realm" menu by clicking the drop-down to the right of the realm title and create the new realm "saas".
 
 
 Next, navigate to Clients in the left-hand navigation of the new Datalab realm. Click Create and fill in the “Add Client” form to add a new client named "saas" shown bellow:
 
-
-<img>
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo7-SaaS/pictures/SaaS-Keycloack-add-client-to-realm-saas.png" width="800">
 
 After adding the new "saas" client, click the Credentials tab to retrieve the generated secret, as shown:
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo7-SaaS/pictures/SaaS-Keycloack-client-credentilals.png" width="800">
+
 
 JupyterHub is later configured to use the client ID "saas" and the generated secret for permission to authenticate users against the Keycloak "saas" realm.
 
 
-Configure the new datalab client (under the Setting tab) by switching Authorization Enabled to on. Provide Valid Redirect URIs, in this case,
+Configure the new "saas" client (under the Setting tab) by switching Authorization Enabled to on. Provide Valid Redirect URIs, in this case,
 https://saas.data.davar.com/hub/oauth_callback later defined in the “JupyterHub” section. Review:
 
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo7-SaaS/pictures/SaaS-Keycloack-client-config-url-auth-enabled.png" width="800">
 
-<img>
 
 Finally, create one or more users in the "saas" realm by choosing Users under the Manage section of the left-hand menu. After adding a user, assign a password under the Credentials tab. Use a strong password; any users assigned to this realm are later given access to a JupyterLab environment with permissions to read and write data and execute code from within the cluster.
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo7-SaaS/pictures/SaaS-Keycloack-user-password-realm-saas.png" width="700">
+
 
 ### SaaS Namespace
 
@@ -136,7 +188,6 @@ kubectl apply -f ../003-data/8000-saas-namespace/08-rolebinding.yml
 
 ```
       
-
 ### JupyterHub
 
 JupyterHub “spawns, manages, and proxies multiple instances of the single-user Jupyter notebook server.” 21 This section installs JupyterHub
@@ -198,9 +249,21 @@ jupyterhub         <none>   saas.data.davar.com      192.168.0.100   80, 443   1
 
 ```
 
+
+
 ### JupyterLab
 JupyterLab is “the next-generation web-based user interface for Project Jupyter,” a feature-rich data science environment. Project Jupyter began in 2014 and has seen massive adoption; 
 
 Jupyter Notebooks are a browser-based (or web-based) IDE.
 
 Kubernetes is a natural fit for provisioning and serving JupyterLab environments through JupyterHub, as demonstrated in the previous section. Streamlining the development of machine learning and statistical models has driven the success of Project Jupyter. Many data science activities, such as machine learning, require static, immutable data sets to achieve reproducible results from experimentation. However, operating Jupyter environments with static data alongside real-time event streams, indexes, and the full power of Kubernetes distributed computing is an opportunity to offer a variety of data science functionality directly in the center of a data platform. The following sections demonstrate brief examples of working directly with the data and control plane from within the k8s cluster, connecting JupyterLab notebooks (Spark cluster) with MinIO, Hive, etc. services
+
+### SaaS login 
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo7-SaaS/pictures/SaaS-jupyterhub.png" width="500">
+
+Change password:
+
+<img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo7-SaaS/pictures/SaaS-login-change-passord.png" width="500">
+
+
