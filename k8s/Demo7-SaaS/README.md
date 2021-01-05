@@ -265,6 +265,8 @@ Kubernetes is a natural fit for provisioning and serving JupyterLab environments
 
 ### SaaS login 
 
+URL: https://saas.data.davar.com
+
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo7-SaaS/pictures/SaaS-jupyterhub.png" width="500">
 
 Change password:
