@@ -891,7 +891,7 @@ Note: GitOps
 
 GitOps, a process popularized by Weaveworks, is another trending concept within the scope of Kubernetes CI/CD. GitOps involves the use of applications reacting to `git push events`. GitOps focuses primarily on Kubernetes clusters matching the state described by configuration residing in a Git repository. On a simplistic level, GitOps aims to replace `kubectl apply` with `git push`. Popular and well-supported GitOps implementations include GitLab, ArgoCD, Flux, and Jenkins X.
 
-## SaaS Build 
+## SaaS Build/Deploy 
 
 Ref: [Spark with MinIO(S3) and Delta Lake for large-scale big data processing and ML](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo6-Spark-ML) & [SaaS deploy with IAM:Keycloak + JupyterHUB/JupyterLAB](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo7-SaaS)
 
