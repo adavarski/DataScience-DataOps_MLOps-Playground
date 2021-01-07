@@ -807,6 +807,24 @@ This section contains the following chapters:
 
 
 
+### Securing User Authentication
+
+In the field of cybersecurity, Artificial Intelligence (AI) is assuming an increasingly important role in the protection of users' sensitive information, including the credentials they use to access their network accounts and applications in order to prevent abuse, such as identity theft.
+
+This chapter will cover the following topics:
+
+    - Authentication abuse prevention
+    - Account reputation scoring
+    - User authentication with keystroke recognition
+    - Biometric authentication with facial recognition
+
+
+
+
+
+#### Keystroke detection example 
+
+
 Keystroke Dynamics - Benchmark Data Set:
 
 ```
