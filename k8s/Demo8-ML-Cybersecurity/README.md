@@ -547,7 +547,7 @@ https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/
 
 ### Malware Threat Detection
 
-This part will cover the following topics:
+This section will cover the following topics:
 
     - How to tell different malware families apart
     - Introducing the malware analysis methodology
@@ -641,5 +641,154 @@ main.py –model 1 –dataset ./dataset/malimg.npz –num_epochs 100 –penalty_
 ### Network Anomaly Detection with AI
 
 
+The current level of interconnection that can be established between different devices (for example, think of the Internet of Things (IoT)) has reached such a complexity that it seriously questions the effectiveness of traditional concepts such as perimeter security. As a matter of fact, cyberspace's attack surface grows exponentially, and it is therefore essential to resort to automated tools for the effective detection of network anomalies associated with unprecedented cybersecurity threats.
+
+This chapter will cover the following topics:
+
+    - Network anomaly detection techniques
+    - How to classify network attacks
+    - Detecting botnet topology
+    - Different machine learning (ML) algorithms for botnet detection
+
+ 
+
+In this section, we will focus on anomaly detection related to network security, postponing the discussion of the aspects of fraud detection and user anomaly behavior detection until the following sections.
+
+#### Network anomaly detection techniques
+
+The techniques we have seen so far can also be adopted to manage anomaly detection and related attempts to gain unauthorized access to the corporate network.
+In fact, anomaly detection has always been a research area of cybersecurity, particularly in the field of network security protection. However, anomaly detection is not limited to identifying and preventing network attacks, but can also be adopted in other areas, such as fraud detection and in the identification of possible compromises of user profiles.
+
+
+#### Intrusion Detection Systems 
+
+Traditionally, intrusion detection activity has been managed through the introduction of specialized devices, known as Intrusion Detection Systems (IDS). These devices were usually divided into the following two categories:
+
+    - Host-based IDS
+    - Network-based IDS
+
+With the introduction of Artificial Intelligence (AI) techniques in the field of cybersecurity, a third type of IDS has also been added to the aforementioned two traditional types: anomaly-driven IDS.
+
+
+#### Anomaly-driven IDS
+
+With the introduction of AI techniques to the field of NIDS, it is now possible to evolve traditional IDS toward more advanced detection solutions, exploiting supervised and unsupervised learning algorithms, as well as reinforcement learning and deep learning.
+
+Similarly, the clustering techniques analyzed in the previous chapters, which exploit the concepts of similarity between the categories of data, can validly be used for the implementation of anomaly-based IDS.
+
+In choosing the algorithms for the anomaly detection network, however, some characteristic aspects of the network environment must be taken into consideration:
+
+    - In the case of solutions based on supervised learning algorithms, we will have to categorize (label) all the data since, by definition, in supervised learning the classes to which sample data belongs are known in advance.
+    - The categorization of all the data inevitably involves a computational overload and a possible slowdown in the network performance, since the network traffic must be analyzed before being sent to the destination. In this sense, we could decide to resort to unsupervised learning algorithms, not only to let the algorithm identify unknown classes, but also to reduce the computational overhead.
+
+Similarly, the algorithms that exploit the concept of similarity (such as clustering algorithms) are well suited for the implementation of anomaly detection solutions. However, it is also necessary in this case to pay particular attention to the type of metrics used to define the concept of similarity that distinguishes the traffic considered as normal from that being considered as anomalous.
+
+Commonly, in the implementation of anomaly detection solutions, scoring systems are used for the assessment of traffic: identifying thresholds of values ​​that separate the different types of traffic from each other (normal versus anomalous). For this purpose, when choosing the most appropriate metrics, we must take into consideration the ordering and distribution of the data.
+
+In other words, an anomaly detection system can use—as a scoring metric—the distance existing between the values ​​of the dataset (considered as points of the n-dimensional space representing the different features), or evaluate the regularity in the distribution of data, with respect to a distribution considered representative of the phenomenon under investigation.
+
+#### Turning service logs into datasets
+
+One of the problems related to network anomaly detection is how to collect sufficient and reliable data to perform algorithm analysis and training. There are hundreds of datasets freely available on the internet, and there are different datasets on which to carry out our analysis; however, it is also possible to use our own network devices to accumulate data that is more representative of our specific reality.
+
+To this end, we can use the following:
+
+    - Network devices, such as routers or network sensors, using tools such as tcpdump for data collection
+    - Services logs and system logs
+
+Within the operating system, services logs and system logs can be stored in various places. In the case of a Unix-like system, the services logs are usually stored as text files inside the /var/log directory and its relative subdirectories. In the case of Windows OSes, logs are distinguished between Windows logs (including security logs and system logs) and application logs. They are accessible through the Windows Event Viewer application, or by accessing file system locations such as %SystemRoot%\System32\Config.
+
+In both the cases of Unix-like systems and Windows OSes, the log files are of a text-based format according to predefined templates, with the difference being that, in the case of Windows, an event ID is also associated with each event recorded in the corresponding log file. The textual nature of the logs files is well suited for the integration of the information stored in the logs.
+
+
+#### Advantages of integrating network data with service logs
+
+Both data sources, that is, network data and services logs, entail advantages and disadvantages for the purposes of network anomaly detection.
+
+However, their integration makes it possible to limit the disadvantages in favor of the advantages.
+
+It is no coincidence that in recent years, several software solutions (both proprietary and open source) have been released to solve the task of integrating different data sources, allowing users to utilize methods of analysis from data science and big data analytics.
+
+Among the most widespread solutions, we can mention the ElasticSearch, Logstash, Kibana (ELK) suite, which allows the indexing of events extracted from log files and can be represented in an intuitive visual form.
+
+Other widespread proprietary networking solutions are based on Cisco's NetFlow protocol, which allows for a compact representation of network traffic.
+
+Reconstructing the events of interest starting from the raw data is anything but easy. This moreover lends itself—if carried out in an automated manner—to the generation of unreliable signals (false positives) that represent a problem in the management of security.
+
+Moreover, in the case of network data, they are representative of the individual services to which they refer, while in the case of service logs, they are directly related to the processes that generated them.
+
+The integration of both data sources (network data and service logs) therefore allows for a contextualization of the events being analyzed, consequently increasing contextual awareness, and reducing the effort required for interpreting events when starting from raw data.
+
+####  Most common network attacks
+
+Given the enormous variety of combinations that we can identify by putting together different features, it is inevitable that we have to resort to a threat model that reflects the level of risk to which a given organization is subjected, and on the basis of this model, to identify the most representative feature of combinations for possible attacks.
+
+In this sense, it can be useful to analyze which are the most frequent types of network attacks:
+
+    - Malware-based
+    - Zero-day exploits
+    - Data exfiltration via network sniffing
+    - Saturation of network resources (DoS)
+    - Session hijacking
+    - Connection spoofing
+    - Port scanning
+
+On the basis of a similar classification (to be adapted to the specific context and constantly updated), we can identify which features to consider, feeding our algorithms with more representative datasets.
+
+#### Anomaly detection strategies
+
+We have therefore seen that the very concept of anomaly detection refers to a behavior that is different from what was expected; this difference, in technical terms, translates into outlier detection.
+
+To identify the outliers, it is possible to follow different strategies:
+
+   - Analyzing a sequence of events within a time series: The data is collected at regular intervals, evaluating the changes that occur in the series over time. This is a technique widely used in the analysis of financial markets, but it can be also validly used in the cybersecurity context to detect the frequency of characters (or commands) entered by the user in a remote session. Even the simple unnatural increase in the frequency of data entered per unit of time is indicative of an anomaly that can be traced back to the presence of an automated agent (instead of a human user) in the remote endpoint.
+
+   - Using supervised learning algorithms: This approach makes sense when normal and anomalous behaviors can be reliably distinguished from each other, as in the case of credit card fraud, in which it is possible to detect predefined patterns of suspicious behavior, relying on the fact that future fraud attempts are attributable to a predefined scheme.
+
+   - Using unsupervised learning algorithms: In this case, it is not possible to trace the anomalies back to predefined behaviors, as it is not possible to identify a reliable and representative training dataset for supervised learning. This scenario is the one that most commonly describes the reality of cybersecurity, characterized by new forms of attack or exploits of new vulnerabilities (zero-day attacks). Similarly, it is often difficult to trace all the theoretically possible intrusions back to a single predefined scheme.
+
+####  Detecting botnet topology
+
+One of the most common pitfalls in network anomaly detection has to do with the detection of botnets within the corporate network. Given the danger of such hidden networks, the detection of botnets is particularly relevant, not only for preventing the exhaustion of the organization's computational and network resources by external attackers, but also for preventing the dissemination of sensitive information (data leakage) outward.
+
+However, identifying the presence of a botnet in time is often an operation that is anything but simple. This is why it is important to understand the very nature of botnets.
+
+In the case of botnets, the attacker's intent is to transform the victim host (by installing malware) into an automated agent that fulfills the orders received by the attacker, through a C2 console that is usually managed by a centralized server.
+
+The victim machine thus becomes part of a vast network of compromised machines (the botnet), contributing toward a common goal with its own computational and network resources:
+
+    - Taking part in email spamming campaigns
+    - Performing Distributed Denial of Services (DDoS) toward institutional or private third-party sites
+    - Bitcoin and cryptocurrency mining
+    - Password cracking
+    - Credit card cracking
+    - Data leakages and data breaches
+
+For an organization, dealing with a botnet (even unconsciously) represents a serious risk in terms of legal responsibility toward third parties; it is not just a waste of company resources.
+
+This is why it is important to monitor the company network by trying to promptly identify the presence of hosts that might be part of a botnet.
+
+####  Different ML algorithms for botnet detection
+
+
+From what we have described so far, it is clear that it is not advisable to exclusively rely on automated tools for network anomaly detection, but it may be more productive to adopt AI algorithms that are able to dynamically learn how to recognize the presence of any anomalies within the network traffic, thus allowing the analyst to perform an in-depth analysis of only really suspicious cases. Now, we will demonstrate the use of different ML algorithms for network anomaly detection, which can also be used to identify a botnet.
+
+The section features in our example consist of the values of network latency and network throughput. In our threat model, anomalous values associated with these features can be considered as representative of the presence of a botnet.
+
+For each example, the accuracy of the algorithm is calculated, in order to be able to make comparisons between the results obtained:
+
+
+####  Anomaly detection using the Gaussian distribution
+
+
+Gaussian anomaly detection
+
+One of the most widespread approaches for detecting regularity within data distribution makes use of the Gaussian distribution of probabilities.
+
+As we shall see, this statistical distribution presents a series of interesting characteristics that help to adequately model many natural, social, and economic phenomena.
+
+Obviously, not all the phenomena under investigation can be represented by the Gaussian distribution (very often, as we have seen, the underlying distribution of the analyzed phenomena is unknown); however, it constitutes a reliable reference point in many cases of anomaly detection.
+
+Therefore, we must see the characteristics of the Gaussian distribution in order to understand why it is frequently used.
 
 
