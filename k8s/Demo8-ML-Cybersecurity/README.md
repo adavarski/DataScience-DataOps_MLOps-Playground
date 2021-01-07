@@ -42,6 +42,8 @@ $ kubectl logs jupyter-notebook
 Browse to http://jupyter.data.davar.com/lab
 
 
+Note: Examples from book "Hands-On Artificial Intelligence for Cybersecurity"
+
 ## Getting to know Python's libraries
 
 Python libraries that are among the most well known and widespread in the field of ML:
@@ -1257,3 +1259,4 @@ Examples:
 ```
 cd ./additional
 ```
+
