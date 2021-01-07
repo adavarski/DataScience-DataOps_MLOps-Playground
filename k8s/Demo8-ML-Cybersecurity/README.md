@@ -1,4 +1,24 @@
-## Types of machine learning            
+
+## Getting to know Python's libraries
+
+Python libraries that are among the most well known and widespread in the field of ML:
+
+   - NumPy 
+   - pandas 
+   - Matplotlib 
+   - scikit-learn
+   - Seaborn
+
+
+### DL libraries
+Python libraries for AI, in particular, to exploit the potential of deep learning. The libraries that are as follows:
+
+   - TensorFlow
+   - Keras
+   - PyTorch
+
+
+## Types of machine learning used with Cybersecurity           
 The process of mechanical learning from data can take different forms, with different characteristics and predictive abilities.In the case of ML (which, as we have seen, is a branch of research belonging to AI), it is common to distinguish between the following types of ML:
 - Supervised learning
 - Unsupervised learning
@@ -69,3 +89,35 @@ The management of false positives is particularly burdensome in the case of dete
 On the other hand, even correct (true positive) reports, if in excessive numbers, contribute to functionally overloading the analysts, distracting them from priority tasks. The need to optimize the learning procedures therefore emerges in order to reduce the number of cases that need to be analyzed in depth by the analysts.
 
 This optimization activity often starts with the selection and cleaning of the data submitted to the algorithms.
+
+### How to find useful sources of data
+
+In the case of anomaly detection, for example, particular attention must be paid to the data being analyzed. An effective anomaly detection activity presupposes that the training data does not contain the anomalies sought, but that on the contrary, they reflect the normal situation of reference.
+
+If, on the other hand, the training data was biased with the anomalies being investigated, the anomaly detection activity would lose much of its reliability and utility in accordance with the principle commonly known as GIGO, which stands for garbage in, garbage out.
+
+Given the increasing availability of raw data in real time, often the preliminary cleaning of data is considered a challenge in itself. In fact, it's often necessary to conduct a preliminary skim of the data, eliminating irrelevant or redundant information. We can then present the data to the algorithms in a correct form, which can improve their ability to learn, adapting to the form of data on the basis of the type of algorithm used.
+
+For example, a classification algorithm will be able to identify a more representative and more effective model in cases in which the input data will be presented in a grouped form, or is capable of being linearly separable. In the same way, the presence of variables (also known as dimensions) containing empty fields weighs down the computational effort of the algorithm and produces less reliable predictive models due to the phenomenon known as the curse of dimensionality.
+
+This occurs when the number of features, that is, dimensions, increases without improving the relevant information, simply resulting in data being dispersed in the increased space of research.
+
+Also, the sources from which we draw our test cases (samples) are important. Think, for example, of a case in which we have to predict the mischievous behavior of an unknown executable. The problem in question is reduced to the definition of a model of classification of the executable, which must be traced back to one of two categories: genuine and malicious.
+
+To achieve such a result, we need to train our classification algorithm by providing it with a number of examples of executables that are considered malicious as an input dataset.
+
+
+Quantity versus quality
+
+When it all boils down to quantity versus quality, we are immediately faced with the following two problems:
+
+    What types of malware can we consider most representative of the most probable risks and threats to our company?
+    How many example cases (samples) should we collect and administer to the algorithms in order to obtain a reliable result in terms of both effectiveness and predictive efficiency of future threats?
+
+The answers to the two questions are closely related to the knowledge that the analyst has of the specific organizational realm in which they must operate. 
+
+All this could lead the analyst to believe that the creation of a honey-pot, which is useful for gathering malicious samples in the wild that will be fed to the algorithms as training samples, would be more representative of the level of risk to which the organization is exposed than the use of datasets as examples of generic threats. At the same time, the number of test examples to be submitted to the algorithm is determined by the characteristics of the data themselves. These can, in fact, present a prevalence of cases (skewness) of a certain type, to the detriment of other types, leading to a distortion in the predictions of the algorithm toward the classes that are most numerous, when in reality, the most relevant information for our investigation is represented by a class with a smaller number of cases.
+
+In conclusion, it will not be a matter of being able to simply choose the best algorithm for our goals (which often does not exist), but mainly to select the most representative cases (samples) to be submitted to a set of algorithms, which we will try to optimize based on the results obtained.
+
+
