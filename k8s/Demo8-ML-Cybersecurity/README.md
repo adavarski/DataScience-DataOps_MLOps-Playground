@@ -562,7 +562,7 @@ This examples will cover the following topics:
     - Advanced malware detection with deep learning
 
 
-Malware goes by many names
+#### Malware goes by many names
 
 There are many types of malware, and every day new forms of threat arise that creatively reutilize previous forms of attack, or adopt radically new compromising strategies that exploit specific characteristics of the target organization (in the case of Advanced Persistent Threats (APTs), these are tailored forms of attack that perfectly adapt themselves to the target victim). This is only limited to the imagination of the attacker.
 
@@ -577,5 +577,37 @@ However, it is possible to compile a classification of the most common types of 
     - Zero days (0 days): Malware that exploits vulnerabilities not yet disclosed to the community of researchers and analysts, whose characteristics and impacts in terms of security are not yet known, and therefore go undetected by antivirus software
 
 Obviously, these different types of threats can be amplified by the fact that they can mix together in the same malicious file (for example, a seemingly harmless Trojan becomes a real threat, as it behaves like a downloader once executed, connecting to the network and downloading malicious software, such as rootkits, which compromises the local network and turns it into a botnet).
+
+
+#### Malware analysis tools of the trade
+
+Many of the tools commonly used for conducting malware analysis can be categorized as follows:
+
+    - Disassemblers (such as Disasm and IDA)
+    - Debuggers (such as OllyDbg, WinDbg, and IDA)
+    - System monitors (such as Process Monitor and Process Explorer)
+    - Network monitors (such as TCP View, Wireshark, and tcpdump)
+    - Unpacking tools and Packer Identifiers (such as PEiD)
+    - Binary and code analysis tools (such as PEView, PE Explorer, LordPE, and ImpREC)
+
+####  Malware detection strategies
+
+ most common malware detection activities, we can include the following malware detection activities:
+
+   - Hashes file calculation: To identify known threats already present in the knowledge base
+   - System monitoring: To identify anomalous behavior of both the hardware and the operating system (such as an unusual increase in CPU cycles, a particularly heavy disk writing activity, changes to the registry keys, and the creation of new and unsolicited processes in the system)
+   - Network monitoring: To identify anomalous connections established by host machines to remote destinations
+
+These detection activities can be easily automated by using specific algorithms, as we will see shortly.
+
+
+#### Random Forest Malware Classifier
+
+#### Decision Tree Malware Detector
+
+#### K-means malware clustering
+
+
+
 
 
