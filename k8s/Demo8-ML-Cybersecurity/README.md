@@ -1025,4 +1025,216 @@ Examples:
 cd ./GANs/
 ```
 
+### Evaluating and Testing Your AI Arsenal
+
+Learning to evaluate, and continuously test the effectiveness of, your AI-based cybersecurity algorithms and tools is just as important as knowing how to develop and deploy them. In this section, we'll learn how to evaluate and test our work.
+
+This section contains the following chapters:
+
+    - Evaluating Algorithms
+    - Assessing Your AI Arsenal
+
+####  Evaluating Algorithms
+
+
+As we have seen in the previous sections, several AI solutions are available to achieve certain cybersecurity goals, so it is important to learn how to evaluate the effectiveness of various alternative solutions, using appropriate analysis metrics. At the same time, it is important to prevent phenomena such as overfitting, which can compromise the reliability of forecasts when switching from training data to test data.
+
+In this section, we will learn about the following topics:
+
+    - Feature engineering best practices in dealing with raw data
+    - How to evaluate a detector's performance using the ROC curve
+    - How to appropriately split sample data into training and test sets
+    - How to manage algorithms' overfitting and bias–variance trade-offs with cross validation
+
+
+Feature engineering examples with sklearn
+
+Let's look at some examples of feature engineering implementation using the NumPy library and the preprocessing package of the scikit-learn library.
+
+In this section, we will look at the different techniques commonly adopted to evaluate the predictive performances of different algorithms. We will look at how to transform raw data into features, following feature engineering best practices, thereby allowing algorithms to use data that does not have a numeric form, such as categorical variables. We will focused on the techniques needed to correctly evaluate the various components (such as bias and variance) that constitute the generalization error associated with the algorithms, and finally, we will learn how to perform the cross validation of the algorithms to improve the training process.
+
+```
+# Min-Max Scaler
+
+from sklearn import preprocessing 
+
+import numpy as np
+
+raw_data = np.array([
+
+  [ 2., -3., 4.],
+
+  [ 5., 0., 1.],
+
+  [ 4., 0., -2.]]) 
+
+min_max_scaler = preprocessing.MinMaxScaler()
+
+scaled_data = min_max_scaler.fit_transform(raw_data)  
+
+
+# Standard Scaler
+
+from sklearn import preprocessing 
+
+import numpy as np
+
+raw_data = np.array([
+
+  [ 2., -3., 4.],
+
+  [ 5., 0., 1.],
+
+  [ 4., 0., -2.]]) 
+
+std_scaler = preprocessing.StandardScaler().fit(raw_data) 
+
+std_scaler.transform(raw_data)
+
+test_data = [[-3., 1., 2.]]
+
+std_scaler.transform(test_data) 
+
+
+# Power Transformation
+
+from sklearn import preprocessing 
+
+import numpy as np
+
+pt = preprocessing.PowerTransformer(method='box-cox', standardize=False)  
+
+X_lognormal = np.random.RandomState(616).lognormal(size=(3, 3))
+
+pt.fit_transform(X_lognormal) 
+
+
+# Ordinal Encoding
+
+from sklearn import preprocessing 
+
+ord_enc = preprocessing.OrdinalEncoder()
+
+cat_data = [['Developer', 'Remote Working', 'Windows'], ['Sysadmin', 'Onsite Working', 'Linux']] 
+
+ord_enc.fit(cat_data)
+
+ord_enc.transform([['Developer', 'Onsite Working', 'Linux']])
+
+
+# One-Hot Encoding
+
+from sklearn import preprocessing 
+
+one_hot_enc = preprocessing.OneHotEncoder()
+
+cat_data = [['Developer', 'Remote Working', 'Windows'], ['Sysadmin', 'Onsite Working', 'Linux']] 
+
+one_hot_enc.fit(cat_data)
+
+one_hot_enc.transform([['Developer', 'Onsite Working', 'Linux']])
+
+
+# ROC Metrics Examples
+
+import numpy as np
+
+from sklearn import metrics
+from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import average_precision_score
+
+y_true = np.array([0, 1, 1, 1])
+y_pred = np.array([0.2, 0.7, 0.65, 0.9])
+
+prec, rec, thres = precision_recall_curve(y_true, y_pred) 
+
+average_precision_score(y_true, y_pred)
+
+metrics.precision_score(y_true, y_pred) 
+
+metrics.recall_score(y_true, y_pred) 
+
+metrics.f1_score(y_true, y_pred) 
+
+
+# ROC curve Example
+
+import numpy as np
+from sklearn.metrics import roc_curve
+
+y_true = np.array([0, 1, 1, 1])
+y_pred = np.array([0.2, 0.7, 0.65, 0.9])
+
+FPR, TPR, THR = roc_curve(y_true, y_pred) 
+
+
+# AUC score Example
+
+import numpy as np
+from sklearn.metrics import roc_auc_score 
+
+y_true = np.array([0, 1, 1, 1])
+y_pred = np.array([0.2, 0.7, 0.65, 0.9])
+
+roc_auc_score(y_true, y_pred)
+
+
+# Brier score Example
+
+import numpy as np
+from sklearn.metrics import brier_score_loss
+
+y_true = np.array([0, 1, 1, 1])
+y_cats = np.array(["fraud", "legit", "legit", "legit"]) 
+
+y_prob = np.array([0.2, 0.7, 0.9, 0.3])
+y_pred = np.array([1, 1, 1, 0])
+
+brier_score_loss(y_true, y_prob)
+
+brier_score_loss(y_cats, y_prob, pos_label="legit") 
+
+brier_score_loss(y_true, y_prob > 0.5)
+
+
+# Splitting samples into training and testing subsets
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+
+# Learning curve example
+
+from sklearn.model_selection import learning_curve 
+
+from sklearn.svm import SVC
+
+_sizes = [ 60, 80, 100]
+
+train_sizes, train_scores, valid_scores = learning_curve(SVC(), X, y, train_sizes=_sizes) 
+
+
+# K-folds Cross Validation example
+
+import numpy as np
+from sklearn.model_selection import KFold
+
+X = np.array([[1., 0.], [2., 1.], [-2., -1.], [3., 2.]])
+y = np.array([0, 1, 0, 1])
+
+k_folds = KFold(n_splits=2)
+
+for train, test in k_folds.split(X): 
+    print("%s %s" % (train, test))
+
+[2 0] [3 1]
+[3 1] [2 0] 
+
+X_train, X_test, y_train, y_test = X[train], X[test], y[train], y[test]
+```
+
+
+
+#### Assessing Your AI Arsenal
 
