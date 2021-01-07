@@ -793,3 +793,22 @@ Obviously, not all the phenomena under investigation can be represented by the G
 Therefore, we must see the characteristics of the Gaussian distribution in order to understand why it is frequently used.
 
 https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/notebooks/Gaussian_Network_Anomaly_Detection.ipynb
+
+
+## Protecting Sensitive Information and Assets
+
+This section covers authentication abuse and fraud prevention through biometric authentication, login attempt classification, account velocity features, and reputation scores.
+
+This section contains the following chapters:
+
+    - Securing User Authentication
+    - Fraud Prevention with Cloud AI Solutions
+    - GANS – Attacks and Defenses
+
+
+
+Keystroke Dynamics - Benchmark Data Set:
+
+```
+$ wget https://www.cs.cmu.edu/~keystroke/DSL-StrongPasswordData.csv (and put into Jupyter env directory: datasets)
+```
