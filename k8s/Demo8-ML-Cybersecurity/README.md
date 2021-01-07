@@ -20,11 +20,11 @@ The classification algorithm of the spam filter must therefore learn to classify
 
 Another example of supervised algorithms is regression algorithms. Ultimately, there are the following main supervised algorithms:
 
-    - Regression (linear and logistic)
-    - k-Nearest Neighbors (k-NNs)
-    - Support vector machines (SVMs)
-    - Decision trees and random forests
-    - Neural networks (NNs)
+   - Regression (linear and logistic)
+   - k-Nearest Neighbors (k-NNs)
+   - Support vector machines (SVMs)
+   - Decision trees and random forests
+   - Neural networks (NNs)
     
 
 ### Unsupervised learning
