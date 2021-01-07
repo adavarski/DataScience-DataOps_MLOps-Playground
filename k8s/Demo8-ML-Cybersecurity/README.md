@@ -982,8 +982,9 @@ Resampled dataset shape Counter({0: 900, 1: 900})
 
 -----------------
 
+Note: Develop a predictive model for credit card fraud detection, exploiting the IBM Cloud platform with IBM Watson Studio.
+
 IBM Fraud Detection notebook available at:   
 https://github.com/IBM/xgboost-smote-detect-fraud/blob/master/notebook/Fraud_Detection.ipynb   
 (Source code Released under apache version 2 license: http://www.apache.org/licenses/LICENSE-2.0.txt) 
-
 
