@@ -988,3 +988,38 @@ IBM Fraud Detection notebook available at:
 https://github.com/IBM/xgboost-smote-detect-fraud/blob/master/notebook/Fraud_Detection.ipynb   
 (Source code Released under apache version 2 license: http://www.apache.org/licenses/LICENSE-2.0.txt) 
 
+### GANs - Attacks and Defenses
+
+Generative adversarial networks (GANs) represent the most advanced example of neural networks that deep learning makes available to us in the context of cybersecurity. GANs can be used for legitimate purposes, such as authentication procedures, but they can also be exploited to violate these procedures. 
+
+In this chapter, we will look at the following topics:
+
+    The fundamental concepts of GANs and their use in attack and defense scenarios
+    The main libraries and tools for developing adversarial examples
+    Attacks against deep neural networks (DNNs) via model substitution
+    Attacks against intrusion detection systems (IDS) via GANs
+    Attacks against facial recognition procedures using adversarial examples
+
+
+GANs in a nutshell
+
+GANs were theorized in a famous paper that dates back to 2014 (https://arxiv.org/abs/1406.2661), written by a team of researchers including Ian Goodfellow and Yoshua Bengio, which described the potential and characteristics of a special category of adversarial processes, called GANs.
+
+The basic idea behind GANs is simple, as they consist of putting two neural networks in competition with one another, until a balanced condition of results is achieved; however at the same time, the possibilities of using these intuitions are almost unlimited, since GANs are able to learn how to imitate and artificially reproduce any data distribution, whether it represents faces, voices, texts, or even works of art.
+
+In this section, we will extend the use of GANs in the field of cybersecurity, learning how it is possible to use them to both carry out attacks (such as attacks against security procedures based on the recognition of biometric evidences) and to defend neural networks from attacks conducted through GANs. In order to fully understand the characteristics and potential of GANs, we need to introduce a number of fundamental concepts concerning neural networks (NNs) and deep learning (DL).
+
+
+Getting to know GANs
+
+We have said that the intuition on which GANs are based entails putting two NNs in competition with one another in order to improve the overall results. The term adversarial refers specifically to the fact that the two NNs compete between themselves in completing their respective tasks. The outcome of this competition is an overall result that cannot be further improved, thereby attaining an equilibrium condition.
+
+A typical example of using GANs is the implementation of a particular NN, called a generative network, with the task of creating an artificial image that simulates the characteristics of a real image. A second NN, called the discriminator network, is placed in competition with the first one (the generator) in order to distinguish the artificially simulated image from the real one.
+
+An interesting aspect is the fact that the two networks collaborate in achieving a situation of equilibrium (condition of indifference), putting in competition with one another the optimization of their respective objective functions. The generator network bases its optimization process on its ability to deceive the discriminator network.
+
+The discriminator network, in turn, carries out its optimization process, based on the accuracy achieved in distinguishing the real image from the artificially generated image from the generator network. 
+
+Examples:
+
+
