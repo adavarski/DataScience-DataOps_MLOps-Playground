@@ -777,6 +777,7 @@ The section features in our example consist of the values of network latency and
 
 For each example, the accuracy of the algorithm is calculated, in order to be able to make comparisons between the results obtained:
 
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/notebooks/Network_Anomaly_Detection.ipynb
 
 ####  Anomaly detection using the Gaussian distribution
 
@@ -791,4 +792,4 @@ Obviously, not all the phenomena under investigation can be represented by the G
 
 Therefore, we must see the characteristics of the Gaussian distribution in order to understand why it is frequently used.
 
-
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/notebooks/Gaussian_Network_Anomaly_Detection.ipynb
