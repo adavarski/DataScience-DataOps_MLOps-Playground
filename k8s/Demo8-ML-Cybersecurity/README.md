@@ -545,5 +545,37 @@ https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/
 https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/notebooks/Bayesian_Spam_Detector_with_Nltk.ipynb
 
 
+### Malware Threat Detection
+
+
+
+The high diffusion of malware and ransomware codes, together with the rapid polymorphic mutation in the different variants (polymorphic and metamorphic malware) of the same threats, has made traditional detection solutions based on signatures and hashing of image files obsolete, on which most common antivirus software is based.
+
+It is therefore increasingly necessary to resort to machine learning (ML) solutions that allow a rapid screening (triage) of threats, focusing attention on not wasting scarce resources such as a malware analyst's skills and efforts.
+
+This examples will cover the following topics:
+
+    - Introducing the malware analysis methodology
+    - How to tell different malware families apart
+    - Decision tree malware detectors
+    - Detecting metamorphic malware with Hidden Markov Models (HMMs)
+    - Advanced malware detection with deep learning
+
+
+Malware goes by many names
+
+There are many types of malware, and every day new forms of threat arise that creatively reutilize previous forms of attack, or adopt radically new compromising strategies that exploit specific characteristics of the target organization (in the case of Advanced Persistent Threats (APTs), these are tailored forms of attack that perfectly adapt themselves to the target victim). This is only limited to the imagination of the attacker.
+
+However, it is possible to compile a classification of the most common types of malware, in order to understand which are the most effective measures of prevention, and contrast their effectiveness for dealing with each malware species:
+
+    - Trojans: Executables that appear as legitimate and harmless, but once they are launched, they execute malicious instructions in the background
+    - Botnets: Malware that has the goal of compromising as many possible hosts of a network, in order to put their computational capacity at the service of the attacker
+    - Downloaders: Malware that downloads malicious libraries or portions of code from the network and executes them on victim hosts
+    - Rootkits: Malware that compromises the hosts at the operating system level and, therefore, often come in the form of device drivers, making the various countermeasures (such as antiviruses installed on the endpoints) ineffective
+    - Ransomwares: Malware that proceeds to encrypt files stored inside the host machines, asking for a ransom from the victim (often to be paid in Bitcoin) to obtain the decryption key which is used for recovering the original files
+    - APTs: APTs are forms of tailored attacks that exploit specific vulnerabilities on the victimized hosts
+    - Zero days (0 days): Malware that exploits vulnerabilities not yet disclosed to the community of researchers and analysts, whose characteristics and impacts in terms of security are not yet known, and therefore go undetected by antivirus software
+
+Obviously, these different types of threats can be amplified by the fact that they can mix together in the same malicious file (for example, a seemingly harmless Trojan becomes a real threat, as it behaves like a downloader once executed, connecting to the network and downloading malicious software, such as rootkits, which compromises the local network and turns it into a botnet).
 
 
