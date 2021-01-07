@@ -233,7 +233,7 @@ iris_df.head()
 iris_df.describe()
 ```
 
-Example python libraries notebook: 
+Example python libraries notebook: https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/notebooks/Python-libs-examples.ipynb
 
 
 
