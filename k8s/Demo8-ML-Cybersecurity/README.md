@@ -523,21 +523,27 @@ This example will cover the following topics:
     - How to detect spam with Perceptrons
     - Image spam detection with support vector machines (SVMs)
     - Phishing detection with logistic regression and decision trees
-    - Spam detection with Naive Bayes
-    - Spam detection adopting NLP
+    - Spam detection with Naive Bayes adopting NLP
 
 
 #### Detecting spam with linear classifiers
 
-#### Spam detection with SVMs
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/notebooks/Perceptron.ipynb
 
-####  Image spam detection with SVMs
+#### Spam detection with SVMs && Image spam detection with SVMs
+
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/notebooks/SVM.ipynb
+
 
 ####  Phishing detection with logistic regression and decision trees
 
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/notebooks/Logistic_Regression_Phishing_Detector.ipynb
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/notebooks/Decision_Tree_Phishing_Detector.ipynb
 
 
 ####  A Bayesian spam detector with NLTK
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/notebooks/Bayesian_Spam_Detector_with_Nltk.ipynb
+
 
 
 
