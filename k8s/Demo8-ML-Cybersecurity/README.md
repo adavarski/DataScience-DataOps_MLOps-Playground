@@ -830,3 +830,5 @@ Keystroke Dynamics - Benchmark Data Set:
 ```
 $ wget https://www.cs.cmu.edu/~keystroke/DSL-StrongPasswordData.csv (and put into Jupyter env directory: datasets)
 ```
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/notebooks/Keystroke_Detection.ipynb
+
