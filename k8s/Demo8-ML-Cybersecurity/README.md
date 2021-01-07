@@ -293,6 +293,73 @@ Python libraries for AI, in particular, to exploit the potential of deep learnin
    - PyTorch
 
 
+### Deep learning pros and cons for cybersecurity
+
+One of the distinctive features of deep learning, compared to other branches of AI, is the ability to exploit general-purpose algorithms, by leveraging neural networks. In this way, it is possible to face similar problems that entail several different application domains, by reusing common algorithms elaborated in different contexts.
+
+The deep learning approach exploits the possibility of neural networks (NNs) to add multiple processing layers, each layer having the task of executing different types of processing, sharing the results of the processing with the other layers.
+
+Within a neural network, at least one layer is hidden, thus simulating the behavior of human brain neurons.
+
+Among the most common uses of deep learning, are the following:
+
+    Speech recognition
+    Video anomaly detection
+    Natural language processing (NLP)
+
+These use cases are also of particular importance in the field of cybersecurity.
+
+For example, for biometric authentication procedures, which are increasingly carried out by resorting to deep learning algorithms, deep learning can also be used successfully in the detection of anomalous user behaviors, or in the abnormal use of payment instruments, such as credit cards, as part of fraud detection procedures.
+
+Another important use of deep learning is in the detection of possible malware or networking threats. Given the vast potential for using deep learning, it should not be surprising that even bad guys have begun to use it.
+
+In particular, the recent spread of evolved neural networks such as generative adversarial networks (GANs) is posing a serious challenge to traditional biometric authentication procedures, which resort to facial recognition or voice recognition. By using a GAN, it is, in fact, possible to generate artificial samples of biometric evidence, which are practically indistinguishable from the original ones.
+
+### TensorFlow
+
+The first deep learning library we will deal with is TensorFlow; in fact, it plays a special role, having been specifically developed to program deep neural network (DNN) models.
+
+Running a sample TensorFlow program as follows:
+```
+import tensorflow as tf
+hello = tf.constant('Hello, TensorFlow!')
+sess = tf.Session()
+print(sess.run(hello))
+```
+For further documentation, visit the TensorFlow website at https://www.tensorflow.org/.
+
+### Keras
+
+The other deep learning library we will use is keras.
+
+A characteristic of Keras is that it can be installed on top of TensorFlow, thus constituting a high-level interface (with respect to TensorFlow) for NN development. 
+
+For further documentation, visit the Keras website at https://keras.io/.
+
+### PyTorch
+
+The last example of a deep learning library we will examine here is pytorch.
+
+PyTorch is a project developed by Facebook, specially designed to perform large-scale image analysis. 
+
+
+Note: Python on steroids with parallel GPU
+
+To fully exploit the potential of some ML libraries, and especially DL, it is necessary to deploy dedicated hardware that includes the use of graphics processing units (GPUs) in addition to traditional CPUs. As current GPUs are, in fact, optimized to perform parallel calculations, this feature is very useful for the effective execution of many DL algorithms.
+
+Reference hardware equipment could be the following:
+
+    CPU Intel Core i5 6th Generation or higher (or AMD equivalent)
+    8 GB RAM as a minimum (16 GB or higher is recommended)
+    GPU  NVIDIA GeForce GTX 960 or higher (visit https://developer.nvidia.com/cuda-gpus for more info)
+    Linux operating system (for example Ubuntu)
+
+By leveraging the Numba compiler for example (provided by Anaconda), you can compile the Python code and run it on CUDA-capable GPUs.
+
+For further information, please refer to the website of your GPU manufacturer and the Numba documentation (https://numba.pydata.org/numba-doc/latest/user/index.html).
+
+
+
 ## Types of machine learning used with Cybersecurity           
 The process of mechanical learning from data can take different forms, with different characteristics and predictive abilities.In the case of ML (which, as we have seen, is a branch of research belonging to AI), it is common to distinguish between the following types of ML:
 - Supervised learning
