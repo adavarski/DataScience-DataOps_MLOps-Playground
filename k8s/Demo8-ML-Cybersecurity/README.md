@@ -41,11 +41,12 @@ $ kubectl logs jupyter-notebook
 ```
 Browse to http://jupyter.data.davar.com/lab
 
+Note: Examples from book "Hands-On Artificial Intelligence for Cybersecurity"
+
+
 ## Machine Learning Map
 
 <img src="https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/pictures/machine-learning-map.png" width="900">
-
-Note: Examples from book "Hands-On Artificial Intelligence for Cybersecurity"
 
 ## Getting to know Python's libraries
 
