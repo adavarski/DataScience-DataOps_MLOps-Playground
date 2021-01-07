@@ -53,7 +53,239 @@ Python libraries that are among the most well known and widespread in the field 
    - Seaborn
 
 
-### DL libraries
+
+### NumPy as an AI building block
+
+Of all the Python libraries dedicated to data science and AI, there is no doubt that NumPy holds a privileged place. Using the functionalities and APIs implemented by NumPy, it is possible to build algorithms and tools for ML from scratch.
+
+Of course, having specialized libraries available for AI (such as the scikit-learn library) accelerates the process of the development of AI and ML tools, but to fully appreciate the advantages deriving from the use of such higher-level libraries, it is useful to understand the building blocks on which they are built. This is why knowledge of the basic concepts of NumPy is helpful in this regard.
+
+
+NumPy multidimensional arrays
+
+NumPy was created to solve important scientific problems, which include linear algebra and matrix calculations. It offers a particularly optimized version, compared to the corresponding native versions of data structures offered by the Python language, such as lists of arrays and making multidimensional array objects, known as ndarrays, available. In fact, an object of the ndarray type allows the acceleration of operations to reach speeds of up to 25 times faster compared to traditional for loops, which is necessary to manage access to data stored in a traditional Python list.
+
+Moreover, NumPy allows the management of operations on matrices, which is particularly useful for the implementation of ML algorithms. Unlike ndarray objects, matrices are objects that can take only two dimensions and represent the main data structures used in linear algebra.
+
+Here are some examples of defining NumPy objects:
+```
+import numpy as np
+np_array = np.array( [0, 1, 2, 3] )
+
+# Creating an array with ten elements initialized as zero
+np_zero_array = np.zeros(10)
+```
+
+Matrix operations with NumPy
+
+As anticipated, matrices and the operations executed on them are of particular importance in the field of ML, and, more generally, they are used to conveniently represent the data to be fed to AI ​​algorithms.
+
+Matrices are particularly useful in the management and representation of large amounts of data.
+
+The notation itself is commonly used to identify the elements of a matrix, making use of positional indexes that allow the execution of consistent, rapid fashion operations, and calculations that concern either the whole matrix or just specific subsets. For example, the  element is easily identified within the matrix, crossing row  and column .
+
+A special matrix, consisting of only one row (and several columns) is identified as a vector. Vectors can be represented in Python as objects of a list type.
+
+However, the particular rules established by linear algebra should be taken into account when performing operations between matrices and vectors.
+
+The basic operations that can be performed on matrices are as follows:
+
+    Addition
+    Subtraction
+    Scalar multiplication (resulting in a constant value multiplied for each matrix element)
+
+If such operations on matrices are relatively simple to accomplish, and are required only as a necessary precondition that the matrices that add or subtract from each other are of the same size, then the result of the addition or subtraction of two matrices is a new matrix whose elements are the result of the sum of corresponding elements in row and column order.
+
+When dealing with the product operation between matrices or between vectors and matrices, the rules of linear algebra are partly different, since, for example, the commutative property is not applicable as it is in the case of the product of two scalars.
+
+In fact, while in the case of the product of two numbers among them, the order of factors does not change the result of multiplication (that is, 2 x 3 = 3 x 2), in the case of the product of two matrices, the order is important:
+```
+aX != Xa
+```
+Here, X represents a matrix and a represents a vector of coefficients. Moreover, it is not always possible to multiply two matrices, as in the case of two matrices with incompatible dimensions.
+
+For this reason, the numpy library provides the dot() function to calculate the product of two matrices between them (usable whenever this operation is possible):
+```
+import numpy as np
+a = np.array([-8, 15])
+X = np.array([[1, 5], 
+              
+              [3, 4],  
+              
+              [2, 3]])
+y = np.dot(X, a)
+```
+In the preceding example, we calculate the product between matrix X and vector a using the np.dot() function.
+
+This product is the expression of the model:
+```
+y = Xa
+```
+It represents one of the most basic models used in ML to associate a set of weights (a) to an input data matrix (X) in order to obtain the estimated values (y) as output.
+
+
+Implementing a simple predictor with NumPy
+
+To fully understand the use of the dot() method of NumPy in matrix multiplication operations, we can try to implement a simple predictor from scratch, to predict future values starting from a set of multiple inputs and on the basis of relative weights, using the product between matrices and vectors:
+
+```
+import numpy as np
+def predict(data, w):  
+     return data.dot(w)
+
+# w is the vector of weights
+w = np.array([0.1, 0.2, 0.3]) 
+
+# matrices as input datasets
+data1 = np.array([0.3, 1.5, 2.8]) 
+data2 = np.array([0.5, 0.4, 0.9]) 
+data3 = np.array([2.3, 3.1, 0.5])
+data_in = np.array([data1[0],data2[0],data3[0]]) 
+print('Predicted value: $%.2f' %  predict(data_in, w) )
+```
+
+
+
+### Scikit-learn
+
+One of the best and most used ML libraries is definitely the scikit-learn library. First developed in 2007, the scikit-learn library provides a series of models and algorithms that are easily reusable in the development of customized solutions, which makes use of the main predictive methods and strategies, including the following:
+
+    Classification
+    Regression
+    Dimensionality reduction
+    Clustering
+
+The list does not end here; in fact, scikit-learn also provides ready-to-use modules that allow the following tasks:
+
+    Data preprocessing
+    Feature extraction
+    Hyperparameter optimization
+    Model evaluation
+
+The particularity of scikit-learn is that it uses the numpy library in addition to the SciPy library for scientific computing. As we have seen, NumPy allows the optimization of calculation operations performed on large datasets, using multidimensional arrays and matrices.
+
+Among the advantages of scikit-learn, we must not forget that it provides developers with a very clean application programming interface (API), which makes the development of customized tools from the classes of the library relatively simple.
+
+As an example of using the predictive analytics templates available in scikit-learn, we will show how to perform a prediction on training data (stored in the X matrix) using the linear regression model, based on a y weight vector.
+
+Our goal will be to use the fit() and predict() methods implemented in the LinearRegression class:
+```
+import numpy as np
+from sklearn.linear_model import LinearRegression
+
+# X is a matrix that represents the training dataset
+
+# y is a vector of weights, to be associated with input dataset
+
+X = np.array([[3], [5], [7], [9], [11]]).reshape(-1, 1) 
+y = [8.0, 9.1, 10.3, 11.4, 12.6]  
+lreg_model = LinearRegression()  
+lreg_model.fit(X, y) 
+
+# New data (unseen before)
+new_data = np.array([[13]]) 
+print('Model Prediction for new data: $%.2f' 
+       %  lreg_model.predict(new_data)[0]  )
+```
+Upon execution, the script produces the following output:
+```
+Model Prediction for new data: $13.73
+```
+
+### Matplotlib and Seaborn
+
+One of the analytical tools used the most by analysts in AI and data science consists of the graphical representation of data. This allows a preliminary activity of data analysis known as exploratory data analysis (EDA). By means of EDA, it is possible to identify, from a simple visual survey of the data, the possibility of associating them with regularities or better predictive models than others.
+
+Among graphical libraries, without a doubt, the best known and most used is the matplotlib library, through which it is possible to create graphs and images of the data being analyzed in a very simple and intuitive way.
+
+Matplotlib is basically a data plotting tool inspired by MATLAB, and is similar to the ggplot tool used in R.
+
+In the following code, we show a simple example of using the matplotlib library, using the plot() method to plot input data obtained by the arange() method (array range) of the numpy library:
+
+```
+import numpy as np 
+import matplotlib.pyplot as plt  
+plt.plot(np.arange(15), np.arange(15))
+plt.show() 
+```
+
+In addition to the matplotlib library in Python, there is another well-known visualization tool among data scientists called Seaborn.
+
+Seaborn is an extension of Matplotlib, which makes various visualization tools available for data science, simplifying the analyst's task and relieving them of the task of having to program the graphical data representation tools from scratch, using the basic features offered by matplotlib and scikit-learn.
+
+### Pandas
+
+The last (but not least) among Python's most used libraries that we'll look at here, is the pandas package, which helps to simplify the ordinary activity of data cleaning (an activity that absorbs most of the analyst's time) in order to proceed with the subsequent data analysis phase.
+
+The implementation of pandas is very similar to that of the DataFrame package in R; DataFrame is nothing but a tabular structure used to store data in the form of a table, on which the columns represent the variables, while the rows represent the data itself.
+
+In the following example, we will show a typical use of a DataFrame, obtained as a result of the instantiation of the DataFrame class of pandas, which receives, as an input parameter, one of the datasets (the iris dataset) available in scikit-learn.
+
+After having instantiated the iris_df object of the  DataFrame type, the head() and describe() methods of the pandas library are invoked, which shows us the first five records of the dataset, respectively, and some of the main statistical measures calculated in the dataset:
+
+```
+import pandas as pd  
+from sklearn import datasets
+
+iris = datasets.load_iris()
+iris_df = pd.DataFrame(iris.data, columns = iris.feature_names)
+iris_df.head()
+iris_df.describe()
+```
+
+Example python libraries notebook: 
+
+
+
+## Python libraries for cybersecurity
+
+Python is not only one of the best languages for data science and AI, but also the language preferred by penetration testers and malware analysts (along with low-level languages, such as C and Assembly).
+
+In Python, there are an infinite number of libraries ready for use, which simplify the daily activities of researchers.
+
+Next, we will analyze some of the most common and the most used of them.
+
+
+### Pefile
+
+The Pefile library is very useful for analyzing Windows executable files, especially during the phases of static malware analysis, looking for possible indications of compromise or the presence of malicious code in executables. In fact, Pefile makes it very easy to analyze the Portable Executable (PE) file format, which represents the standard for the object files (contained or retrievable as libraries of external executable functions) on the Microsoft platform.
+
+So, not only the classic .exe files, but also the .dll libraries and .sys device drivers, follow the PE file format specification. The installation of the Pefile library is very simple; it is sufficient to use the pip command as used in the following example:
+
+```
+! pip install pefile
+```
+Once the installation is complete, we can test the library with a simple script such as the following, which loads the executable notepad.exe into runtime memory, and then extracts from its executable image some of the most relevant information saved in the relative PE file format fields:
+
+```
+import os
+import pefile
+notepad = pefile.PE("notepad.exe", fast_load=True)
+dbgRVA = notepad.OPTIONAL_HEADER.DATA_DIRECTORY[6].VirtualAddress
+imgver = notepad.OPTIONAL_HEADER.MajorImageVersion
+expRVA = notepad.OPTIONAL_HEADER.DATA_DIRECTORY[0].VirtualAddress
+iat = notepad.OPTIONAL_HEADER.DATA_DIRECTORY[12].VirtualAddress
+sections = notepad.FILE_HEADER.NumberOfSections
+dll = notepad.OPTIONAL_HEADER.DllCharacteristics
+print("Notepad PE info: \n")
+print ("Debug RVA: " + dbgRVA)
+print ("\nImage Version: " + imgver)
+print ("\nExport RVA: " + expRVA)
+print ("\nImport Address Table: " + iat)
+print ("\nNumber of Sections: " + sections)
+print ("\nDynamic linking libraries: " + dll)
+```
+
+### Volatility
+
+Another tool widely used by malware analysts is volatility, which allows the analysis of the runtime memory of an executable process, highlighting the presence of possible malware code.
+
+Volatility is a Python-programmable utility, which is often installed by default in distributions for malware analysis and pentesting, such as Kali Linux. Volatility allows the extraction of important information about processes (such as API hooks, network connections and kernel modules) directly from memory dumps, providing the analyst with a suite of programmable tools using Python.
+
+These tools allow the extraction from the memory dumps of all the processes running on the system and any relevant information about injected Dynamic-Link Libraries (DLLs), along with the presence of rootkits, or more generally, the presence of hidden processes within the runtime memory, which easily escapes the detection of common antivirus softwares.
+
+
+## Python DL libraries
 Python libraries for AI, in particular, to exploit the potential of deep learning. The libraries that are as follows:
 
    - TensorFlow
