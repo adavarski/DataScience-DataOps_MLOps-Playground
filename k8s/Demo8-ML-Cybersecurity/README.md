@@ -614,6 +614,8 @@ https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/
 
 #### Detecting metamorphic malware with Hidden Markov Models (HMMs)
 
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/notebooks/HMM.ipynb
+
 #### Advanced malware detection with deep learning (Convolutional Neural Networks :CNNs)
 
 
