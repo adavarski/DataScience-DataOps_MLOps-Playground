@@ -1,3 +1,46 @@
+### Jupyter environment
+
+Jupyter Notebooks are a browser-based (or web-based) IDE (integrated development environments)
+
+Build custom JupyterLab docker image and pushing it into DockerHub container registry.
+```
+$ cd ./jupyterlab
+$ docker build -t jupyterlab-eth .
+$ docker tag jupyterlab-eth:latest davarski/jupyterlab-eth:latest
+$ docker login 
+$ docker push davarski/jupyterlab-eth:latest
+
+```
+Run Jupyter Notebook inside k8s as pod:
+```
+$ cd ./k8s/
+$ sudo k3s crictl pull davarski/jupyterlab-eth:latest
+$ kubectl apply -f jupyter-notebook.pod.yaml -f jupyter-notebook.svc.yaml -f jupyter-notebook.ingress.yaml
+
+```
+Once the Pod is running, copy the generated token from the pod output logs.
+```
+$ kubectl logs jupyter-notebook
+[I 06:44:51.680 LabApp] Writing notebook server cookie secret to /home/jovyan/.local/share/jupyter/runtime/notebook_cookie_secret
+[I 06:44:51.904 LabApp] Loading IPython parallel extension
+[I 06:44:51.916 LabApp] JupyterLab extension loaded from /opt/conda/lib/python3.7/site-packages/jupyterlab
+[I 06:44:51.916 LabApp] JupyterLab application directory is /opt/conda/share/jupyter/lab
+[W 06:44:51.920 LabApp] JupyterLab server extension not enabled, manually loading...
+[I 06:44:51.929 LabApp] JupyterLab extension loaded from /opt/conda/lib/python3.7/site-packages/jupyterlab
+[I 06:44:51.929 LabApp] JupyterLab application directory is /opt/conda/share/jupyter/lab
+[I 06:44:51.930 LabApp] Serving notebooks from local directory: /home/jovyan
+[I 06:44:51.930 LabApp] The Jupyter Notebook is running at:
+[I 06:44:51.930 LabApp] http://(jupyter-notebook or 127.0.0.1):8888/?token=1efac938a73ef297729290af9b301e92755f5ffd7c72bbf8
+[I 06:44:51.930 LabApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 06:44:51.933 LabApp] 
+    
+    To access the notebook, open this file in a browser:
+        file:///home/jovyan/.local/share/jupyter/runtime/nbserver-1-open.html
+    Or copy and paste one of these URLs:
+        http://(jupyter-notebook or 127.0.0.1):8888/?token=1efac938a73ef297729290af9b301e92755f5ffd7c72bbf8
+```
+Browse to http://jupyter.data.davar.com/lab
+
 
 ## Getting to know Python's libraries
 
@@ -107,7 +150,7 @@ Also, the sources from which we draw our test cases (samples) are important. Thi
 To achieve such a result, we need to train our classification algorithm by providing it with a number of examples of executables that are considered malicious as an input dataset.
 
 
-Quantity versus quality
+### Quantity versus quality
 
 When it all boils down to quantity versus quality, we are immediately faced with the following two problems:
 
@@ -119,5 +162,26 @@ The answers to the two questions are closely related to the knowledge that the a
 All this could lead the analyst to believe that the creation of a honey-pot, which is useful for gathering malicious samples in the wild that will be fed to the algorithms as training samples, would be more representative of the level of risk to which the organization is exposed than the use of datasets as examples of generic threats. At the same time, the number of test examples to be submitted to the algorithm is determined by the characteristics of the data themselves. These can, in fact, present a prevalence of cases (skewness) of a certain type, to the detriment of other types, leading to a distortion in the predictions of the algorithm toward the classes that are most numerous, when in reality, the most relevant information for our investigation is represented by a class with a smaller number of cases.
 
 In conclusion, it will not be a matter of being able to simply choose the best algorithm for our goals (which often does not exist), but mainly to select the most representative cases (samples) to be submitted to a set of algorithms, which we will try to optimize based on the results obtained.
+
+### AI in the context of cybersecurity
+
+With the exponential increase in the spread of threats associated with the daily diffusion of new malware, it is practically impossible to think of dealing effectively with these threats using only analysis conducted by human operators. It is necessary to introduce algorithms that allow us to automate that introductory phase of analysis known as triage, that is to say, to conduct a preliminary screening of the threats to be submitted to the attention of the cybersecurity professionals, allowing us to respond in a timely and effective manner to ongoing attacks.
+
+We need to be able to respond in a dynamic fashion, adapting to the changes in the context related to the presence of unprecedented threats. This implies not only that the analysts manage the tools and methods of cybersecurity, but that they can also correctly interpret and evaluate the results offered by AI and ML algorithms.
+
+Cybersecurity professionals are therefore called to understand the logic of the algorithms, thus proceeding to the fine tuning of their learning phases, based on the results and objectives to be achieved.
+
+Some of the tasks related to the use of AI are as follows:
+
+    Classification: This is one of the main tasks in the framework of cybersecurity. It's used to properly identify types of similar attacks, such as different pieces of malware belonging to the same family, that is, having common characteristics and behavior, even if their signatures are distinct (just think of polymorphic malware). In the same way, it is important to be able to adequately classify emails, distinguishing spam from legitimate emails.
+    Clustering: Clustering is distinguished from classification by the ability to automatically identify the classes to which the samples belong when information about classes is not available in advance (this is a typical goal, as we have seen, of unsupervised learning). This task is of fundamental importance in malware analysis and forensic analysis.
+    Predictive analysis: By exploiting NNs and DL, it is possible to identify threats as they occur. To this end, a highly dynamic approach must be adopted, which allows algorithms to optimize their learning capabilities automatically.
+
+Possible uses of AI in cybersecurity are as follows:
+
+    Network protection: The use of ML allows the implementation of highly sophisticated intrusion detection systems (IDS), which are to be used in the network perimeter protection area.
+    Endpoint protection: Threats such as ransomware can be adequately detected by adopting algorithms that learn the behaviors that are typical of these types of malware, thus overcoming the limitations of traditional antivirus software.
+    Application security: Some of the most insidious types of attacks on web applications include Server Side Request Forgery (SSRF) attacks, SQL injection, Cross-Site Scripting (XSS), and Distributed Denial of Service (DDoS) attacks. These are all types of threats that can be adequately countered by using AI and ML tools and algorithms.
+    Suspect user behavior: Identifying attempts at fraud or compromising applications by malicious users at the very moment they occur is one of the emerging areas of application of DL.
 
 
