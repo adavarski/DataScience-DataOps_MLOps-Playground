@@ -547,19 +547,18 @@ https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/
 
 ### Malware Threat Detection
 
+This part will cover the following topics:
+
+    - How to tell different malware families apart
+    - Introducing the malware analysis methodology
+    - Decision tree malware detectors
+    - Detecting metamorphic malware with Hidden Markov Models (HMMs)
+    - Advanced malware detection with deep learning
 
 
 The high diffusion of malware and ransomware codes, together with the rapid polymorphic mutation in the different variants (polymorphic and metamorphic malware) of the same threats, has made traditional detection solutions based on signatures and hashing of image files obsolete, on which most common antivirus software is based.
 
 It is therefore increasingly necessary to resort to machine learning (ML) solutions that allow a rapid screening (triage) of threats, focusing attention on not wasting scarce resources such as a malware analyst's skills and efforts.
-
-This examples will cover the following topics:
-
-    - Introducing the malware analysis methodology
-    - How to tell different malware families apart
-    - Decision tree malware detectors
-    - Detecting metamorphic malware with Hidden Markov Models (HMMs)
-    - Advanced malware detection with deep learning
 
 
 #### Malware goes by many names
@@ -613,7 +612,31 @@ https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/
 
 https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/notebooks/K-means_malware_clustering.ipynb
 
+#### Detecting metamorphic malware with Hidden Markov Models (HMMs)
 
+#### Advanced malware detection with deep learning (Convolutional Neural Networks :CNNs)
+
+
+Detecting malware from images with CNNs
+
+A tool was developed that leverages CNNs to recognize and classify the images that represent malware codes.
+
+The tool can be downloaded from the GitHub repository, by executing the following command:
+```
+git clone https://github.com/AFAgarap/malware-classification.git/
+```
+Inside the archive, there is also a dataset of images of malware codes (malimg.npz). To convert your malware codes to grayscale images, you can also use the Python script developed by Chiheb Chebbi, which is available at https://github.com/PacktPublishing/Mastering-Machine-Learning-for-Penetration-Testing/blob/master/Chapter04/MalwareConvert.py.
+
+We show some examples of the tool's usage as follows:
+```
+Usage: main.py [-h] -m MODEL -d DATASET -n NUM_EPOCHS -c PENALTY_PARAMETER -k CHECKPOINT_PATH -l LOG_PATH -r RESULT_PATH
+```
+To use the CNN-SVM model, set the -model parameter to 1, as in the following example:
+```
+main.py –model 1 –dataset ./dataset/malimg.npz –num_epochs 100 –penalty_parameter 10 -c ./checkpoint/ -l ./logs/ -r ./results/
+```
+
+### Network Anomaly Detection with AI
 
 
 
