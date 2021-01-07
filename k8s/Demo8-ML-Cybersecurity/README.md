@@ -526,86 +526,14 @@ This example will cover the following topics:
     - Spam detection with Naive Bayes
     - Spam detection adopting NLP
 
-#### Detecting spam with Perceptrons
-
-One of the first concrete and successful applications of AI in the field of cybersecurity was spam detection, and one of the most famous open source tools is SpamAssassin.
-
-The strategies that can be implemented for effective spam detection are different, as we will see in the course of the example, but the most common and simpler one uses Neural Networks (NNs) in the most basic form; that is, the Perceptron.
-
-Spam detection also provides us with the opportunity to introduce theoretical concepts related to NNs in a gradual and accessible way, starting with the Perceptron.
-
-
-Meet NNs at their purest – the Perceptron
-
-The peculiar characteristic that unites all NNs (regardless of their implementation complexity) is that they conceptually mimic the behavior of the human brain. The most basic structure we encounter when we analyze the behavior of the brain, is undoubtedly the neuron.
-
-The Perceptron is one of the first successful implementations of a neuron in the field of Artificial Intelligence (AI). Just like a neuron in the human brain, it is characterized by a layered structure, aimed at associating a result in output to certain input levels, as shown in the following diagram:
-
-In the same way, the artificial representation of the neuron implemented through the Perceptron model is structured in such a way as to associate a given output value to one or more levels of input data:
-
-The mechanism that transforms the input data into an output value is implemented by making use of an appropriate weighing of the values of an input, which are synthesized and forwarded to an activation function, which, when exceeding a certain threshold, produces a value of output that is forwarded to the remaining components of the NN.
-
-
-It's all about finding the right weight!
-
-One of the differences in the approach between the statistical models and the AI algorithms is that the algorithms implement an optimization strategy based on the iteration. At each iteration, in fact, the algorithm tries to adjust its own estimate of the values, attributing to them a greater or lesser weight depending on the cost function that we must minimize. One of the aims of the algorithm is to identify precisely an optimal weight vector to be applied to the estimated values in order to obtain reliable future predictions on unknown future data.
-
-To fully understand the power of AI algorithms applied to spam detection, we must first clarify the ideas on which tasks we should perform a spam filter.
-
-
-
-Spam filters in a nutshell
-
- To understand the tasks performed by a spam filter, let's look at an example. Imagine separating the emails we receive, categorizing them based on the presence or the absence of particular keywords occurring within the text of the emails with a certain frequency. To this end, we could list all the messages we receive in our inbox within a table. But how will we proceed with classifying our messages as ham or spam?
-
-As we said, we will look for the number of occurrences of the suspicious keywords within the text of the email messages. We will then assign a score to the individual messages identified as spam, based on the number of occurrences of identified keywords. This score will also provide us with a reference to classify subsequent email messages.
-
-We will identify a threshold value that allows us to separate spam messages. If the calculated score exceeds the threshold value, the email will automatically be classified as spam; otherwise, it will be accepted as a legitimate message, and thus classified as ham. This threshold value (as well as the assigned scores) will be constantly redetermined to take into account the new series of spam messages that we will meet in the future.
-
-Even from the abstract description of our spam detection algorithm, we notice some important features that must be kept in mind: we must proceed to identify a certain number of suspicious keywords that allow us to classify the messages as potential spam emails, assigning to each email a score based on the number of occurrences of identified keywords.
-
-We need to set a threshold value for the score assigned to the individual emails above which the emails will automatically be classified as spam. We must also correctly weigh the significance of the keywords present in the text of the emails in order to adequately represent the degree of probability that the message that contains them represents spam (the keywords, in fact, taken individually, could even be harmless, but put together, they are more likely to represent junk mail).
-
-We must consider that the spammers are well aware of our attempt to filter unwanted messages, and therefore they'll try their best to adopt new strategies to deceive us and our spam filters. This translates into a process of continuous and iterative learning, which lends itself well to being implemented using an AI algorithm.
-
-From what we have said, it is clear that it is no coincidence that spam detection represents a first test in the adoption of AI in the cybersecurity field. The first spam detection solution, in fact, made use of static rules, using regular expressions to identify predefined patterns of suspicious words in the email text.
-
-These static rules quickly proved to be ineffective as a result of the ever-new deception strategies implemented by spammers to deceive the anti-spam filters. It was therefore necessary to adopt a dynamic approach, which allowed the spam filter to learn based on the continuous innovations introduced by spammers, also taking advantage of the decisions made by the user in classifying their emails. This way, it was possible to effectively manage the explosive spread of the spam phenomenon.
-
-
-Spam filters in action
-
-How does an anti-spam algorithm actually behave in the classification of emails? First of all, let's classify the emails based on suspicious keywords. Let's imagine, for the sake of simplicity, that the list of the most representative suspicious keywords is thus reduced to only two words: buy and sex.
-
-At this point, we will classify the email messages within a table, showing the number of occurrences of the individual keywords identified within the text of the emails, indicating the messages as spam or ham:
-
-At this point, we will assign a score to every single email message.
-
-This score will be calculated using a scoring function that takes into account the number of occurrences of suspicious keywords contained within the text.
-
-A possible scoring function could be the sum of the occurrences of our two keywords, represented in this case by the B variable instead of the word buy, and the S variable instead of the word sex.
-
-The scoring function therefore becomes the following:
-
-""
-
-We can also attribute different weights to the representative variables of the respective keywords, based on the fact that, for example, the keyword sex contained within the message is indicative of a greater probability of spam than the word buy.
-
-It is clear that if both words are present in the text of the email, the probability of it being spam increases. Therefore, we will attribute a lower weight of 2 to the B variable and a greater weight of 3 to the S variable.
-
-Our scoring function, corrected with the relative weights assigned to the variables/keywords, therefore becomes the following:
-
-Now let's try to reclassify our emails, calculating the relative scores with our scoring function:
-
-At this point, we must try to identify a threshold value that effectively separates spam from ham. Indeed, a threshold value between 4 and 5 allows us to properly separate the spam from the ham. In other words, in the event that a new email message scores a value equal to or greater than 4, we would most likely be faced with spam rather than ham.
-
-How can we effectively translate the concepts we have just seen into mathematical formulas that can be used in our algorithms?
-
-To this end, linear algebra (as we mentioned in Chapter 2, Setting Your AI for Cybersecurity Arsenal, when we talked about the matrix implementation offered by the numpy library) comes to our aid.
-
-We will discuss further the implementation of Perceptrons, but first, we will introduce the concept of a linear classifier, useful for mathematically representing the task performed by a common spam detection algorithm.
-
 
 ##### Detecting spam with linear classifiers
+
+
+
+##### Spam detection with SVMs
+
+
+
 
 
