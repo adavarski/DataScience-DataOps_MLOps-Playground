@@ -89,6 +89,11 @@ Another example of supervised algorithms is regression algorithms. Ultimately, t
    - Decision trees and random forests
    - Neural networks (NNs)
     
+Example notebooks: 
+
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/notebooks/Supervised-learning-example%20_%20linear_regression.ipynb
+
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/notebooks/Simple-Neural%20Network-example_perceptron.ipynb
 
 ### Unsupervised learning
 
@@ -103,6 +108,7 @@ Here are some examples of unsupervised algorithms:
        - k-means
        - Hierarchical cluster analysis (HCA)
 
+Example: https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/notebooks/Unsupervised-learning-example_clustering.ipynb
 
 ### Reinforcement learning
 
@@ -114,7 +120,7 @@ Given its dynamic nature, it is no coincidence that RL is more similar to the ge
 
 The following are some examples of RL algorithms:
 
-   - Markov process
+   -  Markov process
    -  Q-learning
    -  Temporal difference (TD) methods
    -  Monte Carlo methods
