@@ -527,13 +527,17 @@ This example will cover the following topics:
     - Spam detection adopting NLP
 
 
-##### Detecting spam with linear classifiers
+#### Detecting spam with linear classifiers
+
+#### Spam detection with SVMs
+
+####  Image spam detection with SVMs
+
+####  Phishing detection with logistic regression and decision trees
 
 
 
-##### Spam detection with SVMs
-
-
+####  A Bayesian spam detector with NLTK
 
 
 
