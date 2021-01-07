@@ -1021,5 +1021,8 @@ An interesting aspect is the fact that the two networks collaborate in achieving
 The discriminator network, in turn, carries out its optimization process, based on the accuracy achieved in distinguishing the real image from the artificially generated image from the generator network. 
 
 Examples:
+```
+cd ./GANs/
+```
 
 
