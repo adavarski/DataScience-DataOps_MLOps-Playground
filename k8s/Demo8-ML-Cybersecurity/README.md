@@ -1,4 +1,4 @@
-### Jupyter environment
+## Jupyter environment
 
 Jupyter Notebooks are a browser-based (or web-based) IDE (integrated development environments)
 
