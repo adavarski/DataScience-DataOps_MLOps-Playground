@@ -1238,3 +1238,22 @@ X_train, X_test, y_train, y_test = X[train], X[test], y[train], y[test]
 
 #### Assessing Your AI Arsenal
 
+
+In addition to evaluating the effectiveness of their algorithms, it is also important to know the techniques that attackers exploit to evade Our AI-empowered tools. Only in this way is it possible to gain a realistic idea of the effectiveness and reliability of the solutions adopted. Also, the aspects related to the scalability of the solutions must be taken into consideration, along with their continuous monitoring, in order to guarantee reliability.
+
+In this section, we will learn about the following:
+
+    - How attackers leverage Artificial Intelligence (AI) to evade Machine Learning (ML) anomaly detectors
+    - The challenges we face when implementing ML anomaly detection
+    - How to test our solutions for data and model quality
+    - How to ensure security and reliability of our AI solutions for cybersecurity
+
+
+
+Note: We dealt with the assessment of our AI-based cybersecurity solutions, analyzing the aspects of security, data, and model quality, in order to guarantee the reliability and high availability of solutions deployed in production environments, without neglecting the requirements of privacy and confidentiality of the sensitive data used by algorithms.
+
+Examples: 
+
+```
+cd ./additional
+```
