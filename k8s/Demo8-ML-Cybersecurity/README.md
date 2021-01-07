@@ -603,9 +603,16 @@ These detection activities can be easily automated by using specific algorithms,
 
 #### Random Forest Malware Classifier
 
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/notebooks/Random_Forest_Malware_Classifier.ipynb
+
 #### Decision Tree Malware Detector
 
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/notebooks/Decision_Tree_Malware_Detector.ipynb
+
 #### K-means malware clustering
+
+https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/notebooks/K-means_malware_clustering.ipynb
+
 
 
 
