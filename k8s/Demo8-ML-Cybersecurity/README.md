@@ -832,3 +832,41 @@ $ wget https://www.cs.cmu.edu/~keystroke/DSL-StrongPasswordData.csv (and put int
 ```
 https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/blob/main/k8s/Demo8-ML-Cybersecurity/notebooks/Keystroke_Detection.ipynb
 
+
+### Fraud Prevention with Cloud AI Solutions
+
+
+Fraud Prevention with Cloud AI Solutions
+
+The objective of many security attacks and data breaches that corporations suffer from is the violation of sensitive information, such as customers' credit card details. Such attacks are often conducted in stealth mode, and so it is difficult to detect such threats using traditional methods. In addition, the amount of data to be monitored often assumes dimensions that cannot be effectively analyzed with just traditional extract, transform, and load (ETL) procedures that are executed on relational databases, which is why it is important to adopt artificial intelligence (AI) solutions that are scalable. By doing this, companies can take advantage of cloud architectures in order to manage big data and leverage predictive analytics methodology.
+
+Credit card fraud represents an important test for the application of AI solutions in the field of cybersecurity since it requires the development of predictive analytics models that exploit big data analytics through the use of cloud computing platforms.
+
+In this section, we will learn about the following topics:
+
+    - How to leverage machine learning (ML) algorithms for fraud detection
+    - How bagging and boosting techniques can improve an algorithm's effectiveness
+    - How to analyze data with IBM Watson and Jupyter Notebook
+    - How to resort to statistical metrics for results evaluation
+    
+    
+    
+
+Download the 'creditcard' dataset in .csv format from the following link:
+https://www.openml.org/data/get_csv/1673544/phpKo8OWT
+
+Dataset License: https://www.openml.org/d/1597
+(PUBLIC DOMAIN: https://creativecommons.org/publicdomain/mark/1.0/)
+
+Dataset Credits:
+Author: Andrea Dal Pozzolo, Olivier Caelen and Gianluca Bontempi
+Source: Credit card fraud detection - Date 25th of June 2015
+Please cite: Andrea Dal Pozzolo, Olivier Caelen, Reid A. Johnson and Gianluca Bontempi. 
+Calibrating Probability with Undersampling for Unbalanced Classification. 
+In Symposium on Computational Intelligence and Data Mining (CIDM), IEEE, 2015
+
+```
+$ wget https://www.openml.org/data/get_csv/1673544/phpKo8OWT
+# Put file into jupyter dataset folder
+```
+
