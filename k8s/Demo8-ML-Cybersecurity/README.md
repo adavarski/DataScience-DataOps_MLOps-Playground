@@ -343,7 +343,21 @@ The last example of a deep learning library we will examine here is pytorch.
 PyTorch is a project developed by Facebook, specially designed to perform large-scale image analysis. 
 
 
-Note: Python on steroids with parallel GPU
+Note1:PyTorch versus TensorFlow
+
+To compare both of the learning libraries, it should be noted that PyTorch is the most optimized solution for performing tensor calculus tasks on GPUs, as it has been specifically designed to improve performance in large-scale contexts.
+
+Some of the most common use cases for using PyTorch are as follows:
+
+    NLP
+    Large-scale image processing
+    Social media analysis
+
+However, when compared only on the basis of performance, both PyTorch and TensorFlow are excellent choices; there are other characteristics that could make you lean toward one solution or the other.
+
+For example, in TensorFlow, the debugging of programs is more complex than in PyTorch. This is because, in TensorFlow, development is more cumbersome (having to define tensors, initialize a session, keep track of tensors during the session, and so on), while the deployment of the TensorFlow model is certainly preferred.
+
+Note2: Python on steroids with parallel GPU
 
 To fully exploit the potential of some ML libraries, and especially DL, it is necessary to deploy dedicated hardware that includes the use of graphics processing units (GPUs) in addition to traditional CPUs. As current GPUs are, in fact, optimized to perform parallel calculations, this feature is very useful for the effective execution of many DL algorithms.
 
