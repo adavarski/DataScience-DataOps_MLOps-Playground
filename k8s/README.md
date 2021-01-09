@@ -1052,6 +1052,8 @@ Fix k3s CoreDNS for local development to use local DNS server if needed.
 
 ## Demo7: [SaaS deploy with IAM:Keycloak + JupyterHUB/JupyterLAB](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo7-SaaS)
 
+## Demo8: [ML/DeepML for Cybersecurity ](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo8-ML-Cybersecurity)
+
 ## Clean environment
 
 ```
