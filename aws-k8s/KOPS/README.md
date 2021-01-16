@@ -1207,7 +1207,7 @@ Deleted cluster: "saas.k8s.local"
 
 and verify that the cluster has been terminated in your EC2. And remember, your cluster state is stored in the S3 bucket that you created! 
 
-Delete S3 bucket via aws cli. 
+Delete S3 bucket via aws cli or AWS console.
 
 ```
 $ aws s3 rm s3://k8s-saas-kops-state-dev/ --recursive
