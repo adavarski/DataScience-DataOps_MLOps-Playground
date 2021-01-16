@@ -192,4 +192,8 @@ When you are finished, go ahead and bring it down to save your free tier compute
 ```
 kops delete cluster saas.k8s.local --yes
 ```
-and verify that the cluster has been terminated in your EC2. And remember, your cluster state is stored in the S3 bucket that you created!
+and verify that the cluster has been terminated in your EC2. And remember, your cluster state is stored in the S3 bucket that you created! (so delete S3 bucket too)
+```
+$ aws s3 rm s3://k8s-saas-kops-state-dev/ --recursive
+$ aws s3api delete-bucket --bucket k8s-saas-kops-state-dev --region us-east-1
+```
