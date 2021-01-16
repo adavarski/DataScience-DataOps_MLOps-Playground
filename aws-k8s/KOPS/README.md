@@ -1220,3 +1220,183 @@ https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LoadBalancers:
 https://console.aws.amazon.com/iam/home?region=us-east-1#/home
 https://console.aws.amazon.com/iam/home?region=us-east-1#/roles
 https://s3.console.aws.amazon.com/s3/home?region=us-east-1
+
+
+
+mini-HOWTO: Using Terraform (Ref: https://github.com/kubernetes/kops/blob/master/docs/terraform.md)
+
+```
+------------------------kops edit cluster saas.k8s.local
+
+
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: kops.k8s.io/v1alpha2
+kind: Cluster
+metadata:
+  creationTimestamp: "2021-01-16T08:03:50Z"
+  name: saas.k8s.local
+spec:
+  api:
+    loadBalancer:
+      type: Public
+  authorization:
+    rbac: {}
+  channel: stable
+  cloudProvider: aws
+  configBase: s3://k8s-saas-kops-state-dev/saas.k8s.local
+  containerRuntime: docker
+  etcdClusters:
+  - cpuRequest: 200m
+    etcdMembers:
+    - instanceGroup: master-us-east-1a
+      name: a
+    memoryRequest: 100Mi
+    name: main
+  - cpuRequest: 100m
+    etcdMembers:
+    - instanceGroup: master-us-east-1a
+      name: a
+    memoryRequest: 100Mi
+    name: events
+  iam:
+    allowContainerRegistry: true
+    legacy: false
+  kubelet:
+    anonymousAuth: false
+  kubernetesApiAccess:
+  - 0.0.0.0/0
+  kubernetesVersion: 1.18.14
+  masterInternalName: api.internal.saas.k8s.local
+  masterPublicName: api.saas.k8s.local
+  networkCIDR: 172.20.0.0/16
+  networking:
+    kubenet: {}
+  nonMasqueradeCIDR: 100.64.0.0/10
+  sshAccess:
+  - 0.0.0.0/0
+  subnets:
+  - cidr: 172.20.32.0/19
+    name: us-east-1a
+    type: Public
+    zone: us-east-1a
+  topology:
+    dns:
+      type: Public
+    masters: public
+    nodes: public
+
+------------------kops edit ig --name=saas.k8s.local nodes
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: "2021-01-16T08:03:51Z"
+  labels:
+    kops.k8s.io/cluster: saas.k8s.local
+  name: nodes
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20201112.1
+  machineType: t2.micro
+  maxSize: 3
+  minSize: 3
+  nodeLabels:
+    kops.k8s.io/instancegroup: nodes
+  role: Node
+  subnets:
+  - us-east-1a
+
+-------------kops edit ig --name=saas.k8s.local master-us-east-1a
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: "2021-01-16T08:03:51Z"
+  labels:
+    kops.k8s.io/cluster: saas.k8s.local
+  name: master-us-east-1a
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20201112.1
+  machineType: t2.micro
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: master-us-east-1a
+  role: Master
+  subnets:
+  - us-east-1a
+--------------------------
+```
+
+Set up remote state
+
+You could keep your Terraform state locally, but we strongly recommend saving it on S3 with versioning turned on that bucket. 
+Configure a remote S3 store with a setting like below:
+```
+terraform {
+  backend "s3" {
+    bucket = "mybucket"
+    key    = "path/to/my/key"
+    region = "us-east-1"
+  }
+}
+```
+
+earn more about Terraform state. 
+
+Initialize/create a cluster
+
+For example, a complete setup might be:
+```
+$ kops create cluster \
+  --name=kubernetes.mydomain.com \
+  --state=s3://mycompany.kubernetes \
+  --dns-zone=kubernetes.mydomain.com \
+  [... your other options ...]
+  --out=. \
+  --target=terraform
+```
+Example: 
+```
+kops create cluster --name="saas.k8s.local" --zones="us-east-1a" --master-size="t2.micro" --node-size="t2.micro" --node-count="3" --ssh-public-key="~/.ssh/k8s-saas.pub" --out=. --target=terraform
+```
+Initialize Terraform to set-up the S3 backend and provider plugins.
+```
+$ terraform init
+$ terraform plan
+$ terraform apply
+```
+Editing the cluster
+
+It's possible to use Terraform to make changes to your infrastructure as defined by kOps. In the example below we'd like to change some cluster configs:
+```
+$ kops edit cluster \
+  --name=kubernetes.mydomain.com \
+  --state=s3://mycompany.kubernetes
+
+# editor opens, make your changes ...
+$ kops update cluster \
+  --name=kubernetes.mydomain.com \
+  --state=s3://mycompany.kubernetes \
+  --out=. \
+  --target=terraform
+```
+Then apply your changes after previewing what changes will be applied:
+```
+$ terraform plan
+$ terraform apply
+```
+Teardown the cluster
+
+When you eventually terraform destroy the cluster, you should still run kops delete cluster, to remove the kOps cluster specification and any dynamically created Kubernetes resources (ELBs or volumes). To do this, run:
+```
+$ terraform plan -destroy
+$ terraform destroy
+$ kops delete cluster --yes \
+  --name=kubernetes.mydomain.com \
+  --state=s3://mycompany.kubernetes
+```
+Ps: You don't have to kops delete cluster if you just want to recreate from scratch. Deleting kOps cluster state means that you've have to kops create again.
+
+HOWTO: Using Terraform (Ref: https://github.com/kubernetes/kops/blob/master/docs/terraform.md)
+
