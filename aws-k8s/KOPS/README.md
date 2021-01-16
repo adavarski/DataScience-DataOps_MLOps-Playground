@@ -1220,10 +1220,11 @@ https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LoadBalancers:
 https://console.aws.amazon.com/iam/home?region=us-east-1#/home
 https://console.aws.amazon.com/iam/home?region=us-east-1#/roles
 https://s3.console.aws.amazon.com/s3/home?region=us-east-1
+etc.
 
 
 
-mini-HOWTO: Using Terraform (Ref: https://github.com/kubernetes/kops/blob/master/docs/terraform.md)
+## mini-HOWTO: Using Terraform (Ref: https://github.com/kubernetes/kops/blob/master/docs/terraform.md)
 
 ```
 ------------------------kops edit cluster saas.k8s.local
@@ -1398,5 +1399,5 @@ $ kops delete cluster --yes \
 ```
 Ps: You don't have to kops delete cluster if you just want to recreate from scratch. Deleting kOps cluster state means that you've have to kops create again.
 
-HOWTO: Using Terraform (Ref: https://github.com/kubernetes/kops/blob/master/docs/terraform.md)
+## mini-HOWTO: Using Terraform (Ref: https://github.com/kubernetes/kops/blob/master/docs/terraform.md)
 
