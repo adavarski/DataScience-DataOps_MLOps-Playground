@@ -131,6 +131,8 @@ kops create cluster \
              --ssh-public-key="~/.ssh/k8s-saas.pub"
 ```
 
+Warning: Yes this is free tier, but make sure you setup billing alerts and remember to tear down your cluster when you are not practicing. This will absolutely burn through the free tier compute limit after a day or two of running
+
 Example Outout:
 
 ```
@@ -187,6 +189,7 @@ kubectl get nodes
 You should be able to see the nodes you just created.
 
 You can now use this cluster to try things out, but again, i'd recommend k3s/minikube for testing. This is a good piece of knowledge to have in your professional tool belt.
+
 
 When you are finished, go ahead and bring it down to save your free tier compute hours:
 ```
