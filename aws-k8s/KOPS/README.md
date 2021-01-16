@@ -1,4 +1,12 @@
-Created a new IAM user called k8s-saas with a new group that has access to AmazonEC2FullAccess, IAMFullAccess, AmazonS3FullAccess, and AmazonVPCFullAccess.
+Install/configure awscli
+
+```
+apt install -y python3-pip
+pip3 install awscli
+aws configure (or export AWS_ACCESS_KEY_ID= ; export AWS_SECRET_ACCESS_KEY=; export AWS_DEFAULT_REGION=us-east-1)
+```
+
+Created a new IAM user called k8s-saas with a new group (k8s-saas) that has access to AmazonEC2FullAccess, IAMFullAccess, AmazonS3FullAccess, and AmazonVPCFullAccess.
 
 ```
 AmazonEC2FullAccess
@@ -6,13 +14,6 @@ AmazonRoute53FullAccess
 AmazonS3FullAccess
 IAMFullAccess
 AmazonVPCFullAccess
-```
-
-# Install/configure awscli
-```
-apt install -y python3-pip
-pip3 install awscli
-aws configure (or export AWS_ACCESS_KEY_ID= ; export AWS_SECRET_ACCESS_KEY=; export AWS_DEFAULT_REGION=us-east-1)
 ```
 
 Create kops user using aws cli:
@@ -33,15 +34,28 @@ aws iam create-access-key --user-name k8s-saas
 
 Grab access and secrets keys (from previous JSON output for example) and configure your k8s-saas profile with: 
 ```
-aws configure (or edit ~/.aws/c* files)
+aws configure (or edit ~/.aws/credentials & ~/.aws/config  files)
 ```
-You can check those creds at
+You can check those creds at:
 ```
-cat ~/.aws/credentials
-```
-Next, let's create the s3 bucket with versioning that we need for our kube state (us-east-1). I will call mine k8s-saas-kops-state-dev. Make sure you turn on versioning.
+$ cat ~/.aws/credentials 
+[default]
+aws_access_key_id = 
+aws_secret_access_key = 
+[k8s-saas]
+aws_access_key_id = 
+aws_secret_access_key = 
 
-using aws cli:
+$ cat ~/.aws/config 
+cat: cat: No such file or directory
+[default]
+region = us-east-2
+[k8s-saas]
+region = us-east-1
+```
+Next, let's create the s3 bucket with versioning that we need for our kube state (us-east-1). I will call it `k8s-saas-kops-state-dev`. Make sure you turn on versioning.
+
+Create S3 bucket using aws cli:
 
 ```
 aws s3api create-bucket --bucket k8s-saas-kops-state-dev --region us-east-1 
@@ -58,9 +72,9 @@ sudo mv kops-linux-amd64 /usr/local/bin/kops
 ```
 For other operating systems see their documentation.
 
-Note: What is kOps? We like to think of it as kubectl for clusters. kops helps you create, destroy, upgrade and maintain production-grade, highly available, Kubernetes clusters from the command line. AWS (Amazon Web Services) is currently officially supported, with GCE and OpenStack in beta support, and VMware vSphere in alpha, and other platforms planned.
+Note: What is KOPS? We like to think of it as kubectl for clusters. kops helps you create, destroy, upgrade and maintain production-grade, highly available, Kubernetes clusters from the command line. AWS (Amazon Web Services) is currently officially supported, with GCE and OpenStack in beta support, and VMware vSphere in alpha, and other platforms planned.
 
-Features
+KOPS Features
 
     Automates the provisioning of Kubernetes clusters in AWS and GCE
     Deploys Highly Available (HA) Kubernetes Masters
@@ -96,14 +110,15 @@ export AWS_SECRET_ACCESS_KEY=$(aws configure get k8s-saas.aws_secret_access_key)
 export KOPS_STATE_STORE=s3://k8s-saas-kops-state-dev
 ```
 Once we have done that, let's run kops in the command line to create a master and 3 nodes.(I named mine saas.k8s.local):
-note: I create a new ssh key called k8s-saas with
+note: Create a new ssh key called k8s-saas with `ssh-keygen`
 ```
-ssh-keygen
 
-$ ls -al /home/davar/.ssh/k8s-saas*
+
+$ ls  ~/.ssh/k8s-saas*
 -rw------- 1 davar davar 1679 Jan 16 09:53 /home/davar/.ssh/k8s-saas
 -rw-r--r-- 1 davar davar  394 Jan 16 09:53 /home/davar/.ssh/k8s-saas.pub
 ```
+Create k8s cluster with kops:
 
 ```
 kops create cluster \
@@ -131,16 +146,16 @@ Suggestions:
 
 Finally configure your cluster with: kops update cluster --name saas.k8s.local --yes
 
-
 ```
 check:
+
 ```
 $ kops get cluster
 NAME		CLOUD	ZONES
 saas.k8s.local	aws	us-east-1a
 ```
 
-All configuration is @S3
+All configuration and your cluster state is stored in the S3 bucket that you created:
 ```
 $ aws s3 ls s3://k8s-saas-kops-state-dev/saas.k8s.local/
                            PRE instancegroup/
@@ -148,6 +163,7 @@ $ aws s3 ls s3://k8s-saas-kops-state-dev/saas.k8s.local/
 2021-01-16 10:03:53       5191 cluster.spec
 2021-01-16 10:03:52       1101 config
 ```
+Create k8s cluster with kops (final step: --yes):
 
 ```
 kops update cluster --name saas.k8s.local --yes
@@ -155,11 +171,11 @@ kops update cluster --name saas.k8s.local --yes
 
 If you get any errors, try running:
 ```
-kops update
+kops update cluster --name saas.k8s.local
 ```
 and to validate:
 ```
-kops validate
+kops validate cluster --name saas.k8s.local
 ```
 Once this cluster is complete, you should be able to see it in your EC2 Dashboard. It will also save your configuration to .kube/ in you home directory.
 
