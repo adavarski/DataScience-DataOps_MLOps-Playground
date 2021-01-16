@@ -1,4 +1,4 @@
-Install/configure awscli
+### Install/configure awscli
 
 ```
 apt install -y python3-pip
@@ -6,7 +6,7 @@ pip3 install awscli
 aws configure (or export AWS_ACCESS_KEY_ID= ; export AWS_SECRET_ACCESS_KEY=; export AWS_DEFAULT_REGION=us-east-1)
 ```
 
-Created a new IAM user called k8s-saas with a new group (k8s-saas) that has access to AmazonEC2FullAccess, IAMFullAccess, AmazonS3FullAccess, and AmazonVPCFullAccess.
+### Created a new IAM user called k8s-saas with a new group (k8s-saas) that has access to AmazonEC2FullAccess, IAMFullAccess, AmazonS3FullAccess, and AmazonVPCFullAccess.
 
 ```
 # IAM:ARN
@@ -33,7 +33,7 @@ aws iam create-access-key --user-name k8s-saas
 #Record the SecretAccessKey and AccessKeyID in the returned JSON output.
 ```
 
-Grab access and secrets keys (from previous JSON output for example or from downloaded file `$ cat new_user_credentials.csv`) and configure your k8s-saas profile with: 
+### Grab access and secrets keys (from previous JSON output for example or from downloaded file `$ cat new_user_credentials.csv`) and configure your k8s-saas profile with: 
 ```
 aws configure (or edit ~/.aws/credentials & ~/.aws/config files)
 ```
@@ -54,7 +54,7 @@ region = us-east-2
 [k8s-saas]
 region = us-east-1
 ```
-Next, let's create the s3 bucket with versioning that we need for our kube state (us-east-1). I will call it `k8s-saas-kops-state-dev`. Make sure you turn on versioning.
+### Next, let's create the s3 bucket with versioning that we need for our kube state (us-east-1). I will call it `k8s-saas-kops-state-dev`. Make sure you turn on versioning.
 
 Create S3 bucket using aws cli:
 
