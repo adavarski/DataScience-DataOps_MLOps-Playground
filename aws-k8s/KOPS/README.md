@@ -108,6 +108,7 @@ export AWS_PROFILE="k8s-saas"
 export AWS_ACCESS_KEY_ID=$(aws configure get k8s-saas.aws_access_key_id)
 export AWS_SECRET_ACCESS_KEY=$(aws configure get k8s-saas.aws_secret_access_key)
 export KOPS_STATE_STORE=s3://k8s-saas-kops-state-dev
+export KUBECONFIG=~/.kube/k8s-saas-AWS-KOPS
 ```
 Once we have done that, let's run kops in the command line to create a master and 3 nodes.(I named mine saas.k8s.local):
 note: Create a new ssh key called k8s-saas with `ssh-keygen`
@@ -177,7 +178,7 @@ and to validate:
 ```
 kops validate cluster --name saas.k8s.local
 ```
-Once this cluster is complete, you should be able to see it in your EC2 Dashboard. It will also save your configuration to .kube/ in you home directory.
+Once this cluster is complete, you should be able to see it in your EC2 Dashboard. It will also save your configuration to .kube/ (~/.kube/k8s-saas-AWS-KOPS) in you home directory.
 
 try:
 ```
