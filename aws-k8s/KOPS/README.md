@@ -1214,7 +1214,7 @@ $ aws s3 rm s3://k8s-saas-kops-state-dev/ --recursive
 $ aws s3api delete-bucket --bucket k8s-saas-kops-state-dev --region us-east-1
 ```
 
-And delete kops user and group using aws cli.
+And delete kops user and group using aws cli or AWS console.
 
 Check:
 
