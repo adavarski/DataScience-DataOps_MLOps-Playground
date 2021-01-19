@@ -15,3 +15,7 @@ kubectl create serviceaccount spark-minion
 
 #### Create rolebinding to offer "edit" privileges
 kubectl create rolebinding spark-minion-rb --clusterrole=edit --serviceaccount=default:spark-minion
+
+```
+kubectl apply -f *.yaml
+```
