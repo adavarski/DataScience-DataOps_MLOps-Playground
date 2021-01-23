@@ -1,4 +1,4 @@
-## Data-Driven Analytics/Data Science(ML/DeepML) k8s-based SaaS Platform for Data Analyst/Data Engineer/Data Scientist/DataOps/MLOps playground (MVP/POC/environmints)
+## k8s-based Data-Driven Analytics/Data Science(ML/DeepML) SaaS Platform for Data Analyst/Data Engineer/Data Scientist/DataOps/MLOps playground (MVP/POC/environmints)
 
 ### Used stacks and products:
 
