@@ -1221,13 +1221,23 @@ And delete kops user and group using aws cli or AWS console.
 
 Check:
 
-https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances:
-https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LoadBalancers:
+https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#Instances
+
+https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#LoadBalancers
+
 https://console.aws.amazon.com/iam/home?region=us-east-1#/home
+
 https://console.aws.amazon.com/iam/home?region=us-east-1#/roles
+
 https://s3.console.aws.amazon.com/s3/home?region=us-east-1
+
 etc.
 
+or using aws cli: 
+```
+$ aws elb describe-load-balancers --profile default --region us-east-1
+...
+```
 
 
 ## mini-HOWTO: Using Terraform (Ref: https://github.com/kubernetes/kops/blob/master/docs/terraform.md)
