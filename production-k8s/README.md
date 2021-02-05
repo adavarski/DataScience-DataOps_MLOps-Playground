@@ -1,4 +1,4 @@
-# [KOPS](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/production-k8s/aws-k8s/KOPS) for k8s provisioning on AWS (production: default)
+# [KOPS](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/production-k8s/aws-k8s/KOPS):k8s provisioning on AWS (production: default)
 
 # Managed k8s 
 
