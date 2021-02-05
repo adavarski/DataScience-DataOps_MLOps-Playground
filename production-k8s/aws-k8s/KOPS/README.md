@@ -1239,7 +1239,6 @@ $ aws elb describe-load-balancers --profile default --region us-east-1
 ...
 ```
 
-
 ## mini-HOWTO: Using Terraform (Ref: https://github.com/kubernetes/kops/blob/master/docs/terraform.md)
 
 ```
