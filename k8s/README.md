@@ -1297,22 +1297,6 @@ kilo-k3s.yaml
 the new c2 hybrid cluster is ready for use.
 ```
 
-## Demo1: [DataProcessing: Serverless:OpenFaaS+ETL:Apache Nifi](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo1-DataProcessing-Serverless-ETL/)
-
-## Demo2: [DataProcessing-MinIO](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo2-DataProcessing-MinIO/)
-
-## Demo3: [AutoML:MLFlow+Seldon Core](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo3-AutoML-MLFlow-SeldonCore/)
-
-## Demo4: [DeepML with TensorFlow 2.0](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo4-DeepML-TensorFlow)
-
-## Demo5: [BigData:MinIO Data Lake with Hive/Presto SQL-Engines](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo5-BigData-MinIO-Hive-Presto)
-
-## Demo6: [Spark with MinIO(S3) and Delta Lake for large-scale big data processing and ML](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo6-Spark-ML)
-
-## Demo7: [SaaS deploy with IAM:Keycloak + JupyterHUB/JupyterLAB](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo7-SaaS)
-
-## Demo8: [ML/DeepML for Cybersecurity ](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo8-ML-Cybersecurity)
-
 ## Clean environment
 
 ```
@@ -1412,3 +1396,22 @@ Note4.It's beter to use k8s Operators (ref: https://github.com/adavarski/k8s-ope
 Ref1:  https://github.com/adavarski/RKE-rancher-kvm (Rancher2 RKE+ KVM + CentOS)
 
 Ref2:  https://github.com/adavarski/rancher2-vagrant-alpine (Rancher2 RKE + Vagrant:VBox + Alpine)
+
+# Playgrounds:
+
+## Demo1: [DataProcessing: Serverless:OpenFaaS+ETL:Apache Nifi](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo1-DataProcessing-Serverless-ETL/)
+
+## Demo2: [DataProcessing-MinIO](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo2-DataProcessing-MinIO/)
+
+## Demo3: [AutoML:MLFlow+Seldon Core](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo3-AutoML-MLFlow-SeldonCore/)
+
+## Demo4: [DeepML with TensorFlow 2.0](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo4-DeepML-TensorFlow)
+
+## Demo5: [BigData:MinIO Data Lake with Hive/Presto SQL-Engines](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo5-BigData-MinIO-Hive-Presto)
+
+## Demo6: [Spark with MinIO(S3) and Delta Lake for large-scale big data processing and ML](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo6-Spark-ML)
+
+## Demo7: [SaaS deploy with IAM:Keycloak + JupyterHUB/JupyterLAB](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo7-SaaS)
+
+## Demo8: [ML/DeepML for Cybersecurity ](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo8-ML-Cybersecurity)
+
