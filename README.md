@@ -28,21 +28,21 @@ k8s-based data-driven Analytics/ML/DeepML SaaS platform provisioning/deploy : KO
 
 # Playgrounds:
 
-## Demo1: [DataProcessing: Serverless:OpenFaaS+ETL:Apache Nifi](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo1-DataProcessing-Serverless-ETL/)
+### Demo1: [DataProcessing: Serverless:OpenFaaS+ETL:Apache Nifi](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo1-DataProcessing-Serverless-ETL/)
 
-## Demo2: [DataProcessing-MinIO](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo2-DataProcessing-MinIO/)
+### Demo2: [DataProcessing-MinIO](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo2-DataProcessing-MinIO/)
 
-## Demo3: [AutoML:MLFlow+Seldon Core](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo3-AutoML-MLFlow-SeldonCore/)
+### Demo3: [AutoML:MLFlow+Seldon Core](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo3-AutoML-MLFlow-SeldonCore/)
 
-## Demo4: [DeepML with TensorFlow 2.0](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo4-DeepML-TensorFlow)
+### Demo4: [DeepML with TensorFlow 2.0](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo4-DeepML-TensorFlow)
 
-## Demo5: [BigData:MinIO Data Lake with Hive/Presto SQL-Engines](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo5-BigData-MinIO-Hive-Presto)
+### Demo5: [BigData:MinIO Data Lake with Hive/Presto SQL-Engines](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo5-BigData-MinIO-Hive-Presto)
 
-## Demo6: [Spark with MinIO(S3) and Delta Lake for large-scale big data processing and ML](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo6-Spark-ML)
+### Demo6: [Spark with MinIO(S3) and Delta Lake for large-scale big data processing and ML](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo6-Spark-ML)
 
-## Demo7: [SaaS deploy with IAM:Keycloak + JupyterHUB/JupyterLAB](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo7-SaaS)
+### Demo7: [SaaS deploy with IAM:Keycloak + JupyterHUB/JupyterLAB](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo7-SaaS)
 
-## Demo8: [ML/DeepML for Cybersecurity ](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo8-ML-Cybersecurity)
+### Demo8: [ML/DeepML for Cybersecurity ](https://github.com/adavarski/DataScience-DataOps_MLOps-Playground/tree/main/k8s/Demo8-ML-Cybersecurity)
 
 
 
